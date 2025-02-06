@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Header from "./components/Header";
-import Carousel from "./components/Carousel";
+import Header from "@/components/Header";
+import Carousel from "@/components/carousel/Carousel";
 import "./index.css";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -20,7 +20,7 @@ export default function Home() {
       }
       const data = await response.json();
       setBooks(data);
-      const bookIds = data.map((book) => book.id);
+      const bookIds = data.map((book: { id: string }) => book.id);
       bookMap.set("all", bookIds);
       setBookMap(bookMap);
       setDataLoaded(true);
@@ -29,7 +29,7 @@ export default function Home() {
     }
   };
 
-  const filterBooksByGenre = async (genre) => {
+  const filterBooksByGenre = async (genre: string) => {
     try {
       const response = await fetch(`/api/books/filter/${genre}`);
       if (!response.ok) {
@@ -42,7 +42,7 @@ export default function Home() {
     }
   };
 
-  const filterBooks = async (filter) => {
+  const filterBooks = async (filter: string) => {
     try {
       const response = await fetch(`api/books/filter?filter=${filter}`);
       if (!response.ok) {
@@ -64,6 +64,7 @@ export default function Home() {
   // }
 
   //fix this
+
   useEffect(() => {
     fetchBooks();
     // filterBooksByGenre("Thriller");
@@ -91,8 +92,6 @@ export default function Home() {
       console.log("Error:", error);
     }
   };
-
-  // console.log("parent map", bookMap);
 
   return (
     <div>

@@ -13,7 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 enum ReadingStatus {
   TO_READ
   IN_PROGRESS
@@ -21,49 +20,48 @@ enum ReadingStatus {
 }
 
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  firstName String
-  lastName String
-  email String @unique
-  password String
-  profileImageUrl String 
-  dateCreated DateTime @default(now())
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  firstName       String
+  lastName        String
+  email           String   @unique
+  password        String
+  profileImageUrl String?
+  dateCreated     DateTime @default(now())
 
   @@map("users")
-
 }
 
 model Book {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
-  author String
-  description String
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  author       String
+  description  String
   publish_date DateTime
-  rating Float
-  genres String[]
+  rating       Float
+  genres       String[]
 
-  @@map("books")  
+  @@map("books")
 }
 
 model SavedBook {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
-  bookId String @db.ObjectId
-  dateAdded DateTime @default(now())
-  dateUpdated DateTime @updatedAt
-  status ReadingStatus
-  progress Int
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String        @db.ObjectId
+  bookId      String        @db.ObjectId
+  dateAdded   DateTime      @default(now())
+  dateUpdated DateTime      @updatedAt
+  status      ReadingStatus
+  progress    Int
 
   @@map("savedBooks")
 }
 
 model Review {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
-  bookId String @db.ObjectId
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId  String   @db.ObjectId
+  bookId  String   @db.ObjectId
   content String
-  rating Float
-  date DateTime @default(now())
+  rating  Float
+  date    DateTime @default(now())
 
   @@map("reviews")
 }

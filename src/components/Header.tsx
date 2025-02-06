@@ -1,4 +1,3 @@
-import Link from "next/link";
 import SignUpForm from "./SignUpForm";
 
 export default function Header() {

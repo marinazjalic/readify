@@ -1,15 +1,11 @@
 import { Montserrat } from "next/font/google";
-// import BookCover from "@/components/BookCover"
-// import WantToReadButton from "@/components/WantToReadButton"
-// import StarRating from "@/components/StarRating"
-
-import BookCover from "../../../components/book/BookCover";
-import WantToReadButton from "../../../components/WantToReadButton";
-import StarRating from "../../../components/StarRating";
+import WantToReadButton from "@/components/WantToReadButton"
+import StarRating from "@/components/StarRating"
+import BookCover from "@/components/book/BookCover";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
-export default function BookDetails({ params }) {
+export default function BookDetails({ params }: { params: { id: string } }) {
   const book = {
     id: params.id,
     title: "The Great Gatsby",
