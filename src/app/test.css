@@ -1,0 +1,10 @@
+/* test.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn {
+    @apply bg-blue-500 text-white py-2 px-4 rounded;
+  }
+} */

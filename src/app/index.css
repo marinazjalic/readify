@@ -1,0 +1,62 @@
+/* dont even need image container */
+.image-container:focus {
+  outline: none;
+}
+
+.carousel-container {
+  padding-left: 10px;
+  padding-right: 20px;
+  overflow: hidden;
+}
+
+.slider-image {
+  width: 95%;
+  height: 200px;
+  padding: 5px 0px 5px 13px;
+  /* padding required to not crop image on zoom */
+  /* object-fit: contain; */
+}
+
+.slider-image:focus {
+  outline: none;
+}
+
+.custom-slider-arrow-left {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  height: 10px;
+  width: 10px;
+  top: 50%;
+  transform: translate(-50%);
+  /* padding-left: 50px; */
+  /* margin-right: 0px; */
+  z-index: 1000;
+  /* background-color: red; */
+}
+
+.custom-slider-arrow {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  height: 10px;
+  width: 10px;
+  top: 50%;
+  left: 100%;
+}
+
+.home-page-left {
+  width: 70%;
+}
+
+.slider-image:hover {
+  transform: scale(1.05);
+  overflow: hidden;
+}
+
+.heading-text {
+  font-family: Montserrat;
+  font-size: 22px;
+  font-weight: 100;
+  padding-left: 5px;
+}
