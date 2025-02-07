@@ -1,7 +1,7 @@
 "use client";
 
+import { createUser } from "@/actions/users/createUser";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 
 export default function SignUp() {
   const [passwordConf, setPasswordConf] = useState("");
@@ -14,7 +14,7 @@ export default function SignUp() {
     profileImageUrl: "tests",
   });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData((prev) => ({ ...prev, [name]: value }));
   };
@@ -28,24 +28,25 @@ export default function SignUp() {
   };
 
   const createNewUser = async () => {
-    try {
-      const response = await fetch("/api/users/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+    await createUser(userData);
+    // try {
+    //   const response = await fetch("/api/users/create", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(userData),
+    //   });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("User created: ", data);
-      } else {
-        console.log("Error: Failed to create user. ");
-      }
-    } catch (error) {
-      console.log("Error creating user: ", error);
-    }
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     console.log("User created: ", data);
+    //   } else {
+    //     console.log("Error: Failed to create user. ");
+    //   }
+    // } catch (error) {
+    //   console.log("Error creating user: ", error);
+    // }
   };
 
   return (

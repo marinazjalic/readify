@@ -1,19 +1,10 @@
 import { Settings } from "react-slick";
-import { ArrowProps } from "./Carousel";
 
-interface SliderSettings {
-  infinite: boolean;
-  speed: number;
-  slidesToShow: number;
-  slidesToScroll: number;
-  nextArrow: React.ReactNode;
-  prevArrow: React.ReactNode;
-  responsive: {
-    breakpoint: number;
-    settings: {
-      slidesToShow: number;
-    };
-  }[];
+interface ArrowProps {
+  className?: string;
+  style?: React.CSSProperties;
+  onClick?: () => void;
+  direction?: string;
 }
 
 function SampleNextArrow({ style, onClick, direction }: ArrowProps) {

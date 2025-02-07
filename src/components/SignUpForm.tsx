@@ -14,7 +14,7 @@ export default function SignUpForm() {
     confirmPassword: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
@@ -22,7 +22,7 @@ export default function SignUpForm() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords don't match!");

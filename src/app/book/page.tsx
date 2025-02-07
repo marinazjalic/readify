@@ -1,45 +1,9 @@
 import Image from "next/image";
+import getAllBooks from "@/actions/books/getAllBooks";
 
-const books = [
-  {
-    id: 1,
-    title: "To Kill a Mockingbird",
-    author: "Harper Lee",
-    coverUrl: "/assets/cover.jpg",
-  },
-  //   {
-  //     id: 2,
-  //     title: "1984",
-  //     author: "George Orwell",
-  //     coverUrl: "cover.jpg",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Pride and Prejudice",
-  //     author: "Jane Austen",
-  //     coverUrl: "cover.jpg",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "The Great Gatsby",
-  //     author: "F. Scott Fitzgerald",
-  //     coverUrl: "cover.jpg",
-  //   },
-  //   {
-  //     id: 5,
-  //     title: "The Catcher in the Rye",
-  //     author: "J.D. Salinger",
-  //     coverUrl: "cover.jpg",
-  //   },
-  //   {
-  //     id: 6,
-  //     title: "Moby Dick",
-  //     author: "Herman Melville",
-  //     coverUrl: "cover.jpg",
-  //   },
-];
+export default async function BookDisplay() {
+  const books = await getAllBooks();
 
-export default function BookDisplay() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Book Collection</h1>
@@ -48,7 +12,7 @@ export default function BookDisplay() {
           <div key={book.id} className="border border-gray-200 shadow-sm">
             <div className="relative h-40 w-full">
               <Image
-                src={book.coverUrl || "/placeholder.svg"}
+                src={`/assets/${book.id}.jpg`}
                 alt={`Cover of ${book.title}`}
                 fill
                 style={{ objectFit: "cover" }}

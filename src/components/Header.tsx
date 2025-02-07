@@ -7,7 +7,9 @@ export default function Header() {
         {/* <Link href="/" className="text-2xl font-bold text-gray-800">
           Your Logo
         </Link> */}
-        <p>Discover, Read, and Share books you love.</p>
+        <p className="text-2xl font-bold text-gray-800">
+          Discover, Read, and Share books you love.
+        </p>
         <SignUpForm />
       </div>
     </header>
