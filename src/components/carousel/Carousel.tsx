@@ -19,9 +19,7 @@ export default function Carousel({ text, books }: CarouselProps) {
   const router = useRouter();
 
   const handleCoverClick = async (bookId: string) => {
-    router.push(`/book`);
-
-    // router.push(`/book/${bookId}`);
+    router.push(`/book/${bookId}`);
   };
 
   return (
