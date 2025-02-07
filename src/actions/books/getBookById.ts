@@ -15,8 +15,7 @@ export async function getBookById(bookId: string): Promise<Book | null> {
     revalidatePath(`/book/${bookId}`);
     return book;
   } catch (error) {
-    console.error("Error fetching book:", error);
-    return null;
+    throw new Error("Error: Failed to fetch book by ID. ");
   } finally {
     await prisma.$disconnect();
   }

@@ -4,8 +4,9 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+// import { useRouter } from "next/router";
 import { settings } from "./slider-settings";
 import { Book } from "@prisma/client";
 
@@ -16,15 +17,10 @@ interface CarouselProps {
 
 export default function Carousel({ text, books }: CarouselProps) {
   const router = useRouter();
-  const [bookObj, setBookObj] = useState<Record<string, any>>({});
-
-  // Filter entries of map to get books
-  // const books =
-  //   Array.from(map.entries()).filter((entry) => entry[0] === text)[0]?.[1] ??
-  //   [];
 
   const handleCoverClick = async (bookId: string) => {
     router.push(`/book`);
+
     // router.push(`/book/${bookId}`);
   };
 

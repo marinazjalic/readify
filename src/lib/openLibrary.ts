@@ -1,6 +1,6 @@
 const OPEN_LIBRARY_API_BASE = "https://openlibrary.org";
 
-export async function searchBooks(query) {
+export async function searchBooks(query: string) {
   const response = await fetch(
     `${OPEN_LIBRARY_API_BASE}/search.json?title=${encodeURIComponent(query)}`
   );

@@ -38,43 +38,25 @@ export default function BookDisplay({ books }: { books: Book[] }) {
     }
   };
 
-  // const loadCarouselData = async () => {
+  // const validateCredentials = async () => {
   //   try {
-  //     const filters = ['NEW_RELEASES', 'UPCOMING', 'TOP_RATED'];
-  //     const promises = filters.map((filter) =>)
+  //     const loginData = {
+  //       email: email,
+  //       password: password,
+  //     };
+
+  //     const response = await fetch("/api/users/validate", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(loginData),
+  //     });
+  //     const data = await response.json();
+  //   } catch (error) {
+  //     console.log("Error:", error);
   //   }
-  // }
-
-  //fix this
-  useEffect(() => {
-    // fetchBooks();
-    // filterBooksByGenre("Thriller");
-    filterBooks("NEW_RELEASES");
-    filterBooks("UPCOMING");
-    filterBooks("TOP_RATED");
-  }, []);
-
-  const validateCredentials = async () => {
-    try {
-      const loginData = {
-        email: email,
-        password: password,
-      };
-
-      const response = await fetch("/api/users/validate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(loginData),
-      });
-      const data = await response.json();
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  };
-
-  // console.log("parent map", bookMap);
+  // };
 
   return (
     <div className="container mx-auto px-4 py-8">

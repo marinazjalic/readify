@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { createUser } from "@/actions/users/createUser";
 
 export default function SignUpForm() {
   const [formData, setFormData] = useState({
@@ -22,20 +23,17 @@ export default function SignUpForm() {
     }));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords don't match!");
       return;
     }
-    // Handle form submission logic here
-    console.log("Form submitted", formData);
+    const { confirmPassword, ...userData } = formData;
+    await createUser(userData);
   };
 
-  const handleGoogleSignUp = () => {
-    // Handle Google sign-up logic here
-    console.log("Google sign-up clicked");
-  };
+  const handleGoogleSignUp = () => {};
 
   return (
     <div className="w-72 bg-white p-3 rounded-lg shadow-md">
