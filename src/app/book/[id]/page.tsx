@@ -1,7 +1,7 @@
 import { Montserrat } from "next/font/google";
 import WantToReadButton from "@/components/WantToReadButton";
 import StarRating from "@/components/StarRating";
-import BookCover from "@/components/book/BookCover";
+// import BookCover from "@/components/book/BookCover";
 import { getBookById } from "@/actions/books/getBookById";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -16,7 +16,7 @@ export default async function BookDetails({
   return (
     <div className={`flex min-h-screen bg-white ${montserrat.className}`}>
       <div className="w-1/3 p-8 flex flex-col items-center space-y-6 overflow-hidden">
-        {book && <BookCover bookId={book.id} />}
+        {/* {book && <BookCover bookId={book.id} />} */}
         <WantToReadButton />
         <StarRating editable />
       </div>

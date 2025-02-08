@@ -4,5 +4,9 @@ import BookDisplay from "./book-display";
 export default async function Books() {
   const books = await getAllBooks();
 
-  return <BookDisplay books={books} />;
+  return (
+    <div className="bg-white min-h-screen">
+      <BookDisplay books={books} />
+    </div>
+  );
 }
