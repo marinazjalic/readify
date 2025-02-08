@@ -4,42 +4,16 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { useState } from "react";
-
-const genres = [
-  "Fiction",
-  "Non-fiction",
-  "Mystery",
-  "Science Fiction",
-  "Fantasy",
-  "Romance",
-  "Thriller",
-  "Biography",
-  "History",
-  "Self-help",
-];
+import { useState, KeyboardEvent } from "react";
+import { searchBooksByQuery } from "@/actions/books/searchBooksByQuery";
+import { genres } from "@/constants/constants";
 
 export default function Navbar() {
-  const [searchQuery, setSearchQuery] = useState();
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      console.log("searching..");
-      searchBooks(searchQuery);
-    }
-  };
-
-  const searchBooks = async (query) => {
-    try {
-      const response = await fetch(`/api/books/search?query=${query}`);
-      if (!response.ok) {
-        throw new Error("Error: Failed to find books. ");
-      }
-      const data = await response.json();
-      console.log("search results: ");
-      console.log(data);
-    } catch (error) {
-      throw new Error("Error: Failed to find books. ");
+  const handleSearchSubmit = async (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key == "Enter") {
+      const books = await searchBooksByQuery(searchQuery);
     }
   };
 
@@ -57,7 +31,7 @@ export default function Navbar() {
                 placeholder="Search books..."
                 className="w-full pl-10 pr-4 py-2 rounded-full border-gray-300 focus:border-navy-600 focus:ring-0 focus:outline-none"
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={handleKeyDown}
+                onKeyDown={handleSearchSubmit}
               />
               <Search
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"

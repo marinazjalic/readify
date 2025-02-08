@@ -6,7 +6,6 @@ import "slick-carousel/slick/slick-theme.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-// import { useRouter } from "next/router";
 import { settings } from "./slider-settings";
 import { Book } from "@prisma/client";
 
