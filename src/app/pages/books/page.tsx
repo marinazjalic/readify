@@ -5,10 +5,11 @@ import { searchBooksByQuery } from "@/actions/books/searchBooksByQuery";
 export default async function Books({
   searchParams,
 }: {
-  searchParams: { query: string };
+  searchParams: { filter: string; query: string };
 }) {
+  const filter = searchParams.filter;
   const query = searchParams.query;
-  const searchedBooks = await searchBooksByQuery(query);
+  const searchedBooks = await searchBooksByQuery(filter, query);
   return (
     <div className="bg-white min-h-screen">
       <BookDisplay books={searchedBooks} />

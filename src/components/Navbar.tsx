@@ -20,8 +20,13 @@ export default function Navbar() {
 
   const handleSearchSubmit = async (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key == "Enter") {
-      router.push(`/pages/books?query=${searchQuery}`);
+      router.push(`/pages/books?filter=title&query=${searchQuery}`);
+      setSearchQuery("");
     }
+  };
+
+  const handleGenreClick = (subgenre: string) => {
+    router.push(`/pages/books?filter=subject&query=${subgenre}`);
   };
 
   return (
@@ -39,6 +44,7 @@ export default function Navbar() {
                 className="w-full pl-10 pr-4 py-2 rounded-full border-gray-300 focus:border-navy-600 focus:ring-0 focus:outline-none"
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleSearchSubmit}
+                value={searchQuery}
               />
               <Search
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -64,7 +70,11 @@ export default function Navbar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="grid grid-cols-2 gap-2 p-2">
                 {value.map((subgenre, index) => (
-                  <DropdownMenuItem key={index} className="w-full">
+                  <DropdownMenuItem
+                    key={index}
+                    className="w-full"
+                    onClick={() => handleGenreClick(subgenre)}
+                  >
                     {subgenre}
                   </DropdownMenuItem>
                 ))}
