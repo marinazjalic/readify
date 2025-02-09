@@ -1,5 +1,10 @@
 "use client";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +12,7 @@ import { Search } from "lucide-react";
 import { useState, KeyboardEvent } from "react";
 import { genres } from "@/constants/constants";
 import { useRouter } from "next/navigation";
+import { subjectMap } from "@/constants/constants";
 
 export default function Navbar() {
   const router = useRouter();
@@ -45,15 +51,25 @@ export default function Navbar() {
           </Button>
         </div>
         <div className="flex justify-start items-center py-2">
-          {genres.map((genre) => (
-            <Button
-              key={genre}
-              variant="ghost"
-              className="text-navy-600 hover:text-navy-800 hover:bg-white relative group px-4"
-            >
-              {genre}
-              <span className="absolute bottom-1 left-0 w-full h-0.5 bg-navy-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-out"></span>
-            </Button>
+          {Array.from(subjectMap.entries()).map(([key, value]) => (
+            <DropdownMenu key={key}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="text-navy-600 hover:text-navy-800 hover:bg-white relative group px-4"
+                >
+                  {key}
+                  <span className="absolute bottom-1 left-0 w-full h-0.5 bg-navy-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-out"></span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="grid grid-cols-2 gap-2 p-2">
+                {value.map((subgenre, index) => (
+                  <DropdownMenuItem key={index} className="w-full">
+                    {subgenre}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           ))}
         </div>
       </div>
