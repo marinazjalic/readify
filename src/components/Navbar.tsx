@@ -5,15 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useState, KeyboardEvent } from "react";
-import { searchBooksByQuery } from "@/actions/books/searchBooksByQuery";
 import { genres } from "@/constants/constants";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchSubmit = async (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key == "Enter") {
-      const books = await searchBooksByQuery(searchQuery);
+      router.push(`/pages/books?query=${searchQuery}`);
     }
   };
 

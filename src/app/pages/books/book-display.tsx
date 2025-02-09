@@ -3,24 +3,25 @@
 import Image from "next/image";
 import type { Book } from "@prisma/client";
 import { Montserrat } from "next/font/google";
+import { BookOverview } from "@/types";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
-export default function BookDisplay({ books }: { books: Book[] }) {
+export default function BookDisplay({ books }: { books: BookOverview[] }) {
   return (
     <div className="container mx-auto">
       <h1 className="text-sm font-light mb-4 text-gray-500">
         {books.length} results
       </h1>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {books.map((book: Book) => (
+        {books.map((book: BookOverview) => (
           <div
-            key={book.id}
+            key={book.key}
             className="border rounded-lg overflow-hidden shadow-sm"
           >
             <div className="relative h-48 w-full">
               <Image
-                src={`/assets/${book.id}.jpg`}
+                src={`https://covers.openlibrary.org/b/id/${book.cover}-L.jpg`}
                 alt={`Cover of ${book.title}`}
                 fill
                 style={{ objectFit: "contain" }}
