@@ -13,6 +13,23 @@ export const genres = [
 
 export const subjectMap: Map<string, string[]> = new Map([
   [
+    "Arts",
+    [
+      "Architecture",
+      "Art Instruction",
+      "Art History",
+      "Dance",
+      "Design",
+      "Fashion",
+      "Film",
+      "Graphic Design",
+      "Music",
+      "Music Theory",
+      "Painting",
+      "Photography",
+    ],
+  ],
+  [
     "Fiction",
     [
       "Fantasy",
@@ -46,7 +63,7 @@ export const subjectMap: Map<string, string[]> = new Map([
     ],
   ],
   [
-    "Children's",
+    "Children's Books",
     [
       "Kids Books",
       "Stories in Rhyme",
@@ -74,6 +91,40 @@ export const subjectMap: Map<string, string[]> = new Map([
       "Exercise",
       "Nutrition",
       "Self-help",
+    ],
+  ],
+  [
+    "Biography",
+    [
+      "Autobiographies",
+      "History",
+      "Politics and Government",
+      "World War II",
+      "Women",
+      "Kings and Rulers",
+      "Composers",
+      "Artists",
+    ],
+  ],
+  [
+    "Social Sciences",
+    ["Anthropology", "Religion", "Political Science", "Psychology"],
+  ],
+  [
+    "Textbooks",
+    [
+      "History",
+      "Mathematics",
+      "Geography",
+      "Psychology",
+      "Algebra",
+      "Education",
+      "Business & Economics",
+      "Science",
+      "Chemistry",
+      "English Language",
+      "Physics",
+      "Computer Science",
     ],
   ],
 ]);

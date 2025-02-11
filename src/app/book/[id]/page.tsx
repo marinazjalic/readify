@@ -1,36 +1,106 @@
+"use client";
+
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { Montserrat } from "next/font/google";
-import WantToReadButton from "@/components/WantToReadButton";
-import StarRating from "@/components/StarRating";
-// import BookCover from "@/components/book/BookCover";
-import { getBookById } from "@/actions/books/getBookById";
+import { Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { getBookByKey } from "@/actions/books/getBookByKey";
+import { useBookStore } from "@/lib/bookStore";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
-export default async function BookDetails({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const book = await getBookById(params.id);
+function StarRating({ value }: { value: number }) {
+  return (
+    <div className="flex">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <Star
+          key={star}
+          className={`w-4 h-4 ${
+            star <= Math.round(value)
+              ? "text-yellow-400 fill-current"
+              : "text-gray-300"
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
+
+export default function BookDetails({ params }: { params: { id: string } }) {
+  const [wantToRead, setWantToRead] = useState(false);
+  const [bookDetails, setBookDetails] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const currentBook = useBookStore((state) => state.currentBook);
+
+  useEffect(() => {
+    const fetchBookDetails = async () => {
+      if (currentBook) {
+        try {
+          const details = await getBookByKey(currentBook.key, currentBook);
+          setBookDetails(details);
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Failed to fetch book details. Error: ", error);
+        }
+      }
+    };
+    fetchBookDetails();
+  }, [currentBook]);
 
   return (
-    <div className={`flex min-h-screen bg-white ${montserrat.className}`}>
-      <div className="w-1/3 p-8 flex flex-col items-center space-y-6 overflow-hidden">
-        {/* {book && <BookCover bookId={book.id} />} */}
-        <WantToReadButton />
-        <StarRating editable />
-      </div>
-      <div className="w-2/3 p-8 overflow-y-auto">
-        <h1 className="text-3xl font-bold mb-1">{book?.title || "Title"}</h1>
-        <p className="text-lg text-gray-600 mb-2">
-          by {book?.author || "Author"}
-        </p>
-        <div className="mb-4">
-          <StarRating value={book?.rating || 0} />
+    <div
+      className={`flex flex-col md:flex-row min-h-screen bg-white ${montserrat.className} text-sm`}
+    >
+      <div className="w-full md:w-1/4 p-4 flex flex-col items-center space-y-4">
+        <div className="w-48">
+          <Image
+            src={`https://covers.openlibrary.org/b/id/${currentBook?.cover}-L.jpg`}
+            alt={`Cover of ${currentBook?.title}`}
+            width={192}
+            height={288}
+            className="rounded-lg shadow-lg"
+          />
         </div>
-        <p className="text-sm text-gray-700 mb-4">
-          {book?.description || "Description"}
-        </p>
+        <Button
+          onClick={() => setWantToRead(!wantToRead)}
+          variant={wantToRead ? "default" : "outline"}
+          className="w-48 rounded-full bg-forest-green hover:bg-forest-green-dark text-white text-xs"
+        >
+          {wantToRead ? "Added to List" : "Want to Read"}
+        </Button>
+      </div>
+      <div className="w-full md:w-3/4 p-4 overflow-y-auto">
+        <h1 className="text-2xl font-bold mb-1">{currentBook?.title}</h1>
+        <p className="text-base text-gray-600 mb-2">by {currentBook?.author}</p>
+
+        {/* <div className="flex items-center mb-3"> //handle ratings later
+          <StarRating value={book.rating} />
+          <span className="ml-2 text-sm">
+            {book.rating.toFixed(1)} ({Math.floor(book.rating * 20)}%)
+          </span>
+        </div> */}
+
+        <div>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : bookDetails && bookDetails.description ? (
+            <p className="text-sm leading-relaxed mb-4">
+              {bookDetails.description}
+            </p>
+          ) : (
+            <p>No description available.</p>
+          )}
+        </div>
+
+        {/* <div className="space-y-1 text-xs"> //get these details later
+          <p>
+            <strong>Published:</strong>{" "}
+            {bookDetails.publish_date.toDateString()}
+          </p>
+          <p><strong>Genres:</strong> {book.genres.join(", ")}</p>
+        </div> */}
       </div>
     </div>
   );

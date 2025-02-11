@@ -11,3 +11,11 @@ export async function searchBooks(filter: string, query: string) {
   }
   return response.json();
 }
+
+export async function getBookDetails(key: string) {
+  const response = await fetch(`${OPEN_LIBRARY_API_BASE}/works/${key}.json`);
+  if (!response.ok) {
+    throw new Error("Error: Failed to fetch books from Open Library API.");
+  }
+  return response.json();
+}
