@@ -1,10 +1,15 @@
 const OPEN_LIBRARY_API_BASE = "https://openlibrary.org";
 
-export async function searchBooks(filter: string, query: string) {
+export async function searchBooks(
+  filter: string,
+  query: string,
+  limit: number,
+  offset: number
+) {
   const response = await fetch(
     `${OPEN_LIBRARY_API_BASE}/search.json?${filter}=${encodeURIComponent(
       query
-    )}&limit=10` //temp limit
+    )}&limit=${limit}&offset=${offset}`
   );
   if (!response.ok) {
     throw new Error("Error: Failed to fetch books from Open Library API. ");

@@ -7,10 +7,23 @@ import { useRouter } from "next/navigation";
 import { useBookStore } from "@/lib/bookStore";
 import { Heart } from "lucide-react";
 import { useState } from "react";
+import Pagination from "@/components/Pagination";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
-export default function BookDisplay({ books }: { books: BookDetails[] }) {
+interface BookDisplayProps {
+  books: BookDetails[];
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+export default function BookDisplay({
+  books,
+  currentPage,
+  totalPages,
+  onPageChange,
+}: BookDisplayProps) {
   const router = useRouter();
   const setCurrentBook = useBookStore((state) => state.setCurrentBook);
   const [likedBooks, setLikedBooks] = useState<Set<string>>(new Set());
@@ -92,6 +105,11 @@ export default function BookDisplay({ books }: { books: BookDetails[] }) {
           </div>
         ))}
       </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+      />
     </div>
   );
 }
