@@ -1,6 +1,6 @@
 export type BookDetails = {
   title: string;
-  author: string;
+  author: string[];
   cover: string;
   key: string;
   publish_date?: string;

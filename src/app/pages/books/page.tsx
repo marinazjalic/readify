@@ -11,8 +11,11 @@ export default async function Books({
   const query = searchParams.query;
   const searchedBooks = await searchBooksByQuery(filter, query);
   return (
-    <div className="bg-white min-h-screen">
-      <BookDisplay books={searchedBooks} />
+    <div>
+      <br />
+      <div className="bg-white min-h-screen">
+        <BookDisplay books={searchedBooks} />
+      </div>
     </div>
   );
 }
