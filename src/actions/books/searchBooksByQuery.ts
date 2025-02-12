@@ -20,7 +20,7 @@ export async function searchBooksByQuery(
     const books: BookDetails[] = apiResponse.docs.map((doc: any) => ({
       key: doc.key.split("/works/")[1],
       title: doc.title,
-      author: doc.author_name,
+      author: doc.author_name || [],
       cover: doc.cover_i,
       publish_date: doc.first_publish_year,
     }));
