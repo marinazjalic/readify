@@ -6,7 +6,7 @@ import { BookDetails } from "@/types";
 import { useRouter } from "next/navigation";
 import { useBookStore } from "@/lib/bookStore";
 import { Heart } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pagination from "@/components/Pagination";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -16,6 +16,8 @@ interface BookDisplayProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  query: string;
+  isLoading: boolean;
 }
 
 export default function BookDisplay({
@@ -23,6 +25,8 @@ export default function BookDisplay({
   currentPage,
   totalPages,
   onPageChange,
+  query,
+  isLoading,
 }: BookDisplayProps) {
   const router = useRouter();
   const setCurrentBook = useBookStore((state) => state.setCurrentBook);
@@ -49,7 +53,7 @@ export default function BookDisplay({
   return (
     <div className="container mx-auto">
       <h1 className="text-sm font-light mb-4 text-gray-500">
-        {books.length} results
+        Displaying results for '<i>{query}</i> ':
       </h1>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {books.map((book: BookDetails) => (
@@ -105,11 +109,13 @@ export default function BookDisplay({
           </div>
         ))}
       </div>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={onPageChange}
-      />
+      {!isLoading && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
+      )}
     </div>
   );
 }

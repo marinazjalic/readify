@@ -6,6 +6,7 @@ import { searchBooksByQuery } from "@/actions/books/searchBooksByQuery";
 import { useState, useEffect } from "react";
 import { BookDetails } from "@/types";
 import { useSearchParams } from "next/navigation";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function Books() {
   const searchParams = useSearchParams();
@@ -14,6 +15,7 @@ export default function Books() {
   const [currentPage, setCurrentPage] = useState(1);
   const [books, setBooks] = useState<BookDetails[]>([]);
   const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -23,6 +25,8 @@ export default function Books() {
         setTotalPages(Math.ceil(result.total / 20));
       } catch (error) {
         console.error("Failed to fetch books:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -36,12 +40,15 @@ export default function Books() {
   return (
     <div>
       <br />
+      {isLoading && <LoadingSpinner />}
       <div className="bg-white min-h-screen">
         <BookDisplay
           books={books}
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}
+          query={query}
+          isLoading={isLoading}
         />
       </div>
     </div>
