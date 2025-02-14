@@ -46,11 +46,12 @@ model Book {
 model SavedBook {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
   userId      String        @db.ObjectId
-  bookId      String        @db.ObjectId
+  bookId      String?       @db.ObjectId
+  bookKey     String //open library api key
   dateAdded   DateTime      @default(now())
   dateUpdated DateTime      @updatedAt
-  status      ReadingStatus
-  progress    Int
+  status      ReadingStatus @default(TO_READ)
+  progress    Int           @default(0)
 
   @@map("savedBooks")
 }
