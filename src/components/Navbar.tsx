@@ -4,6 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,8 @@ import { useRouter } from "next/navigation";
 import { subjectMap } from "@/constants/constants";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Users, User, LogOut } from "lucide-react";
 
 export default function Navbar() {
   const router = useRouter();
@@ -61,12 +64,37 @@ export default function Navbar() {
             </div>
           </div>
           {session ? (
-            <Button
-              onClick={() => signOut()}
-              className="bg-navy-600 text-white hover:bg-navy-700"
-            >
-              Log Out
-            </Button>
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <Users className="h-5 w-5" />
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full">
+                    <Avatar>
+                      <AvatarImage
+                        src={session.user.image || undefined}
+                        alt={session.user.name || "User avatar"}
+                      />
+                      <AvatarFallback>
+                        {session.user.name?.[0] || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel>
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => signOut()}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           ) : (
             <Button
               onClick={() => router.push("/login")}
@@ -76,6 +104,7 @@ export default function Navbar() {
             </Button>
           )}
         </div>
+
         <div className="flex justify-start items-center py-2">
           {Array.from(subjectMap.entries()).map(([key, value]) => (
             <DropdownMenu key={key}>
