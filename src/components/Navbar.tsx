@@ -13,10 +13,12 @@ import { useState, KeyboardEvent } from "react";
 import { genres } from "@/constants/constants";
 import { useRouter } from "next/navigation";
 import { subjectMap } from "@/constants/constants";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Navbar() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+  const { data: session } = useSession();
 
   const handleSearchSubmit = async (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key == "Enter") {
@@ -52,9 +54,21 @@ export default function Navbar() {
               />
             </div>
           </div>
-          <Button className="bg-navy-600 text-white hover:bg-navy-700">
-            Log In
-          </Button>
+          {session ? (
+            <Button
+              onClick={() => signOut()}
+              className="bg-navy-600 text-white hover:bg-navy-700"
+            >
+              Log Out
+            </Button>
+          ) : (
+            <Button
+              onClick={() => router.push("/login")}
+              className="bg-navy-600 text-white hover:bg-navy-700"
+            >
+              Log In
+            </Button>
+          )}
         </div>
         <div className="flex justify-start items-center py-2">
           {Array.from(subjectMap.entries()).map(([key, value]) => (

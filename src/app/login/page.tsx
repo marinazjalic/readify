@@ -7,16 +7,27 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [keepSignedIn, setKeepSignedIn] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Login submitted", { email, password, keepSignedIn });
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+    if (result?.error) {
+      console.error(result.error);
+    } else {
+      router.push("/"); //temp go back to home page
+    }
   };
 
   return (
