@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [keepSignedIn, setKeepSignedIn] = useState(false);
+  const [validationError, setValidationError] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -24,7 +25,7 @@ export default function LoginPage() {
       redirect: false,
     });
     if (result?.error) {
-      console.error(result.error);
+      setValidationError(true);
     } else {
       router.push("/"); //temp go back to home page
     }
@@ -34,7 +35,9 @@ export default function LoginPage() {
     <div className="flex min-h-screen bg-gray-100">
       <div className="m-auto bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <div className="flex justify-center mb-8">
-          <h3 className="text-2xl font-bold text-navy-600">Readify</h3>
+          <Link href="/" className="text-2xl font-bold text-navy-600">
+            Readify
+          </Link>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
@@ -51,16 +54,26 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="keepSignedIn"
-              checked={keepSignedIn}
-              onCheckedChange={(checked) => setKeepSignedIn(checked as boolean)}
-            />
-            <label htmlFor="keepSignedIn" className="text-sm text-gray-600">
-              Keep me signed in
-            </label>
+          <div className="flex flex-col space-y-2">
+            {validationError && (
+              <p className="text-xs text-red-500 mb-1 text-center">
+                Incorrect email or password.
+              </p>
+            )}
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="keepSignedIn"
+                checked={keepSignedIn}
+                onCheckedChange={(checked) =>
+                  setKeepSignedIn(checked as boolean)
+                }
+              />
+              <label htmlFor="keepSignedIn" className="text-sm text-gray-600">
+                Keep me signed in
+              </label>
+            </div>
           </div>
+
           <Button
             type="submit"
             className="w-full bg-navy-600 hover:bg-navy-700"

@@ -14,11 +14,13 @@ import { genres } from "@/constants/constants";
 import { useRouter } from "next/navigation";
 import { subjectMap } from "@/constants/constants";
 import { useSession, signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const { data: session } = useSession();
+  const pathname = usePathname();
 
   const handleSearchSubmit = async (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key == "Enter") {
@@ -30,6 +32,10 @@ export default function Navbar() {
   const handleGenreClick = (subgenre: string) => {
     router.push(`/pages/books?filter=subject&query=${subgenre}`);
   };
+
+  if (pathname === "/login") {
+    return null;
+  }
 
   return (
     <nav className="bg-white shadow-md">
