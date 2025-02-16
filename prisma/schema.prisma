@@ -53,6 +53,7 @@ model SavedBook {
   status      ReadingStatus @default(TO_READ)
   progress    Int           @default(0)
 
+  @@unique([userId, bookKey])
   @@map("savedBooks")
 }
 

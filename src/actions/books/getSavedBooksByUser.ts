@@ -4,7 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { Book, SavedBook } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-const getBooksByUser = async (userId: string): Promise<SavedBook[] | null> => {
+export async function getSavedBooksByUser(
+  userId: string
+): Promise<SavedBook[] | null> {
   try {
     const savedBooks = await prisma.savedBook.findMany({
       where: { userId: userId },
@@ -16,6 +18,4 @@ const getBooksByUser = async (userId: string): Promise<SavedBook[] | null> => {
   } finally {
     await prisma.$disconnect();
   }
-};
-
-export default getBooksByUser;
+}
