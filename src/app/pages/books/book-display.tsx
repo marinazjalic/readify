@@ -5,11 +5,12 @@ import { Montserrat } from "next/font/google";
 import { BookDetails } from "@/types";
 import { useRouter } from "next/navigation";
 import { useBookStore } from "@/lib/bookStore";
-import { Heart } from "lucide-react";
+import { BookKey, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 import Pagination from "@/components/Pagination";
-
-const montserrat = Montserrat({ subsets: ["latin"] });
+import { useSession } from "next-auth/react";
+import { addSavedBook } from "@/actions/books/addSavedBook";
+import { deleteSavedBook } from "@/actions/books/deleteSavedBook";
 
 interface BookDisplayProps {
   books: BookDetails[];
@@ -31,23 +32,52 @@ export default function BookDisplay({
   const router = useRouter();
   const setCurrentBook = useBookStore((state) => state.setCurrentBook);
   const [likedBooks, setLikedBooks] = useState<Set<string>>(new Set());
+  const { data: session } = useSession();
 
   const handleCoverClick = (book: BookDetails) => {
     setCurrentBook(book);
     router.push(`/book/${book.key}`);
   };
 
-  //temp logic - only authenticated users can favourite books
-  const handleLike = (bookKey: string) => {
-    setLikedBooks((prev) => {
-      const newSet = new Set(prev);
+  const addToSavedBooks = async (
+    bookKey: string,
+    userId: string,
+    newSet: Set<string>
+  ) => {
+    const result = await addSavedBook(bookKey, userId);
+    if (result.success) {
+      newSet.add(bookKey);
+      setLikedBooks(newSet);
+    } else if (!result.success && result.error?.statusCode === 409) {
+      console.log(result.error?.message);
+    }
+  };
+
+  const deleteSavedBooks = async (
+    bookKey: string,
+    userId: string,
+    newSet: Set<string>
+  ) => {
+    const result = await deleteSavedBook(bookKey, userId);
+    if (result.success) {
+      newSet.delete(bookKey);
+      setLikedBooks(newSet);
+    } else {
+      console.log("Error: Something went wrong");
+    }
+  };
+
+  //only authenticated users can favourite books
+  const handleLike = async (bookKey: string) => {
+    if (session) {
+      let newSet = new Set(likedBooks);
+      console.log(newSet);
       if (newSet.has(bookKey)) {
-        newSet.delete(bookKey);
+        deleteSavedBooks(bookKey, session.user.id, newSet);
       } else {
-        newSet.add(bookKey);
+        addToSavedBooks(bookKey, session.user.id, newSet);
       }
-      return newSet;
-    });
+    }
   };
 
   return (
