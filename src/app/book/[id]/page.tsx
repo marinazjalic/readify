@@ -50,32 +50,32 @@ export default function BookDetails({ params }: { params: { id: string } }) {
   }, [currentBook]);
 
   return (
-    <div
-      className={`flex flex-col md:flex-row min-h-screen bg-white ${montserrat.className} text-sm`}
-    >
-      <div className="w-full md:w-1/4 p-4 flex flex-col items-center space-y-4">
-        <div className="w-48">
+    <div className={`flex min-h-screen bg-white text-sm pt-0`}>
+      <div className="w-1/4 fixed left-0 top-[120px] bottom-0 p-4 flex flex-col items-center space-y-4 overflow-y-auto">
+        <div className="w-49">
           <Image
             src={`https://covers.openlibrary.org/b/id/${currentBook?.cover}-L.jpg`}
             alt={`Cover of ${currentBook?.title}`}
-            width={192}
-            height={288}
-            className="rounded-lg shadow-lg"
+            width={220}
+            height={320}
+            className="shadow-lg"
           />
         </div>
         <Button
           onClick={() => setWantToRead(!wantToRead)}
           variant={wantToRead ? "default" : "outline"}
-          className="w-48 rounded-full bg-forest-green hover:bg-forest-green-dark text-white text-xs"
+          className="w-60 rounded-full bg-forest-green hover:bg-forest-green-dark text-white text-xs"
         >
           {wantToRead ? "Added to List" : "Want to Read"}
         </Button>
       </div>
-      <div className="w-full md:w-3/4 p-4 overflow-y-auto">
+      <div className="w-3/4 ml-[25%] p-4 overflow-y-auto min-h-screen">
         <h1 className="text-2xl font-bold mb-1">{currentBook?.title}</h1>
         <p className="text-base text-gray-600 mb-2">by {currentBook?.author}</p>
 
-        {/* <div className="flex items-center mb-3"> //handle ratings later
+        {/* <div className="flex items-center mb-3">
+          {" "}
+          //handle ratings later
           <StarRating value={book.rating} />
           <span className="ml-2 text-sm">
             {book.rating.toFixed(1)} ({Math.floor(book.rating * 20)}%)
