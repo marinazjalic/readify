@@ -6,4 +6,5 @@ export type BookDetails = {
   publish_date?: string;
   description?: string;
   rating?: number;
+  genres?: string[];
 };
