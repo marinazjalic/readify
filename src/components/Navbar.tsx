@@ -54,10 +54,10 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 border-b border-gray-200">
-      <div className="container mx-auto px-4">
+    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 border-b border-gray-200 w-full">
+      <div className="container mx-auto px-4 relative max-w-full">
         <div className="flex justify-between items-center py-4">
-          <Link href="/" className="text-2xl font-bold text-navy-600">
+          <Link href="/" className="text-2xl font-bold text-navy-600 ml-4">
             Readify
           </Link>
           <div className="flex-grow mx-8">
