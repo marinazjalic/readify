@@ -36,7 +36,7 @@ export default function BookDisplay({
 
   const handleCoverClick = (book: BookDetails) => {
     setCurrentBook(book);
-    router.push(`/book/${book.key}`);
+    router.push(`/pages/books/${book.key}`);
   };
 
   const addToSavedBooks = async (
