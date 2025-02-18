@@ -60,9 +60,9 @@ model SavedBook {
 model Review {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   userId  String   @db.ObjectId
-  bookId  String   @db.ObjectId
-  content String
-  rating  Float
+  bookKey String //open library api key
+  content String?
+  rating  Int
   date    DateTime @default(now())
 
   @@map("reviews")
