@@ -59,7 +59,7 @@ export default function Navbar() {
         <div className="container mx-auto px-4 relative max-w-full">
           <div className="flex justify-between items-center py-4">
             <Link href="/" className="text-2xl font-bold text-navy-600 ml-4">
-              Readify
+              readify
             </Link>
             <div className="flex-grow mx-8">
               <div className="relative">
