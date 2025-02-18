@@ -78,7 +78,7 @@ export default function BookDisplay({
         addToSavedBooks(bookKey, session.user.id, newSet);
       }
     } else {
-      router.push("/login");
+      router.push("./login");
     }
   };
 
