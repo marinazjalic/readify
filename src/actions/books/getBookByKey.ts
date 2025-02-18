@@ -7,13 +7,21 @@ import { subjectMap } from "@/constants/constants";
 //function for comparing subjects in api response to subjectMap
 const getValidSubjects = (apiSubjects: string[]): string[] => {
   const validSubjects: string[] = [
-    ...Array.from(subjectMap.keys()).map((key) => key.toLowerCase()),
-    ...Array.from(subjectMap.values())
-      .flat()
-      .map((subject) => subject.toLowerCase()),
+    ...Array.from(subjectMap.keys()),
+    ...Array.from(subjectMap.values()).flat(),
   ];
   const subjectSet: Set<string> = new Set(validSubjects);
-  return apiSubjects.filter((subject) => subjectSet.has(subject.toLowerCase()));
+  return apiSubjects
+    .map((subject) => convertToCamelCase(subject))
+    .filter((subject) => subjectSet.has(subject));
+};
+
+//resolves casing inconsistencies from api
+const convertToCamelCase = (subject: string): string => {
+  return subject
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 
 export async function getBookByKey(
