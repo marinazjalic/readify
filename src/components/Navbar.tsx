@@ -54,143 +54,152 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 border-b border-gray-200 w-full">
-      <div className="container mx-auto px-4 relative max-w-full">
-        <div className="flex justify-between items-center py-4">
-          <Link href="/" className="text-2xl font-bold text-navy-600 ml-4">
-            Readify
-          </Link>
-          <div className="flex-grow mx-8">
-            <div className="relative">
-              <Input
-                type="text"
-                placeholder="Search..."
-                className="w-full pl-10 pr-4 py-2 rounded-lg border-gray-100 bg-gray-100 focus:border-navy-600 focus:ring-0 focus:outline-none focus:border-gray-100"
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={handleSearchSubmit}
-                value={searchQuery}
-              />
-              <Search
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
-              />
+    <>
+      <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 border-b border-gray-200 w-full">
+        <div className="container mx-auto px-4 relative max-w-full">
+          <div className="flex justify-between items-center py-4">
+            <Link href="/" className="text-2xl font-bold text-navy-600 ml-4">
+              Readify
+            </Link>
+            <div className="flex-grow mx-8">
+              <div className="relative">
+                <Input
+                  type="text"
+                  placeholder="Search..."
+                  className="w-full pl-10 pr-4 py-2 rounded-lg border-gray-100 bg-gray-100 focus:border-navy-600 focus:ring-0 focus:outline-none focus:border-gray-100"
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearchSubmit}
+                  value={searchQuery}
+                />
+                <Search
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
+              </div>
             </div>
-          </div>
-          {session ? (
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <Users className="h-5 w-5" />
+            {session ? (
+              <div className="flex items-center space-x-4">
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Users className="h-5 w-5" />
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full"
+                    >
+                      <Avatar>
+                        <AvatarImage
+                          src={session.user.image || undefined}
+                          alt={session.user.name || "User avatar"}
+                        />
+                        <AvatarFallback>
+                          {session.user.name?.[0] || "U"}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    className="w-56 p-0 rounded-t-none border-t-0"
+                    style={{
+                      boxShadow:
+                        "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                      marginTop: "2px",
+                      marginRight: "4px",
+                    }}
+                  >
+                    <div className="flex items-center space-x-2 p-4 border-b border-gray-200">
+                      <Avatar>
+                        <AvatarImage
+                          src={session.user.image || undefined}
+                          alt={session.user.name || "User avatar"}
+                        />
+                        <AvatarFallback>
+                          {session.user.name?.[0] || "U"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium">
+                          {session.user.name}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {session.user.email}
+                        </p>
+                      </div>
+                    </div>
+                    <DropdownMenuItem className="text-xs">
+                      <User className="mr-2 h-4 w-4" />
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="text-xs"
+                      onClick={() => signOut()}
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            ) : (
+              <Button
+                onClick={() => router.push("/login")}
+                className="bg-navy-600 text-white hover:bg-navy-700"
+              >
+                Log In
               </Button>
-              <DropdownMenu>
+            )}
+          </div>
+
+          <div className="flex justify-start items-center py-2 relative">
+            {Array.from(subjectMap.entries()).map(([key, value]) => (
+              <DropdownMenu
+                key={key}
+                open={openDropdown === key}
+                onOpenChange={() => {}}
+              >
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full">
-                    <Avatar>
-                      <AvatarImage
-                        src={session.user.image || undefined}
-                        alt={session.user.name || "User avatar"}
-                      />
-                      <AvatarFallback>
-                        {session.user.name?.[0] || "U"}
-                      </AvatarFallback>
-                    </Avatar>
+                  <Button
+                    variant="ghost"
+                    className="text-navy-600 hover:text-navy-800 hover:bg-white relative group px-4"
+                    onMouseEnter={() => handleMouseEnter(key)}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    {key}
+                    <span className="absolute bottom-1 left-0 w-full h-0.5 bg-navy-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-out"></span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  align="end"
-                  className="w-56 p-0 rounded-t-none border-t-0"
+                  side="bottom"
+                  align="start"
+                  className="grid grid-cols-2 gap-2 p-2 mt-0 rounded-t-none border-t-0"
+                  onMouseEnter={() => handleMouseEnter(key)}
+                  onMouseLeave={handleMouseLeave}
                   style={{
                     boxShadow:
                       "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                    marginTop: "2px",
-                    marginRight: "4px",
+                    marginTop: "5px", //moves dropdown below navbar
+                    transform: "translateX(-1px)",
                   }}
                 >
-                  <div className="flex items-center space-x-2 p-4 border-b border-gray-200">
-                    <Avatar>
-                      <AvatarImage
-                        src={session.user.image || undefined}
-                        alt={session.user.name || "User avatar"}
-                      />
-                      <AvatarFallback>
-                        {session.user.name?.[0] || "U"}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium">{session.user.name}</p>
-                      <p className="text-xs text-gray-500">
-                        {session.user.email}
-                      </p>
-                    </div>
-                  </div>
-                  <DropdownMenuItem className="text-xs">
-                    <User className="mr-2 h-4 w-4" />
-                    Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className="text-xs"
-                    onClick={() => signOut()}
-                  >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Sign out
-                  </DropdownMenuItem>
+                  {value.map((subgenre, index) => (
+                    <DropdownMenuItem
+                      key={index}
+                      className="w-full"
+                      onClick={() => handleGenreClick(subgenre)}
+                    >
+                      {subgenre}
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
-            </div>
-          ) : (
-            <Button
-              onClick={() => router.push("/login")}
-              className="bg-navy-600 text-white hover:bg-navy-700"
-            >
-              Log In
-            </Button>
-          )}
+            ))}
+          </div>
         </div>
-
-        <div className="flex justify-start items-center py-2 relative">
-          {Array.from(subjectMap.entries()).map(([key, value]) => (
-            <DropdownMenu
-              key={key}
-              open={openDropdown === key}
-              onOpenChange={() => {}}
-            >
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="text-navy-600 hover:text-navy-800 hover:bg-white relative group px-4"
-                  onMouseEnter={() => handleMouseEnter(key)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  {key}
-                  <span className="absolute bottom-1 left-0 w-full h-0.5 bg-navy-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-out"></span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                side="bottom"
-                align="start"
-                className="grid grid-cols-2 gap-2 p-2 mt-0 rounded-t-none border-t-0"
-                onMouseEnter={() => handleMouseEnter(key)}
-                onMouseLeave={handleMouseLeave}
-                style={{
-                  boxShadow:
-                    "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                  marginTop: "5px", //moves dropdown below navbar
-                  transform: "translateX(-1px)",
-                }}
-              >
-                {value.map((subgenre, index) => (
-                  <DropdownMenuItem
-                    key={index}
-                    className="w-full"
-                    onClick={() => handleGenreClick(subgenre)}
-                  >
-                    {subgenre}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ))}
-        </div>
-      </div>
-    </nav>
+      </nav>
+      <div className="h-[calc(64px+50px)]"></div>
+    </>
   );
 }

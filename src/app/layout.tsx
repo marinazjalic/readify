@@ -20,7 +20,7 @@ export default function RootLayout({
       <SessionProvider>
         <body className={inter.className}>
           <Navbar />
-          <main className="flex-grow mt-[120px]">{children}</main>
+          {children}
         </body>
       </SessionProvider>
     </html>
