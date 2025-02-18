@@ -87,10 +87,32 @@ export default function BookDetails({ params }: { params: { id: string } }) {
             <p>Loading...</p>
           ) : bookDetails && bookDetails.description ? (
             <p className="text-sm leading-relaxed mb-4">
-              {bookDetails.description}
+              {bookDetails.description.split("([source]")[0]}
             </p>
           ) : (
             <p>No description available.</p>
+          )}
+        </div>
+
+        <div>
+          {isLoading ? (
+            <p>Loading</p>
+          ) : bookDetails && bookDetails.genres.length !== 0 ? (
+            <div>
+              <p className="text-sm">Genres</p>
+              <div className="flex gap-2 mt-2">
+                {bookDetails.genres.map((genre: string, index: number) => (
+                  <button
+                    key={index}
+                    className="bg-forest-green-dark text-white text-xs px-1.5 py-1 rounded-full"
+                  >
+                    {genre}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <p>No genres available</p>
           )}
         </div>
 
