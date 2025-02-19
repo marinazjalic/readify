@@ -62,6 +62,7 @@ model Review {
   userId  String   @db.ObjectId
   bookKey String //open library api key
   content String?
+  subject String?
   rating  Int
   date    DateTime @default(now())
 

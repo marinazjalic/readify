@@ -7,6 +7,8 @@ import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getBookByKey } from "@/actions/books/getBookByKey";
 import { useBookStore } from "@/lib/bookStore";
+import Reviews from "@/components/Reviews";
+import { Review } from "@prisma/client";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -98,13 +100,13 @@ export default function BookDetails({ params }: { params: { id: string } }) {
           {isLoading ? (
             <p>Loading</p>
           ) : bookDetails && bookDetails.genres.length !== 0 ? (
-            <div>
-              <p className="text-sm">Genres</p>
-              <div className="flex gap-2 mt-2">
+            <div className="flex items-center gap-4">
+              <p className="text-sm font-semibold whitespace-nowrap">Genres:</p>
+              <div className="flex flex-wrap gap-2">
                 {bookDetails.genres.map((genre: string, index: number) => (
                   <button
                     key={index}
-                    className="bg-forest-green-dark text-white text-xs px-1.5 py-1 rounded-full"
+                    className="bg-forest-green-dark text-white text-xs px-2 py-1 rounded-full"
                   >
                     {genre}
                   </button>
@@ -113,6 +115,18 @@ export default function BookDetails({ params }: { params: { id: string } }) {
             </div>
           ) : (
             <p>No genres available</p>
+          )}
+        </div>
+
+        <div>
+          {isLoading ? (
+            <p>Loading</p>
+          ) : (
+            <Reviews
+              bookId={bookDetails.key}
+              bookTitle={bookDetails.title}
+              bookCover={bookDetails.cover}
+            />
           )}
         </div>
 

@@ -1,32 +1,52 @@
-"use client";
+"use client"
 
-import { Star } from "lucide-react";
+import { useState } from "react"
 
 interface StarRatingProps {
-  value: number;
-  editable?: boolean;
+  value: number
+  onChange?: (rating: number) => void
+  editable?: boolean
 }
 
-export default function StarRating({
-  value,
-  editable = false,
-}: StarRatingProps) {
-  const stars = Array.from({ length: 5 }, (_, index) => {
-    const filled = index < Math.floor(value);
-    const halfFilled = !filled && index < Math.ceil(value);
-    return (
-      <Star
-        key={index}
-        className={`w-6 h-6 ${
-          filled
-            ? "text-yellow-400 fill-current"
-            : halfFilled
-            ? "text-yellow-400 fill-yellow-400 half"
-            : "text-gray-300"
-        }`}
-      />
-    );
-  });
+export default function StarRating({ value, onChange, editable = false }: StarRatingProps) {
+  const [hoverRating, setHoverRating] = useState(0)
 
-  return <div className="flex">{stars}</div>;
+  const handleStarClick = (rating: number) => {
+    if (editable && onChange) {
+      onChange(rating)
+    }
+  }
+
+  const handleStarHover = (rating: number) => {
+    if (editable) {
+      setHoverRating(rating)
+    }
+  }
+
+  const handleMouseLeave = () => {
+    setHoverRating(0)
+  }
+
+  return (
+    <div className="flex" onMouseLeave={handleMouseLeave}>
+      {[1, 2, 3, 4, 5].map((star) => (
+        <svg
+          key={star}
+          className={`w-6 h-6 ${
+            star <= (hoverRating || value) ? "text-yellow-400" : "text-gray-300"
+          } ${editable ? "cursor-pointer" : ""}`}
+          onClick={() => handleStarClick(star)}
+          onMouseEnter={() => handleStarHover(star)}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </svg>
+      ))}
+    </div>
+  )
 }
+
