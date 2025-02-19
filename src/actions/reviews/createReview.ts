@@ -7,7 +7,8 @@ export async function createReview(
   bookKey: string,
   userId: string,
   rating: number,
-  content?: string
+  content?: string,
+  subject?: string
 ): Promise<{ success: boolean; data?: Review }> {
   try {
     console.log(bookKey, userId, rating, content);
@@ -17,6 +18,7 @@ export async function createReview(
         bookKey: bookKey,
         rating: rating,
         content: content,
+        subject: subject,
       },
     });
 

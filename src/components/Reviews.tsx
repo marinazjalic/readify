@@ -16,6 +16,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Image from "next/image";
+import { createReview } from "@/actions/reviews/createReview";
+import { useSession } from "next-auth/react";
 
 interface ReviewsProps {
   bookId: string;
@@ -29,16 +31,27 @@ export default function Reviews({
   bookCover,
 }: ReviewsProps) {
   const [rating, setRating] = useState(0);
-  const [review, setReview] = useState({ subject: "", content: "" });
+  const [reviewContent, setReviewContent] = useState("");
+  const [reviewSubject, setReviewSubject] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { data: session } = useSession();
 
   const handleRatingChange = (newRating: number) => {
     setRating(newRating);
   };
 
-  //to do
-  const handleSubmitReview = (e: React.FormEvent) => {
+  const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (session) {
+      const review = await createReview(
+        bookId,
+        session.user.id,
+        rating,
+        reviewContent,
+        reviewSubject
+      );
+    }
+
     setIsDialogOpen(false);
   };
 
@@ -79,17 +92,13 @@ export default function Reviews({
               <form onSubmit={handleSubmitReview} className="space-y-4">
                 <Input
                   placeholder="Review Subject"
-                  value={review.subject}
-                  onChange={(e) =>
-                    setReview({ ...review, subject: e.target.value })
-                  }
+                  value={reviewSubject}
+                  onChange={(e) => setReviewSubject(e.target.value)}
                 />
                 <Textarea
                   placeholder="Your review"
-                  value={review.content}
-                  onChange={(e) =>
-                    setReview({ ...review, content: e.target.value })
-                  }
+                  value={reviewContent}
+                  onChange={(e) => setReviewContent(e.target.value)}
                   rows={4}
                 />
                 <div className="flex justify-end gap-2">
