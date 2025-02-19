@@ -145,7 +145,7 @@ export default function Navbar() {
               </div>
             ) : (
               <Button
-                onClick={() => router.push("/login")}
+                onClick={() => router.push("/pages/login")}
                 className="bg-navy-600 text-white hover:bg-navy-700"
               >
                 Log In
