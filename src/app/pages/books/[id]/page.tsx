@@ -9,6 +9,8 @@ import { getBookByKey } from "@/actions/books/getBookByKey";
 import { useBookStore } from "@/lib/bookStore";
 import Reviews from "@/components/Reviews";
 import { Review } from "@prisma/client";
+import { getBooksByGenre } from "@/actions/books/getBooksByGenre";
+import { useRouter } from "next/navigation";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -33,6 +35,7 @@ export default function BookDetails({ params }: { params: { id: string } }) {
   const [wantToRead, setWantToRead] = useState(false);
   const [bookDetails, setBookDetails] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   const currentBook = useBookStore((state) => state.currentBook);
 
@@ -50,6 +53,10 @@ export default function BookDetails({ params }: { params: { id: string } }) {
     };
     fetchBookDetails();
   }, [currentBook]);
+
+  const handleGenreBtnClick = async (genre: string) => {
+    router.push(`/pages/books?filter=subject&query=${genre}`);
+  };
 
   return (
     <div className={`flex min-h-screen bg-white text-sm pt-0`}>
@@ -107,6 +114,7 @@ export default function BookDetails({ params }: { params: { id: string } }) {
                   <button
                     key={index}
                     className="bg-forest-green-dark text-white text-xs px-2 py-1 rounded-full"
+                    onClick={() => handleGenreBtnClick(genre)}
                   >
                     {genre}
                   </button>
