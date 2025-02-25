@@ -10,7 +10,7 @@ interface ArrowProps {
 function SampleNextArrow({ style, onClick, direction }: ArrowProps) {
   return (
     <div
-      className="custom-slider-arrow"
+      className="absolute flex flex-col h-[10px] w-[10px] top-1/2 left-full transform -translate-y-1/2 cursor-pointer bg-white"
       style={{
         ...style,
         display: "flex",
@@ -35,7 +35,7 @@ function SampleNextArrow({ style, onClick, direction }: ArrowProps) {
 function SamplePrevArrow({ style, onClick }: ArrowProps) {
   return (
     <div
-      className="custom-slider-arrow-left"
+      className="absolute flex flex-col h-[10px] w-[10px] top-1/2 -translate-x-1/2 z-[1000]"
       style={{
         ...style,
         display: "flex",

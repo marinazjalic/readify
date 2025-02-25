@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import Carousel from "@/components/carousel/Carousel";
-import "./index.css";
 import getAllBooks from "@/actions/books/getAllBooks";
 
 export default async function Home() {
@@ -10,10 +9,10 @@ export default async function Home() {
     <div>
       <br />
       <Header />
-      <div className="home-page-left">
-        <Carousel text="all" books={books} />
-        <Carousel text="all" books={books} />
-        <Carousel text="all" books={books} />
+      <div className="w-[70%]">
+        <Carousel text="temp" books={books} />
+        <Carousel text="temp" books={books} />
+        <Carousel text="temp" books={books} />
       </div>
     </div>
   );

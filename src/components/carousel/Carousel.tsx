@@ -22,15 +22,15 @@ export default function Carousel({ text, books }: CarouselProps) {
   };
 
   return (
-    <div className="carousel-container">
-      <h3 className="heading-text">{text}</h3>
+    <div className="pl-2 pr-5 overflow-hidden">
+      <h3 className="text-[22px] font-thin pl-[5px]">{text}</h3>
       <Slider {...settings}>
         {books.map((book: Book) => (
           <div key={book.id} className="image-container">
             <img
               src={`/assets/${book.id}.jpg`}
               alt={book.title}
-              className="slider-image"
+              className="w-[95%] h-[200px] py-[5px] pl-[13px] focus:outline-none hover:scale-105 hover:overflow-hidden transition-transform duration-100"
               onClick={() => handleCoverClick(book.id)}
             />
           </div>
