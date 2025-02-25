@@ -11,6 +11,8 @@ import Reviews from "@/components/Reviews";
 import { Review } from "@prisma/client";
 import { getBooksByGenre } from "@/actions/books/getBooksByGenre";
 import { useRouter } from "next/navigation";
+import { getReviewsByBook } from "@/actions/reviews/getReviewsByBook";
+import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -34,6 +36,7 @@ function StarRating({ value }: { value: number }) {
 export default function BookDetails({ params }: { params: { id: string } }) {
   const [wantToRead, setWantToRead] = useState(false);
   const [bookDetails, setBookDetails] = useState<any>(null);
+  const [bookReviews, setBookReviews] = useState<ReviewDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -44,7 +47,9 @@ export default function BookDetails({ params }: { params: { id: string } }) {
       if (currentBook) {
         try {
           const details = await getBookByKey(currentBook.key, currentBook);
+          const reviews = await getReviewsByBook(currentBook.key);
           setBookDetails(details);
+          setBookReviews(reviews);
           setIsLoading(false);
         } catch (error) {
           console.error("Failed to fetch book details. Error: ", error);
