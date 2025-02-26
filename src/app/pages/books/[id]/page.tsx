@@ -7,13 +7,14 @@ import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getBookByKey } from "@/actions/books/getBookByKey";
 import { useBookStore } from "@/lib/bookStore";
-import Reviews from "@/components/Reviews";
+import ReviewForm from "@/components/ReviewForm";
 import { Review } from "@prisma/client";
 import { getBooksByGenre } from "@/actions/books/getBooksByGenre";
 import { useRouter } from "next/navigation";
 import { getReviewsByBook } from "@/actions/reviews/getReviewsByBook";
 import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import Reviews from "@/components/Reviews";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -139,11 +140,12 @@ export default function BookDetails({ params }: { params: { id: string } }) {
 
               {/* loading review dialog */}
               <div>
-                <Reviews
+                <ReviewForm
                   bookId={bookDetails.key}
                   bookTitle={bookDetails.title}
                   bookCover={bookDetails.cover}
                 />
+                <Reviews reviews={bookReviews} />
               </div>
             </div>
           )}

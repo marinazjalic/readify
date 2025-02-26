@@ -1,133 +1,82 @@
-"use client";
-
-import type React from "react";
-
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
-import StarRating from "@/components/StarRating";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import Image from "next/image";
-import { createReview } from "@/actions/reviews/createReview";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { Star } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
+import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
 
 interface ReviewsProps {
-  bookId: string;
-  bookTitle: string;
-  bookCover: string;
+  reviews: ReviewDetails[];
 }
 
-export default function Reviews({
-  bookId,
-  bookTitle,
-  bookCover,
-}: ReviewsProps) {
-  const [rating, setRating] = useState(0);
-  const [reviewContent, setReviewContent] = useState("");
-  const [reviewSubject, setReviewSubject] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { data: session } = useSession();
-  const router = useRouter();
-
-  const handleRatingChange = (newRating: number) => {
-    setRating(newRating);
-  };
-
-  const handleSubmitReview = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (session) {
-      const review = await createReview(
-        bookId,
-        session.user.id,
-        rating,
-        reviewContent,
-        reviewSubject
-      );
-    }
-
-    setIsDialogOpen(false);
-  };
-
-  const handleLeaveReviewBtn = () => {
-    if (session) {
-      setIsDialogOpen(true);
-    } else {
-      router.push("/pages/login");
-    }
-  };
-
+function StarRating({ value }: { value: number }) {
   return (
-    <div className="mt-8">
-      <Separator className="my-4" />
-      <h3 className="text-xl font-semibold mb-6 text-center">
-        Let other readers know what you thought.
-      </h3>
-      <div className="flex justify-center">
-        <Button onClick={handleLeaveReviewBtn}>Leave Review</Button>
-        {session && (
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild></DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Write a Review</DialogTitle>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
+    <div className="flex">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <Star
+          key={star}
+          className={`w-4 h-4 ${
+            star <= value ? "text-yellow-400 fill-current" : "text-gray-300"
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
+
+export default function Reviews({ reviews }: ReviewsProps) {
+  return (
+    <div className="space-y-6">
+      <h2 className="text-xl font-semibold">Reviews</h2>
+      {reviews.length === 0 ? (
+        <p className="text-muted-foreground text-sm">No reviews yet</p>
+      ) : (
+        <div className="space-y-4">
+          {reviews.map((review) => (
+            <Card key={review.id}>
+              <CardContent className="p-4">
                 <div className="flex items-start gap-4">
-                  <Image
-                    src={`https://covers.openlibrary.org/b/id/${bookCover}-L.jpg`}
-                    alt={bookTitle}
-                    width={60}
-                    height={90}
-                    className="object-cover"
-                  />
-                  <h4 className="font-semibold">{bookTitle}</h4>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <StarRating
-                    value={rating}
-                    onChange={handleRatingChange}
-                    editable
-                  />
-                  <span className="text-xs text-gray-500">Rate this book</span>
-                </div>
-                <form onSubmit={handleSubmitReview} className="space-y-4">
-                  <Input
-                    placeholder="Review Subject"
-                    value={reviewSubject}
-                    onChange={(e) => setReviewSubject(e.target.value)}
-                  />
-                  <Textarea
-                    placeholder="Your review"
-                    value={reviewContent}
-                    onChange={(e) => setReviewContent(e.target.value)}
-                    rows={4}
-                  />
-                  <div className="flex justify-end gap-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setIsDialogOpen(false)}
-                    >
-                      Cancel
-                    </Button>
-                    <Button type="submit">Submit Review</Button>
+                  <div className="flex flex-col items-center">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage
+                        src={review.user.profileImageUrl || undefined}
+                        alt={review.user.firstName || "User avatar"}
+                      />
+
+                      <AvatarFallback>
+                        {review.user.firstName.charAt(0) +
+                          review.user.lastName.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <p className="font-medium">{review.user.firstName}</p>
                   </div>
-                </form>
-              </div>
-            </DialogContent>
-          </Dialog>
-        )}
-      </div>
-      <Separator className="my-4" />
+
+                  <div className="flex-1 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <StarRating value={review.rating} />
+                          <span className="text-xs text-muted-foreground">
+                            {new Date(review.date).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {review.subject && (
+                      <p className="font-medium text-sm">{review.subject}</p>
+                    )}
+
+                    {review.content && (
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {review.content}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
