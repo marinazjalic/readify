@@ -66,9 +66,11 @@ export default function BookDetails({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className={`flex min-h-screen bg-white text-sm pt-0`}>
-      <div className="w-1/4 fixed left-0 top-[120px] bottom-0 p-4 flex flex-col items-center space-y-4 overflow-y-auto">
-        <div className="w-49">
+    <div
+      className={`flex flex-col lg:flex-row min-h-screen bg-white text-sm pt-0`}
+    >
+      <div className="w-full lg:w-1/4 lg:fixed lg:left-0 lg:top-[120px] lg:bottom-0 p-4 flex flex-col items-center space-y-4">
+        <div className="w-full max-w-[220px]">
           <Image
             src={`https://covers.openlibrary.org/b/id/${currentBook?.cover}-L.jpg`}
             alt={`Cover of ${currentBook?.title}`}
@@ -80,14 +82,14 @@ export default function BookDetails({ params }: { params: { id: string } }) {
         <Button
           onClick={() => setWantToRead(!wantToRead)}
           variant={wantToRead ? "default" : "outline"}
-          className="w-60 rounded-full bg-forest-green hover:bg-forest-green-dark text-white text-xs"
+          className="w-full max-w-[220px] rounded-full bg-forest-green hover:bg-forest-green-dark text-white text-xs"
         >
           {wantToRead ? "Added to List" : "Want to Read"}
         </Button>
       </div>
 
       {/* right side content */}
-      <div className="w-3/4 ml-[25%] p-4 overflow-y-auto min-h-screen">
+      <div className="w-full lg:w-3/4 lg:ml-[25%] p-4 overflow-y-auto">
         <h1 className="text-2xl font-bold mb-1">{currentBook?.title}</h1>
         <p className="text-base text-gray-600 mb-2">by {currentBook?.author}</p>
 
