@@ -36,7 +36,7 @@ export default function SignUpForm() {
   const handleGoogleSignUp = () => {};
 
   return (
-    <div className="w-72 bg-white p-3 rounded-lg shadow-md">
+    <div className="w-72 bg-white p-3 rounded-lg shadow-lg border-2">
       <h2 className="text-lg font-bold text-center text-gray-800 mb-2">
         Join the Community
       </h2>
@@ -88,7 +88,7 @@ export default function SignUpForm() {
           required
           className="h-8 text-sm"
         />
-        <Button type="submit" className="w-full h-8 text-sm">
+        <Button type="submit" className="w-full h-8 text-sm bg-teracota">
           Sign Up
         </Button>
         <div className="relative">
