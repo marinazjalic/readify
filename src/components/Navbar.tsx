@@ -4,20 +4,33 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useState, type KeyboardEvent, useRef } from "react";
-import { genres } from "@/constants/constants";
 import { useRouter } from "next/navigation";
 import { subjectMap } from "@/constants/constants";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users, User, LogOut } from "lucide-react";
+import {
+  Users,
+  User,
+  LogOut,
+  Menu,
+  ChevronRight,
+  ChevronLeft,
+} from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import Image from "next/image";
 
 export default function Navbar() {
   const router = useRouter();
@@ -26,6 +39,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleSearchSubmit = async (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key == "Enter") {
@@ -55,13 +69,97 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 border-b border-gray-200 w-full">
+      <nav className="bg-olive-green shadow-md fixed top-0 left-0 right-0 z-50 border-b border-gray-200 w-full">
         <div className="container mx-auto px-4 relative max-w-full">
           <div className="flex justify-between items-center py-4">
-            <Link href="/" className="text-2xl font-bold text-navy-600 ml-4">
-              readify
-            </Link>
-            <div className="flex-grow mx-8">
+            <div className="flex items-center">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="mr-2 lg:hidden"
+                  >
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Toggle navigation menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent
+                  side="left"
+                  className="w-[300px] sm:w-[400px] p-0"
+                >
+                  <SheetHeader className="px-4 py-4 border-b">
+                    <SheetTitle>Categories</SheetTitle>
+                  </SheetHeader>
+                  <div className="overflow-y-auto h-full">
+                    {(() => {
+                      const [selectedGenre, setSelectedGenre] = useState<
+                        string | null
+                      >(null);
+                      if (selectedGenre) {
+                        const subgenres = subjectMap.get(selectedGenre) || [];
+                        return (
+                          <div className="flex flex-col">
+                            <Button
+                              variant="ghost"
+                              className="flex items-center justify-start p-4 mb-2"
+                              onClick={() => setSelectedGenre(null)}
+                            >
+                              <ChevronLeft className="h-4 w-4 mr-2" />
+                              Back to Categories
+                            </Button>
+                            <div className="px-4 py-2 font-semibold text-lg">
+                              {selectedGenre}
+                            </div>
+                            <nav className="flex flex-col">
+                              {subgenres.map((subgenre, index) => (
+                                <Button
+                                  key={index}
+                                  variant="ghost"
+                                  className="justify-start px-6 py-3 text-left rounded-none hover:bg-gray-100"
+                                  onClick={() => {
+                                    handleGenreClick(subgenre);
+                                    setIsMobileMenuOpen(false);
+                                  }}
+                                >
+                                  {subgenre}
+                                </Button>
+                              ))}
+                            </nav>
+                          </div>
+                        );
+                      }
+                      return (
+                        <nav className="flex flex-col">
+                          {Array.from(subjectMap.keys()).map((genre) => (
+                            <Button
+                              key={genre}
+                              variant="ghost"
+                              className="flex items-center justify-between px-4 py-3 text-left rounded-none hover:bg-gray-100"
+                              onClick={() => setSelectedGenre(genre)}
+                            >
+                              <span>{genre}</span>
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          ))}
+                        </nav>
+                      );
+                    })()}
+                  </div>
+                </SheetContent>
+              </Sheet>
+              <div className="w-24">
+                <Link href="/">
+                  <Image
+                    src="/assets/logo.png"
+                    alt="logo"
+                    width={200}
+                    height={100}
+                  />
+                </Link>
+              </div>
+            </div>
+            <div className="flex-grow mx-8 lg:w-auto block">
               <div className="relative">
                 <Input
                   type="text"
@@ -146,14 +244,14 @@ export default function Navbar() {
             ) : (
               <Button
                 onClick={() => router.push("/pages/login")}
-                className="bg-navy-600 text-white hover:bg-navy-700"
+                className="bg-navy-600 text-white hover:bg-navy-700 text-xs w-15"
               >
                 Log In
               </Button>
             )}
           </div>
 
-          <div className="flex justify-start items-center py-2 relative">
+          <div className="flex justify-start items-center py-2 relative hidden lg:flex">
             {Array.from(subjectMap.entries()).map(([key, value]) => (
               <DropdownMenu
                 key={key}
@@ -163,7 +261,7 @@ export default function Navbar() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="text-navy-600 hover:text-navy-800 hover:bg-white relative group px-4"
+                    className="text-navy hover:text-navy hover:bg-navy relative group px-4 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
                     onMouseEnter={() => handleMouseEnter(key)}
                     onMouseLeave={handleMouseLeave}
                   >
@@ -180,7 +278,7 @@ export default function Navbar() {
                   style={{
                     boxShadow:
                       "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                    marginTop: "5px", //moves dropdown below navbar
+                    marginTop: "5px",
                     transform: "translateX(-1px)",
                   }}
                 >
