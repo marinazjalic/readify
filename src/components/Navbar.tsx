@@ -15,22 +15,9 @@ import { subjectMap } from "@/constants/constants";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Users,
-  User,
-  LogOut,
-  Menu,
-  ChevronRight,
-  ChevronLeft,
-} from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Users, User, LogOut } from "lucide-react";
 import Image from "next/image";
+import NavDrawer from "./NavDrawer";
 
 export default function Navbar() {
   const router = useRouter();
@@ -39,8 +26,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   const handleSearchSubmit = async (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key == "Enter") {
       router.push(`/pages/books?filter=title&query=${searchQuery}`);
@@ -73,81 +58,7 @@ export default function Navbar() {
         <div className="container mx-auto px-4 relative max-w-full">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="mr-2 lg:hidden"
-                  >
-                    <Menu className="h-6 w-6" />
-                    <span className="sr-only">Toggle navigation menu</span>
-                  </Button>
-                </SheetTrigger>
-                <SheetContent
-                  side="left"
-                  className="w-[300px] sm:w-[400px] p-0"
-                >
-                  <SheetHeader className="px-4 py-4 border-b">
-                    <SheetTitle>Categories</SheetTitle>
-                  </SheetHeader>
-                  <div className="overflow-y-auto h-full">
-                    {(() => {
-                      const [selectedGenre, setSelectedGenre] = useState<
-                        string | null
-                      >(null);
-                      if (selectedGenre) {
-                        const subgenres = subjectMap.get(selectedGenre) || [];
-                        return (
-                          <div className="flex flex-col">
-                            <Button
-                              variant="ghost"
-                              className="flex items-center justify-start p-4 mb-2"
-                              onClick={() => setSelectedGenre(null)}
-                            >
-                              <ChevronLeft className="h-4 w-4 mr-2" />
-                              Back to Categories
-                            </Button>
-                            <div className="px-4 py-2 font-semibold text-lg">
-                              {selectedGenre}
-                            </div>
-                            <nav className="flex flex-col">
-                              {subgenres.map((subgenre, index) => (
-                                <Button
-                                  key={index}
-                                  variant="ghost"
-                                  className="justify-start px-6 py-3 text-left rounded-none hover:bg-gray-100"
-                                  onClick={() => {
-                                    handleGenreClick(subgenre);
-                                    setIsMobileMenuOpen(false);
-                                  }}
-                                >
-                                  {subgenre}
-                                </Button>
-                              ))}
-                            </nav>
-                          </div>
-                        );
-                      }
-                      return (
-                        <nav className="flex flex-col">
-                          {Array.from(subjectMap.keys()).map((genre) => (
-                            <Button
-                              key={genre}
-                              variant="ghost"
-                              className="flex items-center justify-between px-4 py-3 text-left rounded-none hover:bg-gray-100"
-                              onClick={() => setSelectedGenre(genre)}
-                            >
-                              <span>{genre}</span>
-                              <ChevronRight className="h-4 w-4" />
-                            </Button>
-                          ))}
-                        </nav>
-                      );
-                    })()}
-                  </div>
-                </SheetContent>
-              </Sheet>
+              <NavDrawer />
               <div className="w-24">
                 <Link href="/">
                   <Image
