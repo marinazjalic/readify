@@ -88,7 +88,10 @@ export default function SignUpForm() {
           required
           className="h-8 text-sm"
         />
-        <Button type="submit" className="w-full h-8 text-sm bg-teracota">
+        <Button
+          type="submit"
+          className="w-full h-8 text-sm bg-teracota-600 hover:bg-teracota-500"
+        >
           Sign Up
         </Button>
         <div className="relative">

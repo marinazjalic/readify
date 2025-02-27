@@ -22,7 +22,10 @@ module.exports = {
         "dusty-rose": "#d09696",
         "olive-green": "#759684",
         "cream-header": "#efefe7",
-        teracota: "#e2725b",
+        teracota: {
+          "500": "#e47c67",
+          "600": "#e2725b",
+        },
         navy: {
           "500": "#0D2E5C",
           "600": "#0A2342",
