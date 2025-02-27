@@ -19,9 +19,11 @@ import {
 import { subjectMap } from "@/constants/constants";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 export default function NavDrawer() {
   const router = useRouter();
+  const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
 
   const handleGenreClick = (subgenre: string) => {
     router.push(`/pages/books?filter=subject&query=${subgenre}`);
@@ -31,33 +33,47 @@ export default function NavDrawer() {
     <div>
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="mr-2 lg:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="mr-2 lg:hidden hover:bg-olive-green-500"
+          >
             <Menu className="h-6 w-6" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-[300px] sm:w-[400px] p-0">
-          <SheetHeader className="px-4 py-4 border-b">
-            <SheetTitle>Genres & Categories</SheetTitle>
-          </SheetHeader>
-          <div className="overflow-y-auto h-full">
+        <SheetContent
+          side="left"
+          className="w-[300px] sm:w-[400px] p-0 bg-olive-green-100 text-navy-500"
+        >
+          {selectedGenre && (
+            <Button
+              variant="ghost"
+              className="flex items-center justify-start mt-2 text-navy-600 hover:bg-olive-green-100 hover:text-gray-400"
+              onClick={() => setSelectedGenre(null)}
+            >
+              <ChevronLeft className="h-4 w-4 mr-2" />
+            </Button>
+          )}
+
+          <VisuallyHidden>
+            <SheetHeader className="px-4 py-4 border-b">
+              <SheetTitle className="text-navy-600">Categories</SheetTitle>
+            </SheetHeader>
+          </VisuallyHidden>
+
+          <div
+            className={
+              selectedGenre
+                ? "overflow-y-auto h-full"
+                : "overflow-y-auto h-full pt-9"
+            }
+          >
             {(() => {
-              //tracking if a genre is selected & getting its subgenres by key/value pair
-              const [selectedGenre, setSelectedGenre] = useState<string | null>(
-                null
-              );
               if (selectedGenre) {
                 const subgenres = subjectMap.get(selectedGenre) || [];
                 return (
-                  <div className="flex flex-col">
-                    <Button
-                      variant="ghost"
-                      className="flex items-center justify-start p-4 mb-2"
-                      onClick={() => setSelectedGenre(null)}
-                    >
-                      <ChevronLeft className="h-4 w-4 mr-2" />
-                      Back to Categories
-                    </Button>
-                    <div className="px-4 py-2 font-semibold text-lg">
+                  <div>
+                    <div className="px-5 py-2 font-semibold text-lg">
                       {selectedGenre}
                     </div>
                     <nav className="flex flex-col">
@@ -66,7 +82,7 @@ export default function NavDrawer() {
                         <Button
                           key={index}
                           variant="ghost"
-                          className="justify-start px-6 py-3 text-left rounded-none hover:bg-gray-100"
+                          className="justify-start px-6 py-3 text-left rounded-none hover:bg-olive-green-100 hover:text-gray-400"
                           onClick={() => {
                             handleGenreClick(subgenre);
                           }}
@@ -84,11 +100,11 @@ export default function NavDrawer() {
                     <Button
                       key={genre}
                       variant="ghost"
-                      className="flex items-center justify-between px-4 py-3 text-left rounded-none hover:bg-gray-100"
+                      className="flex items-center justify-between px-4 py-3 text-left rounded-none hover:bg-olive-green-100 hover:text-gray-400"
                       onClick={() => setSelectedGenre(genre)}
                     >
                       <span>{genre}</span>
-                      <ChevronRight className="h-4 w-4" />
+                      <ChevronRight className="h-4 w-4 text-gray-400" />
                     </Button>
                   ))}
                 </nav>

@@ -23,7 +23,11 @@ export default function UserMenu({
 }: UserMenuProps) {
   return (
     <div className="flex items-center space-x-4">
-      <Button variant="ghost" size="icon" className="rounded-full">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="rounded-full hover:bg-olive-green-500 text-navy-600 hover:text-gray-300"
+      >
         <Users className="h-5 w-5" />
       </Button>
       <DropdownMenu>

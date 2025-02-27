@@ -40,7 +40,7 @@ export default function NavDropDown() {
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="text-navy hover:text-navy hover:bg-navy relative group px-4 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+              className="text-navy-600 hover:text-navy-600 hover:bg-olive-green-500 relative group px-4 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
               onMouseEnter={() => handleMouseEnter(key)}
               onMouseLeave={handleMouseLeave}
             >
@@ -51,13 +51,13 @@ export default function NavDropDown() {
           <DropdownMenuContent
             side="bottom"
             align="start"
-            className="grid grid-cols-2 gap-2 p-2 mt-0 rounded-t-none border-t-0"
+            className="grid grid-cols-2 gap-2 p-2 mt-0 rounded-t-none border-t-0 bg-olive-green-100"
             onMouseEnter={() => handleMouseEnter(key)}
             onMouseLeave={handleMouseLeave}
             style={{
               boxShadow:
                 "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-              marginTop: "5px",
+              marginTop: "4px",
               transform: "translateX(-1px)",
             }}
           >

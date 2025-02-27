@@ -20,7 +20,10 @@ module.exports = {
         "forest-green": "#228B22",
         "forest-green-dark": "#006400",
         "dusty-rose": "#d09696",
-        "olive-green": "#759684",
+        "olive-green": {
+          "100": "#e2e9e5",
+          "500": "#759684",
+        },
         "cream-header": "#efefe7",
         teracota: {
           "500": "#e47c67",
