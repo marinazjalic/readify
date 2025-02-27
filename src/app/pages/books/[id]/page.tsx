@@ -76,13 +76,13 @@ export default function BookDetails({ params }: { params: { id: string } }) {
             alt={`Cover of ${currentBook?.title}`}
             width={220}
             height={320}
-            className="shadow-lg"
+            className="shadow-xl rounded-tr-xl rounded-br-xl"
           />
         </div>
         <Button
           onClick={() => setWantToRead(!wantToRead)}
           variant={wantToRead ? "default" : "outline"}
-          className="w-full max-w-[220px] rounded-full bg-forest-green hover:bg-forest-green-dark text-white text-xs"
+          className="w-full max-w-[220px] rounded-full bg-navy-600 hover:bg-navy-500 hover:text-white text-white text-xs"
         >
           {wantToRead ? "Added to List" : "Want to Read"}
         </Button>
@@ -90,8 +90,14 @@ export default function BookDetails({ params }: { params: { id: string } }) {
 
       {/* right side content */}
       <div className="w-full lg:w-3/4 lg:ml-[25%] p-4 overflow-y-auto">
-        <h1 className="text-2xl font-bold mb-1">{currentBook?.title}</h1>
-        <p className="text-base text-gray-600 mb-2">by {currentBook?.author}</p>
+        <h1 className={` ${montserrat.className} text-2xl font-bold mb-1`}>
+          {currentBook?.title}
+        </h1>
+        <p
+          className={`${montserrat.className} text-base text-xs text-gray-500 mb-2`}
+        >
+          {currentBook?.author}
+        </p>
 
         {/* <div className="flex items-center mb-3">
           {" "}
@@ -110,7 +116,9 @@ export default function BookDetails({ params }: { params: { id: string } }) {
               <div>
                 {/* loading the book description */}
                 {bookDetails?.description ? (
-                  <p className="text-sm leading-relaxed mb-4">
+                  <p
+                    className={`${montserrat.className} text-sm leading-relaxed mb-4`}
+                  >
                     {bookDetails.description.split("([source]")[0]}
                   </p>
                 ) : null}
@@ -120,15 +128,17 @@ export default function BookDetails({ params }: { params: { id: string } }) {
               {bookDetails?.genres?.length ? (
                 <div>
                   <div className="flex items-center gap-4">
-                    <p className="text-sm font-semibold whitespace-nowrap">
-                      Genres:
+                    <p
+                      className={`${montserrat.className} text-xs text-gray-600 whitespace-nowrap`}
+                    >
+                      Categories
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {bookDetails.genres.map(
                         (genre: string, index: number) => (
                           <button
                             key={index}
-                            className="bg-forest-green-dark text-white text-xs px-2 py-1 rounded-full"
+                            className={`${montserrat.className} bg-teracota-600 hover:bg-teracota-500 text-white text-xxs px-1 rounded-lg`}
                             onClick={() => handleGenreBtnClick(genre)}
                           >
                             {genre}

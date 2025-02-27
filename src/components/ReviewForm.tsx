@@ -19,12 +19,15 @@ import Image from "next/image";
 import { createReview } from "@/actions/reviews/createReview";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Montserrat } from "next/font/google";
 
 interface ReviewsProps {
   bookId: string;
   bookTitle: string;
   bookCover: string;
 }
+
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 export default function ReviewForm({
   bookId,
@@ -72,7 +75,12 @@ export default function ReviewForm({
         Let other readers know what you thought.
       </h3>
       <div className="flex justify-center">
-        <Button onClick={handleLeaveReviewBtn}>Leave Review</Button>
+        <Button
+          className={`${montserrat.className} bg-white text-navy-600 border-2 border-olive-green-500 hover:bg-olive-green-500 hover:text-white rounded-full`}
+          onClick={handleLeaveReviewBtn}
+        >
+          Leave Review
+        </Button>
         {session && (
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild></DialogTrigger>
