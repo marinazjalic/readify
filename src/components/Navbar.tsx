@@ -12,12 +12,11 @@ import { Search } from "lucide-react";
 import { useState, type KeyboardEvent, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { subjectMap } from "@/constants/constants";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users, User, LogOut } from "lucide-react";
 import Image from "next/image";
 import NavDrawer from "./NavDrawer";
+import UserMenu from "./UserMenu";
 
 export default function Navbar() {
   const router = useRouter();
@@ -48,7 +47,7 @@ export default function Navbar() {
     }, 300);
   };
 
-  if (pathname === "/login") {
+  if (pathname === "/pages/login") {
     return null;
   }
 
@@ -87,70 +86,12 @@ export default function Navbar() {
               </div>
             </div>
             {session ? (
-              <div className="flex items-center space-x-4">
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <Users className="h-5 w-5" />
-                </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-full"
-                    >
-                      <Avatar>
-                        <AvatarImage
-                          src={session.user.image || undefined}
-                          alt={session.user.name || "User avatar"}
-                        />
-                        <AvatarFallback>
-                          {session.user.name?.[0] || "U"}
-                        </AvatarFallback>
-                      </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    align="end"
-                    className="w-56 p-0 rounded-t-none border-t-0"
-                    style={{
-                      boxShadow:
-                        "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                      marginTop: "2px",
-                      marginRight: "4px",
-                    }}
-                  >
-                    <div className="flex items-center space-x-2 p-4 border-b border-gray-200">
-                      <Avatar>
-                        <AvatarImage
-                          src={session.user.image || undefined}
-                          alt={session.user.name || "User avatar"}
-                        />
-                        <AvatarFallback>
-                          {session.user.name?.[0] || "U"}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-sm font-medium">
-                          {session.user.name}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {session.user.email}
-                        </p>
-                      </div>
-                    </div>
-                    <DropdownMenuItem className="text-xs">
-                      <User className="mr-2 h-4 w-4" />
-                      Profile
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="text-xs"
-                      onClick={() => signOut()}
-                    >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Sign out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <div>
+                <UserMenu
+                  userName={session.user.name as string}
+                  userEmail={session.user.email as string}
+                  userProfileImg={session.user.image}
+                />
               </div>
             ) : (
               <Button
