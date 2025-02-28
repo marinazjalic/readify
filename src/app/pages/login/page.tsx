@@ -32,11 +32,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <div className="m-auto bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="flex min-h-screen bg-olive-green-100">
+      <div className="m-auto bg-olive-green-500 p-8 rounded-lg shadow-md w-full max-w-md">
         <div className="flex justify-center mb-8">
-          <Link href="/" className="text-2xl font-bold text-navy-600">
-            Readify
+          <Link href="/">
+            <Image src="/assets/logo.png" alt="logo" width={200} height={100} />
           </Link>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -46,6 +46,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            className="bg-white [&:not(:placeholder-shown)]:text-gray-600 placeholder:text-gray-500"
           />
           <Input
             type="password"
@@ -53,6 +54,7 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="bg-white [&:not(:placeholder-shown)]:text-gray-600 placeholder:text-gray-500"
           />
           <div className="flex flex-col space-y-2">
             {validationError && (
@@ -64,11 +66,12 @@ export default function LoginPage() {
               <Checkbox
                 id="keepSignedIn"
                 checked={keepSignedIn}
+                className="border-white data-[state=checked]:bg-transparent data-[state=checked]:border-white"
                 onCheckedChange={(checked) =>
                   setKeepSignedIn(checked as boolean)
                 }
               />
-              <label htmlFor="keepSignedIn" className="text-sm text-gray-600">
+              <label htmlFor="keepSignedIn" className="text-sm text-white">
                 Keep me signed in
               </label>
             </div>
@@ -76,13 +79,23 @@ export default function LoginPage() {
 
           <Button
             type="submit"
-            className="w-full bg-navy-600 hover:bg-navy-700"
+            className="w-full bg-navy-600 hover:bg-navy-500"
           >
             Sign In
           </Button>
         </form>
-        <Separator className="my-4" />
-        <Button variant="outline" className="w-full mb-4">
+        <div className="relative">
+          <Separator className="my-4" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="bg-olive-green-500 px-2 text-white text-xs">
+              or
+            </span>
+          </div>
+        </div>
+        <Button
+          variant="outline"
+          className="w-full mb-4 border-2 border-navy-600 text-navy-600"
+        >
           Continue with Google
         </Button>
         <div className="text-center">
@@ -94,7 +107,7 @@ export default function LoginPage() {
           </Link>
         </div>
         <div className="text-center mt-4">
-          <span className="text-sm text-gray-600">Don't have an account? </span>
+          <span className="text-sm text-white">Don't have an account? </span>
           <Link
             href="/signup"
             className="text-sm text-navy-600 hover:underline"
