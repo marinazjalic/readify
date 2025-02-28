@@ -2,6 +2,8 @@ import { Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
+import { Inter, Lora, Montserrat } from "next/font/google";
+import { Separator } from "@/components/ui/separator";
 
 interface ReviewsProps {
   reviews: ReviewDetails[];
@@ -22,14 +24,20 @@ function StarRating({ value }: { value: number }) {
   );
 }
 
+const inter = Inter({ subsets: ["latin"] });
+const lora = Lora({ subsets: ["latin"] });
+
 export default function Reviews({ reviews }: ReviewsProps) {
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold">Reviews</h2>
+      <h2 className={`${lora.className} text-xl font-semibold`}>
+        Reviews & Ratings
+      </h2>
       {reviews.length === 0 ? (
         <p className="text-muted-foreground text-sm">No reviews yet</p>
       ) : (
         <div className="space-y-4">
+          <Separator />
           {reviews.map((review) => (
             <Card key={review.id}>
               <CardContent className="p-4">
@@ -46,7 +54,12 @@ export default function Reviews({ reviews }: ReviewsProps) {
                           review.user.lastName.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
-                    <p className="font-medium">{review.user.firstName}</p>
+                    <p className="text-xs font-semibold pt-3">
+                      {review.user.firstName +
+                        " " +
+                        review.user.lastName[0] +
+                        ". "}
+                    </p>
                   </div>
 
                   <div className="flex-1 space-y-2">
@@ -62,17 +75,18 @@ export default function Reviews({ reviews }: ReviewsProps) {
                     </div>
 
                     {review.subject && (
-                      <p className="font-medium text-sm">{review.subject}</p>
+                      <p className="text-sm">{review.subject}</p>
                     )}
 
                     {review.content && (
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <p className="text-xs text-muted-foreground leading-relaxed">
                         {review.content}
                       </p>
                     )}
                   </div>
                 </div>
               </CardContent>
+              <Separator />
             </Card>
           ))}
         </div>

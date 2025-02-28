@@ -22,6 +22,7 @@ module.exports = {
         "dusty-rose": "#d09696",
         "olive-green": {
           "100": "#e2e9e5",
+          "400": "#8ba798",
           "500": "#759684",
         },
         "cream-header": "#efefe7",

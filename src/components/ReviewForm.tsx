@@ -71,7 +71,7 @@ export default function ReviewForm({
   return (
     <div className="mt-8">
       <Separator className="my-4" />
-      <h3 className="text-xl font-semibold mb-6 text-center">
+      <h3 className="text-xl font-semibold mb-6 text-center text-navy-600">
         Let other readers know what you thought.
       </h3>
       <div className="flex justify-center">
@@ -86,7 +86,11 @@ export default function ReviewForm({
             <DialogTrigger asChild></DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
-                <DialogTitle>Write a Review</DialogTitle>
+                <DialogTitle
+                  className={`${montserrat.className} text-navy-600`}
+                >
+                  Leave a review.
+                </DialogTitle>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="flex items-start gap-4">
@@ -95,9 +99,11 @@ export default function ReviewForm({
                     alt={bookTitle}
                     width={60}
                     height={90}
-                    className="object-cover"
+                    className="object-cover shadow-lg rounded-tr-lg rounded-br-lg"
                   />
-                  <h4 className="font-semibold">{bookTitle}</h4>
+                  <h4 className={`${montserrat.className} font-semibold`}>
+                    {bookTitle}
+                  </h4>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <StarRating
@@ -105,31 +111,46 @@ export default function ReviewForm({
                     onChange={handleRatingChange}
                     editable
                   />
-                  <span className="text-xs text-gray-500">Rate this book</span>
+                  <span
+                    className={`${montserrat.className} text-xs text-gray-500`}
+                  >
+                    Rate this book
+                  </span>
                 </div>
                 <form onSubmit={handleSubmitReview} className="space-y-4">
-                  <Input
-                    placeholder="Review Subject"
-                    value={reviewSubject}
-                    onChange={(e) => setReviewSubject(e.target.value)}
-                  />
-                  <Textarea
-                    placeholder="Your review"
-                    value={reviewContent}
-                    onChange={(e) => setReviewContent(e.target.value)}
-                    rows={4}
-                  />
+                  <div className="border-2 rounded-md">
+                    <Input
+                      placeholder="Subject: "
+                      value={reviewSubject}
+                      className="border-b border-t-0 border-l-0 border-r-0 rounded-none shadow-none focus-visible:ring-transparent placeholder:text-xs text-xxs text-gray-600"
+                      onChange={(e) => setReviewSubject(e.target.value)}
+                    />
+                    <Textarea
+                      placeholder="Share your thoughts"
+                      value={reviewContent}
+                      className="border-none shadow-none focus-visible:ring-transparent placeholder:text-xs"
+                      onChange={(e) => setReviewContent(e.target.value)}
+                      rows={4}
+                    />
+                  </div>
                   <div className="flex justify-end gap-2">
                     <Button
                       type="button"
                       variant="outline"
+                      className="border border-olive-green-500 text-navy-600"
                       onClick={() => setIsDialogOpen(false)}
                     >
                       Cancel
                     </Button>
-                    <Button type="submit">Submit Review</Button>
+                    <Button
+                      type="submit"
+                      className="bg-olive-green-500 hover:bg-olive-green-400"
+                    >
+                      Submit Review
+                    </Button>
                   </div>
                 </form>
+                {/* </div> */}
               </div>
             </DialogContent>
           </Dialog>
