@@ -32,7 +32,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-olive-green-500 shadow-md fixed top-0 left-0 right-0 z-50 border-b border-gray-200 w-full">
+      <nav className="bg-olive-green-500 shadow-md fixed top-0 left-0 right-0 z-50 border-b border-gray-200 w-[100vw]">
         <div className="container mx-auto px-4 relative max-w-full">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
@@ -75,7 +75,7 @@ export default function Navbar() {
             ) : (
               <Button
                 onClick={() => router.push("/pages/login")}
-                className="bg-navy-600 text-white hover:bg-navy-700 text-xs w-15"
+                className="bg-navy-600 text-white hover:bg-navy-700 text-xs w-15 mr-2"
               >
                 Log In
               </Button>

@@ -22,17 +22,17 @@ export default function UserMenu({
   userProfileImg,
 }: UserMenuProps) {
   return (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center">
       <Button
         variant="ghost"
         size="icon"
-        className="rounded-full hover:bg-olive-green-500 text-navy-600 hover:text-gray-300"
+        className="rounded-full hover:bg-olive-green-500 text-navy-600 hover:text-gray-300 mr-4"
       >
         <Users className="h-5 w-5" />
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="rounded-full">
+          <Button variant="ghost" size="icon" className="rounded-full mr-3">
             <Avatar>
               <AvatarImage
                 src={userEmail || undefined}
