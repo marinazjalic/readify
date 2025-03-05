@@ -26,7 +26,7 @@ export default function Navbar() {
     }
   };
 
-  if (pathname === "/pages/login") {
+  if (pathname === "/pages/login" || pathname === "/pages/sign-up") {
     return null;
   }
 

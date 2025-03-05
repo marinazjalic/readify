@@ -21,7 +21,11 @@ export default function Header() {
           className="mt-12 ml-12"
         />
         <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10">
-          <SignUpForm />
+          <SignUpForm
+            shadow="shadow-lg"
+            border="border-2"
+            buttonColor="bg-teracota-600 hover:bg-teracota-500"
+          />
         </div>
       </div>
     </header>
