@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
 import { Inter, Lora, Montserrat } from "next/font/google";
 import { Separator } from "@/components/ui/separator";
+import ProgressBar from "./ProgressBar";
 
 interface ReviewsProps {
   reviews: ReviewDetails[];
@@ -33,6 +34,25 @@ export default function Reviews({ reviews }: ReviewsProps) {
       <h2 className={`${lora.className} text-xl font-semibold`}>
         Reviews & Ratings
       </h2>
+
+      <div className="space-y-2">
+        {Array.from({ length: 5 }).map((_, index) => {
+          const starCount = 5 - index;
+          const reviewCount = reviews.filter(
+            (review) => review.rating == starCount
+          ).length;
+          const ratingPercent = (reviewCount / reviews.length) * 100;
+          return (
+            <ProgressBar
+              key={starCount}
+              index={starCount}
+              ratingPercent={ratingPercent}
+              reviewCount={reviewCount}
+            />
+          );
+        })}
+      </div>
+
       {reviews.length === 0 ? (
         <p className="text-muted-foreground text-sm">No reviews yet</p>
       ) : (
