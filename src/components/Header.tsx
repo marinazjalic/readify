@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Header() {
   return (
-    <header className="relative w-full h-[300px] bg-cream-header py-2">
+    <header className="relative w-full h-[300px] bg-cream-header py-2 mt-7">
       <div className="container mx-auto px-4 flex items-center">
         <Image
           src="/assets/header.png"

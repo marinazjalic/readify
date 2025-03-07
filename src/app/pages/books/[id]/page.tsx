@@ -138,7 +138,7 @@ export default function BookDetails({ params }: { params: { id: string } }) {
                         (genre: string, index: number) => (
                           <button
                             key={index}
-                            className={`${montserrat.className} bg-teracota-600 hover:bg-teracota-500 text-white text-xxs px-1 rounded-lg`}
+                            className={`${montserrat.className} border-t-none border-b-2 border-olive-green-500 hover:border-gray-400 hover:text-gray-500 text-navy-600 text-xxs font-bold`}
                             onClick={() => handleGenreBtnClick(genre)}
                           >
                             {genre}
