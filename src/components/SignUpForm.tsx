@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { createUser } from "@/actions/users/createUser";
+import { GoogleAuthButton } from "./google-auth-buttons";
 
 interface SignUpFormProps {
   bgColor?: string;
@@ -117,14 +118,15 @@ export default function SignUpForm({
             <span className={`${bgColor} px-2 text-gray-500 text-xs`}>or</span>
           </div>
         </div>
-        <Button
+        {/* <Button
           type="button"
           variant="outline"
           className="w-full h-8 text-sm"
           onClick={handleGoogleSignUp}
         >
           Continue with Google
-        </Button>
+        </Button> */}
+        <GoogleAuthButton mode={"signup"} />
       </form>
     </div>
   );

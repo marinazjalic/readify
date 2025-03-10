@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { GoogleAuthButton } from "@/components/google-auth-buttons";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -92,12 +93,13 @@ export default function LoginPage() {
             </span>
           </div>
         </div>
-        <Button
+        {/* <Button
           variant="outline"
           className="w-full mb-4 border-2 border-navy-600 text-navy-600"
         >
           Continue with Google
-        </Button>
+        </Button> */}
+        <GoogleAuthButton mode={"signin"} />
         <div className="text-center">
           <Link
             href="/forgot-password"
