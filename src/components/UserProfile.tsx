@@ -63,6 +63,21 @@ export default function UserProfile() {
       </div>
 
       <Separator className="mx-auto w-[90%] md:w-[80%]" />
+
+      <div className="py-4">
+        <h3 className="text-sm text-navy-600 px-4">READING CHALLENGE</h3>
+        <div className="w-[85%] ml-4">
+          <div className="bg-gray-300 w-full h-2.5 rounded-md  mt-2">
+            <div
+              className={`bg-olive-green-500 h-full rounded-md w-[35%]`}
+            ></div>
+          </div>
+          <div className="flex flex-row text-xxs text-gray-500 mt-1">
+            <p>0/50 books read</p>
+            <p className="ml-auto">Update goal</p>
+          </div>
+        </div>
+      </div>
     </aside>
   );
 }
