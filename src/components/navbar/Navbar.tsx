@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import NavDrawer from "./NavDrawer";
-import UserMenu from "./UserMenu";
+import UserMenu from "../user/UserMenu";
 import NavDropDown from "./NavDropDown";
 
 export default function Navbar() {

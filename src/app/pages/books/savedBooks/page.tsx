@@ -3,7 +3,7 @@ import { getSavedBooksByUser } from "@/actions/books/getSavedBooksByUser";
 import { useSession } from "next-auth/react";
 import { useState, useEffect, use } from "react";
 import { DisplayBook } from "@/types";
-import BookScrollDisplay from "@/components/BookScrollDisplay";
+import BookScrollDisplay from "@/components/books/BookScrollDisplay";
 
 export default function SavedBooks() {
   const { data: session } = useSession();

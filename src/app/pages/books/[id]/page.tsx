@@ -7,14 +7,14 @@ import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getBookByKey } from "@/actions/books/getBookByKey";
 import { useBookStore } from "@/lib/bookStore";
-import ReviewForm from "@/components/ReviewForm";
+import ReviewForm from "@/components/reviews/ReviewForm";
 import { Review } from "@prisma/client";
 import { getBooksByGenre } from "@/actions/books/getBooksByGenre";
 import { useRouter } from "next/navigation";
 import { getReviewsByBook } from "@/actions/reviews/getReviewsByBook";
 import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import Reviews from "@/components/Reviews";
+import Reviews from "@/components/reviews/Reviews";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 

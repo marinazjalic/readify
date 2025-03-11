@@ -1,4 +1,4 @@
-import UserProfile from "@/components/UserProfile";
+import UserProfile from "@/components/user/UserProfile";
 import Newsfeed from "@/components/Newsfeed";
 
 export default function UserHomePage() {

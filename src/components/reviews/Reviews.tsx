@@ -2,7 +2,7 @@ import { Star } from "lucide-react";
 import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
 import { Inter, Lora, Montserrat } from "next/font/google";
 import { Separator } from "@/components/ui/separator";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "../ProgressBar";
 import { useState } from "react";
 import ReviewCard from "./ReviewCard";
 
