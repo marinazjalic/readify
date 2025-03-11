@@ -1,11 +1,11 @@
 "use client";
 
-import { BookDetails } from "@/types";
+import { BookDetails, DisplayBook } from "@/types";
 import Pagination from "@/components/Pagination";
 import BookGrid from "./BookGrid";
 
 interface BookDisplayProps {
-  books: BookDetails[];
+  books: DisplayBook[];
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;

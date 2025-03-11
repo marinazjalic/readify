@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { BookDetails } from "@/types";
 import { useSearchParams } from "next/navigation";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { DisplayBook } from "@/types";
 
 export default function Books() {
   const searchParams = useSearchParams();
@@ -42,7 +43,13 @@ export default function Books() {
       {isLoading && <LoadingSpinner />}
       <div className="bg-white min-h-screen">
         <BookDisplay
-          books={books}
+          //mapping to type DisplayBook
+          books={
+            books.map((book) => ({
+              ...book,
+              isSaved: false,
+            })) as DisplayBook[]
+          }
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}

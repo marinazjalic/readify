@@ -1,3 +1,5 @@
+import type { ReadingStatus } from "@prisma/client";
+
 export type BookDetails = {
   title: string;
   author: string[];
@@ -7,4 +9,16 @@ export type BookDetails = {
   description?: string;
   rating?: number;
   genres?: string[];
+};
+
+//unified type for book details and saved book info
+export type DisplayBook = BookDetails & {
+  isSaved: boolean;
+  savedInfo?: {
+    id: string;
+    status: ReadingStatus;
+    progress: number;
+    dateAdded: Date;
+    dateUpdated: Date;
+  };
 };

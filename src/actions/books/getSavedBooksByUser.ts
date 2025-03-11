@@ -1,21 +1,38 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { Book, SavedBook } from "@prisma/client";
-import { revalidatePath } from "next/cache";
+import { DisplayBook } from "@/types";
+import { getBookDetails } from "@/lib/openLibrary";
 
 export async function getSavedBooksByUser(
   userId: string
-): Promise<SavedBook[] | null> {
+): Promise<DisplayBook[] | null> {
   try {
     const savedBooks = await prisma.savedBook.findMany({
       where: { userId: userId },
     });
-    revalidatePath("/");
-    return savedBooks;
+    const displayBooks = await Promise.all(
+      savedBooks.map(async (book) => {
+        const apiResponse = await getBookDetails(book.bookKey);
+        const bookDetails: DisplayBook = {
+          key: apiResponse.key.split("/works/")[1],
+          title: apiResponse.title,
+          author: apiResponse.author_name || [], //fix - author name not provided
+          cover: apiResponse.covers[0],
+          isSaved: true,
+          savedInfo: {
+            id: book.id,
+            status: book.status,
+            progress: book.progress,
+            dateAdded: book.dateAdded,
+            dateUpdated: book.dateUpdated,
+          },
+        };
+        return bookDetails;
+      })
+    );
+    return displayBooks;
   } catch (error) {
     throw new Error("Error: Failed to find saved books.");
-  } finally {
-    await prisma.$disconnect();
   }
 }
