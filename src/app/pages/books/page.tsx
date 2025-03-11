@@ -1,7 +1,6 @@
 "use client";
 
-import getAllBooks from "@/actions/books/getAllBooks";
-import BookDisplay from "./book-display";
+import BookDisplay from "@/components/BookDisplay";
 import { searchBooksByQuery } from "@/actions/books/searchBooksByQuery";
 import { useState, useEffect } from "react";
 import { BookDetails } from "@/types";

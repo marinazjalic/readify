@@ -1,34 +1,19 @@
-"use client";
-
 import Image from "next/image";
-import { Montserrat } from "next/font/google";
 import { BookDetails } from "@/types";
 import { useRouter } from "next/navigation";
 import { useBookStore } from "@/lib/bookStore";
-import { BookKey, Heart } from "lucide-react";
-import { useEffect, useState } from "react";
-import Pagination from "@/components/Pagination";
+import { Heart } from "lucide-react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { addSavedBook } from "@/actions/books/addSavedBook";
 import { deleteSavedBook } from "@/actions/books/deleteSavedBook";
 
-interface BookDisplayProps {
+interface GridProps {
   books: BookDetails[];
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-  query: string;
-  isLoading: boolean;
+  enableSaving: boolean;
 }
 
-export default function BookDisplay({
-  books,
-  currentPage,
-  totalPages,
-  onPageChange,
-  query,
-  isLoading,
-}: BookDisplayProps) {
+export default function BookGrid({ books, enableSaving }: GridProps) {
   const router = useRouter();
   const setCurrentBook = useBookStore((state) => state.setCurrentBook);
   const [likedBooks, setLikedBooks] = useState<Set<string>>(new Set());
@@ -39,6 +24,7 @@ export default function BookDisplay({
     router.push(`/pages/books/${book.key}`);
   };
 
+  //functions only used when saving feature is enabled
   const addToSavedBooks = async (
     bookKey: string,
     userId: string,
@@ -83,32 +69,31 @@ export default function BookDisplay({
   };
 
   return (
-    <div className="container mx-auto">
-      <h1 className="text-sm font-light mb-4 text-gray-500">
-        Displaying results for '<i>{query}</i> ':
-      </h1>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        {books.map((book: BookDetails) => (
-          <div
-            key={book.key}
-            className="border overflow-hidden shadow-sm relative group"
-          >
-            <div className="relative h-60 w-full bg-gray-100">
-              <Image
-                src={
-                  book.cover
-                    ? `https://covers.openlibrary.org/b/id/${book.cover}-L.jpg`
-                    : "/assets/book-icon.jpg"
-                }
-                alt={`Cover of ${book.title}`}
-                fill
-                style={
-                  book.cover ? { objectFit: "contain" } : { objectFit: "cover" }
-                }
-                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw"
-                onClick={() => handleCoverClick(book)}
-              />
-            </div>
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      {books.map((book: BookDetails) => (
+        <div
+          key={book.key}
+          className="border overflow-hidden shadow-sm relative group"
+        >
+          <div className="relative h-60 w-full bg-gray-100">
+            <Image
+              src={
+                book.cover
+                  ? `https://covers.openlibrary.org/b/id/${book.cover}-L.jpg`
+                  : "/assets/book-icon.jpg"
+              }
+              alt={`Cover of ${book.title}`}
+              fill
+              style={
+                book.cover ? { objectFit: "contain" } : { objectFit: "cover" }
+              }
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw"
+              onClick={() => handleCoverClick(book)}
+            />
+          </div>
+
+          {/* enable 'favouring feature' only when not displaying saved books*/}
+          {enableSaving && (
             <div
               className={`absolute top-2 right-2 transition-opacity ${
                 likedBooks.has(book.key)
@@ -128,26 +113,19 @@ export default function BookDisplay({
                 }}
               />
             </div>
+          )}
 
-            <div className="p-2">
-              <h2 className="font-semibold text-xs mb-1 line-clamp-2">
-                {book.title}
-              </h2>
-              <p className="text-gray-600 text-xs">
-                {book.author.slice(0, 3).join(", ")}
-                {book.author.length > 3 && ", and others"}
-              </p>
-            </div>
+          <div className="p-2">
+            <h2 className="font-semibold text-xs mb-1 line-clamp-2">
+              {book.title}
+            </h2>
+            <p className="text-gray-600 text-xs">
+              {book.author.slice(0, 3).join(", ")}
+              {book.author.length > 3 && ", and others"}
+            </p>
           </div>
-        ))}
-      </div>
-      {!isLoading && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={onPageChange}
-        />
-      )}
+        </div>
+      ))}
     </div>
   );
 }
