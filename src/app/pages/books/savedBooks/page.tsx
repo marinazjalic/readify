@@ -58,9 +58,11 @@ export default function SavedBooks() {
   };
 
   return (
-    <div className=" bg-olive-green-100 pt-7 text-gray-600 pb-7">
-      <div className="bg-white pt-3 pb-3 mr-5 ml-5 rounded-lg shadow-md">
-        <h3 className="ml-8 mb-3">Currently Reading</h3>
+    <div className="bg-olive-green-100 py-3 sm:py-5 md:py-7 text-gray-600">
+      <div className="bg-white py-3 mx-2 sm:mx-4 md:mx-5 rounded-lg shadow-md">
+        <h3 className="text-base sm:text-lg font-medium px-4 sm:px-6 md:px-8 mb-2 sm:mb-3">
+          Currently Reading
+        </h3>
         <BookScrollDisplay
           savedBooks={savedBooks.filter(
             (book) => book.savedInfo!.status === ReadingStatus.IN_PROGRESS
@@ -69,12 +71,14 @@ export default function SavedBooks() {
         />
       </div>
 
-      <div className="bg-white pt-5 pb-5 mr-5 ml-5 rounded-lg shadow-md mt-5">
-        <h3 className="ml-8 mb-3">Your Bookshelves</h3>
-        <div className="flex flex-row text-xxs bg-white gap-2">
+      <div className="bg-white py-3 sm:py-4 md:py-5 mx-2 sm:mx-4 md:mx-5 rounded-lg shadow-md mt-3 sm:mt-4 md:mt-5">
+        <h3 className="text-base sm:text-lg font-medium px-4 sm:px-6 md:px-8 mb-2 sm:mb-3">
+          Your Bookshelves
+        </h3>
+        <div className="flex flex-row text-xxs bg-white gap-2 px-4 sm:px-6 md:px-8 overflow-x-auto pb-2">
           <Button
             variant="ghost"
-            className={`ml-8 ${getButtonClass("ALL")}`}
+            className={getButtonClass("ALL")}
             onClick={() => handleButtonClicked("ALL")}
           >
             All
