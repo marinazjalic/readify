@@ -58,7 +58,7 @@ export default function SavedBooks() {
   };
 
   return (
-    <div className="bg-olive-green-100 py-3 sm:py-5 md:py-7 text-gray-600">
+    <div className="flex flex-col gap-4">
       <div className="bg-white py-3 mx-2 sm:mx-4 md:mx-5 rounded-lg shadow-md">
         <h3 className="text-base sm:text-lg font-medium px-4 sm:px-6 md:px-8 mb-2 sm:mb-3">
           Currently Reading
@@ -72,31 +72,33 @@ export default function SavedBooks() {
       </div>
 
       <div className="bg-white py-3 sm:py-4 md:py-5 mx-2 sm:mx-4 md:mx-5 rounded-lg shadow-md mt-3 sm:mt-4 md:mt-5">
-        <h3 className="text-base sm:text-lg font-medium px-4 sm:px-6 md:px-8 mb-2 sm:mb-3">
-          Your Bookshelves
-        </h3>
-        <div className="flex flex-row text-xxs bg-white gap-2 px-4 sm:px-6 md:px-8 overflow-x-auto pb-2">
-          <Button
-            variant="ghost"
-            className={getButtonClass("ALL")}
-            onClick={() => handleButtonClicked("ALL")}
-          >
-            All
-          </Button>
-          <Button
-            variant="ghost"
-            className={getButtonClass(ReadingStatus.TO_READ)}
-            onClick={() => handleButtonClicked(ReadingStatus.TO_READ)}
-          >
-            Want to Read
-          </Button>
-          <Button
-            variant="ghost"
-            className={getButtonClass(ReadingStatus.COMPLETED)}
-            onClick={() => handleButtonClicked(ReadingStatus.COMPLETED)}
-          >
-            Read
-          </Button>
+        <div className="px-4 sm:px-6 md:px-8">
+          <h3 className="text-base sm:text-lg font-medium mb-2 sm:mb-3">
+            Your Bookshelves
+          </h3>
+          <div className="flex flex-row text-xxs gap-2 mb-2">
+            <Button
+              variant="ghost"
+              className={getButtonClass("ALL")}
+              onClick={() => handleButtonClicked("ALL")}
+            >
+              All
+            </Button>
+            <Button
+              variant="ghost"
+              className={getButtonClass(ReadingStatus.TO_READ)}
+              onClick={() => handleButtonClicked(ReadingStatus.TO_READ)}
+            >
+              Want to Read
+            </Button>
+            <Button
+              variant="ghost"
+              className={getButtonClass(ReadingStatus.COMPLETED)}
+              onClick={() => handleButtonClicked(ReadingStatus.COMPLETED)}
+            >
+              Read
+            </Button>
+          </div>
         </div>
         <BookScrollDisplay savedBooks={filteredBooks} showProgress={false} />
       </div>
