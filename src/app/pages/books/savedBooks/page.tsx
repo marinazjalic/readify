@@ -43,7 +43,7 @@ export default function SavedBooks() {
       setFilteredBooks(
         savedBooks.filter((book) => book.savedInfo!.status === readingStatus)
       );
-    }
+    } else setFilteredBooks(savedBooks);
   };
 
   const getButtonClass = (readingStatus: string) => {
@@ -58,8 +58,8 @@ export default function SavedBooks() {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="bg-white py-3 mx-2 sm:mx-4 md:mx-5 rounded-lg shadow-md">
+    <div className="flex flex-col gap-4 text-gray-600">
+      <div className="bg-white py-3 mx-2 sm:mx-4 md:mx-5 rounded-lg shadow-md mt-4">
         <h3 className="text-base sm:text-lg font-medium px-4 sm:px-6 md:px-8 mb-2 sm:mb-3">
           Currently Reading
         </h3>
@@ -76,7 +76,7 @@ export default function SavedBooks() {
           <h3 className="text-base sm:text-lg font-medium mb-2 sm:mb-3">
             Your Bookshelves
           </h3>
-          <div className="flex flex-row text-xxs gap-2 mb-2">
+          <div className="flex flex-row text-xxs gap-2 mb-2 ml-0.5">
             <Button
               variant="ghost"
               className={getButtonClass("ALL")}
