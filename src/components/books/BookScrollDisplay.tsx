@@ -8,9 +8,13 @@ import { BookOpen } from "lucide-react";
 
 interface BookScrollProps {
   savedBooks: DisplayBook[];
+  showProgress: boolean;
 }
 
-export default function BookScrollDisplay({ savedBooks }: BookScrollProps) {
+export default function BookScrollDisplay({
+  savedBooks,
+  showProgress,
+}: BookScrollProps) {
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -59,15 +63,17 @@ export default function BookScrollDisplay({ savedBooks }: BookScrollProps) {
                 </div>
 
                 {/* progress bar */}
-                <div className="bg-gray-300 w-full h-2 rounded-md mt-2">
-                  <div
-                    className="bg-olive-green-500 h-full rounded-md"
-                    style={{
-                      width: `${book.savedInfo?.progress || 0}%`,
-                      maxWidth: "100%",
-                    }}
-                  ></div>
-                </div>
+                {showProgress && (
+                  <div className="bg-gray-300 w-full h-2 rounded-md mt-2">
+                    <div
+                      className="bg-olive-green-500 h-full rounded-md"
+                      style={{
+                        width: `${book.savedInfo?.progress || 0}%`,
+                        maxWidth: "100%",
+                      }}
+                    ></div>
+                  </div>
+                )}
               </div>
             </div>
           ))
