@@ -28,9 +28,15 @@ export default function SavedBooks() {
     if (!session?.user?.id) return;
     try {
       const books = await getSavedBooksByUser(session.user.id);
+
+      //display pinned books at the beginning
+      const pinned = books?.filter((book) => book.savedInfo?.isPinned) || [];
+      const unpinned = books?.filter((book) => !book.savedInfo?.isPinned) || [];
+      const allBooks = [...pinned, ...unpinned];
+
       if (books) {
         setSavedBooks(books);
-        setFilteredBooks(books);
+        setFilteredBooks(allBooks);
       }
     } catch (error) {
       console.error("Error fetching saved books:", error);
@@ -40,7 +46,6 @@ export default function SavedBooks() {
   };
 
   /* keep track of currently selected bookshelf for filtering/styling */
-
   const handleButtonClicked = (readingStatus: string) => {
     setCurrentBookShelf(readingStatus);
     if (readingStatus in ReadingStatus) {
