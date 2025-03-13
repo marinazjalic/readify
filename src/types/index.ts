@@ -20,5 +20,6 @@ export type DisplayBook = BookDetails & {
     progress: number;
     dateAdded: Date;
     dateUpdated: Date;
+    isPinned?: boolean;
   };
 };
