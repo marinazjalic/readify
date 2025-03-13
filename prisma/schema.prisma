@@ -96,6 +96,7 @@ model SavedBook {
   dateUpdated DateTime      @updatedAt
   status      ReadingStatus @default(TO_READ)
   progress    Int           @default(0)
+  isPinned    Boolean?
 
   @@unique([userId, bookKey])
   @@map("savedBooks")

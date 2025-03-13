@@ -6,6 +6,7 @@ import { DisplayBook } from "@/types";
 import BookScrollDisplay from "@/components/books/BookScrollDisplay";
 import { Button } from "@/components/ui/button";
 import { ReadingStatus } from "@prisma/client";
+import { updateSavedBook } from "@/actions/books/updateSavedBook";
 
 export default function SavedBooks() {
   const { data: session } = useSession();
@@ -18,22 +19,25 @@ export default function SavedBooks() {
     if (session?.user?.id) {
       setIsLoading(true);
       setCurrentBookShelf("ALL");
-      const fetchSavedBooks = async () => {
-        try {
-          const books = await getSavedBooksByUser(session.user.id);
-          if (books) {
-            setSavedBooks(books);
-            setFilteredBooks(books);
-          }
-        } catch (error) {
-          console.error("Error fetching saved books:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
+
       fetchSavedBooks();
     }
   }, [session]);
+
+  const fetchSavedBooks = async () => {
+    if (!session?.user?.id) return;
+    try {
+      const books = await getSavedBooksByUser(session.user.id);
+      if (books) {
+        setSavedBooks(books);
+        setFilteredBooks(books);
+      }
+    } catch (error) {
+      console.error("Error fetching saved books:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   /* keep track of currently selected bookshelf for filtering/styling */
 
@@ -57,6 +61,35 @@ export default function SavedBooks() {
       : baseClass;
   };
 
+  const handlePinBook = async (bookKey: string, isPinned: boolean) => {
+    if (!session?.user?.id) return;
+
+    try {
+      await updateSavedBook(bookKey, session.user.id, { isPinned });
+      fetchSavedBooks();
+    } catch (error) {
+      console.error("Error updating book.", error);
+    }
+  };
+
+  const handleUpdateStatus = async (bookKey: string, status: string) => {
+    if (!session?.user?.id) return;
+    try {
+      if (status in ReadingStatus) {
+        const result = await updateSavedBook(bookKey, session.user.id, {
+          status: status as ReadingStatus,
+        });
+        if (result) {
+          fetchSavedBooks();
+        }
+      } else {
+        console.error("Invalid reading status:", status);
+      }
+    } catch (error) {
+      console.error("Error updating book status:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 text-gray-600">
       <div className="bg-white py-3 mx-2 sm:mx-4 md:mx-5 rounded-lg shadow-md mt-4">
@@ -68,6 +101,8 @@ export default function SavedBooks() {
             (book) => book.savedInfo!.status === ReadingStatus.IN_PROGRESS
           )}
           showProgress={true}
+          onPinBook={handlePinBook}
+          onUpdateStatus={handleUpdateStatus}
         />
       </div>
 
@@ -100,7 +135,12 @@ export default function SavedBooks() {
             </Button>
           </div>
         </div>
-        <BookScrollDisplay savedBooks={filteredBooks} showProgress={false} />
+        <BookScrollDisplay
+          savedBooks={filteredBooks}
+          showProgress={false}
+          onPinBook={handlePinBook}
+          onUpdateStatus={handleUpdateStatus}
+        />
       </div>
     </div>
   );
