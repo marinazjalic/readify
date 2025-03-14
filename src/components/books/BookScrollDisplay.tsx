@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import type { DisplayBook } from "@/types";
 import Image from "next/image";
-import { BookOpen, ChevronRight, Pin, Check } from "lucide-react";
+import { BookOpen, ChevronRight, Pin, Check, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,18 +22,20 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ReadingStatus } from "@prisma/client";
 
 interface BookScrollProps {
   savedBooks: DisplayBook[];
   showProgress: boolean;
   onUpdateStatus?: (bookKey: string, status: string) => void;
-  onUpdateProgress?: (bookKey: string, progress: number) => void;
+  onUpdateProgress?: (
+    bookKey: string,
+    progress: number,
+    pageCount?: number
+  ) => void;
   onPinBook?: (bookKey: string, isPinned: boolean) => void;
 }
 
@@ -54,7 +56,13 @@ export default function BookScrollDisplay({
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
   const [progressDialogOpen, setProgressDialogOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<DisplayBook | null>(null);
-  const [progress, setProgress] = useState<number>(0);
+
+  // states for progress tracking
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [initialCurrentPage, setInitialCurrentPage] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<string>("");
+  const [initialTotalPages, setInitialTotalPages] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Book width including margin
   const BOOK_WIDTH = 144; // 32px width + 4px margin on each side
@@ -97,13 +105,6 @@ export default function BookScrollDisplay({
     e.preventDefault();
     setSelectedBook(book);
     setContextMenuOpen(true);
-
-    // Set initial progress value if available
-    if (book.savedInfo?.progress) {
-      setProgress(book.savedInfo.progress);
-    } else {
-      setProgress(0);
-    }
   };
 
   const handleUpdateStatus = (status: string) => {
@@ -123,13 +124,62 @@ export default function BookScrollDisplay({
   const handleOpenProgressDialog = () => {
     setContextMenuOpen(false);
     setProgressDialogOpen(true);
+    setErrorMessage("");
+
+    if (selectedBook) {
+      //initialize current and total page count if existing
+      const bookCurrentPage = selectedBook.savedInfo?.progress || 0;
+      setCurrentPage(bookCurrentPage);
+      setInitialCurrentPage(bookCurrentPage);
+      const bookPageCount = selectedBook.savedInfo?.pageCount || 0;
+      const bookPageCountStr =
+        bookPageCount > 0 ? bookPageCount.toString() : "";
+      setTotalPages(bookPageCountStr);
+      setInitialTotalPages(bookPageCountStr);
+    }
   };
 
   const handleUpdateProgress = () => {
+    // get effective total pages - either the current input or the initial value if not changed
+    const effectiveTotalPages = totalPages || initialTotalPages;
+    if (!effectiveTotalPages || effectiveTotalPages === "0") {
+      setErrorMessage("Please enter the total page count");
+      return;
+    }
+    const totalPagesNum = Number.parseInt(effectiveTotalPages);
+
+    if (currentPage > totalPagesNum) {
+      setErrorMessage("Current page cannot exceed total pages");
+      return;
+    }
+
+    // check for changes
+    const currentPageChanged = currentPage !== initialCurrentPage;
+    const totalPagesChanged =
+      totalPages !== initialTotalPages && totalPages !== "";
+
+    if (!currentPageChanged && !totalPagesChanged) {
+      setProgressDialogOpen(false);
+      return;
+    }
+
     if (selectedBook && onUpdateProgress) {
-      onUpdateProgress(selectedBook.key, progress);
+      onUpdateProgress(
+        selectedBook.key,
+        currentPage,
+        totalPagesChanged ? Number.parseInt(totalPages) : undefined
+      );
     }
     setProgressDialogOpen(false);
+  };
+
+  // calculate progress percetange for progress bar
+  const getProgressPercentage = (book: DisplayBook): number => {
+    const progress = book.savedInfo?.progress || 0;
+    const pageCount = book.savedInfo?.pageCount || 0;
+
+    if (pageCount <= 0) return 0;
+    return Math.min(Math.round((progress / pageCount) * 100), 100);
   };
 
   return (
@@ -172,10 +222,16 @@ export default function BookScrollDisplay({
                   >
                     {/* Book cover container */}
                     <div className="flex flex-col">
-                      <div className="relative h-44 w-32 bg-white shadow-sm rounded-tr-lg rounded-br-lg overflow-hidden border">
+                      <div
+                        className={`relative h-44 w-32 bg-white shadow-sm rounded-tr-lg rounded-br-lg overflow-hidden border ${
+                          book.savedInfo?.isPinned
+                            ? "border-olive-green-500 border-2"
+                            : "border-gray-200"
+                        }`}
+                      >
                         {book.savedInfo?.isPinned && (
-                          <div className="absolute top-1 right-1 z-10 bg-olive-green-500 text-white rounded-full p-1">
-                            <Pin className="h-3 w-3" />
+                          <div className="absolute top-2 right-2 z-10 bg-olive-green-500 text-white rounded-full p-1.5 shadow-md transform -rotate-12">
+                            <Pin className="h-4 w-4" />
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gray-100">
@@ -203,7 +259,7 @@ export default function BookScrollDisplay({
                           <div
                             className="bg-olive-green-500 h-full rounded-md"
                             style={{
-                              width: `${book.savedInfo?.progress || 0}%`,
+                              width: `${getProgressPercentage(book)}%`,
                               maxWidth: "100%",
                             }}
                           ></div>
@@ -328,37 +384,86 @@ export default function BookScrollDisplay({
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Update Reading Progress</DialogTitle>
+            {selectedBook && (
+              <p className="text-sm text-gray-500 mt-1">{selectedBook.title}</p>
+            )}
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="progress" className="text-right">
-                Progress
-              </Label>
-              <div className="col-span-3 flex items-center gap-2">
+              <div className="col-span-4 flex items-center gap-2 text-sm text-gray-600">
+                <p>Pages read</p>
                 <Input
-                  id="progress"
+                  id="currentPage"
                   type="number"
                   min="0"
-                  max="100"
-                  value={progress}
-                  onChange={(e) => setProgress(Number(e.target.value))}
-                  className="w-20"
+                  placeholder={initialCurrentPage.toString()}
+                  value={currentPage}
+                  onChange={(e) => {
+                    const value = Number.parseInt(e.target.value);
+                    setCurrentPage(isNaN(value) ? 0 : value);
+                    setErrorMessage("");
+                  }}
+                  className="w-20 h-6"
                 />
-                <span>%</span>
+                <p>/</p>
+                <Input
+                  id="totalPages"
+                  type="text"
+                  placeholder={initialTotalPages || "Total pages"}
+                  value={totalPages}
+                  onChange={(e) => {
+                    setTotalPages(e.target.value);
+                    setErrorMessage("");
+                  }}
+                  className="w-20 h-6"
+                />
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <Button
-              onClick={handleUpdateProgress}
-              className="bg-olive-green-500 hover:bg-olive-green-600"
-            >
-              Save
-            </Button>
-          </DialogFooter>
+          <div className="flex flex-row items-center justify-between mt-4">
+            {errorMessage ? (
+              <div className="flex items-center text-red-500 text-xxs">
+                <AlertCircle className="h-3 w-3 mr-1" />
+                <p>{errorMessage}</p>
+              </div>
+            ) : currentPage >
+              (Number.parseInt(totalPages || initialTotalPages) || 0) ? (
+              <p className="text-xxs text-red-500">
+                Current page cannot exceed total pages.
+              </p>
+            ) : !totalPages && !initialTotalPages ? (
+              <p className="text-xxs text-red-500">
+                Please input the total page count.
+              </p>
+            ) : (
+              <div className="text-xxs text-gray-500">
+                {currentPage !== initialCurrentPage ||
+                (totalPages !== initialTotalPages && totalPages !== "")
+                  ? "Changes will be saved"
+                  : "No changes detected"}
+              </div>
+            )}
+            <div className="flex space-x-2">
+              <DialogClose asChild>
+                <Button variant="outline" size="sm">
+                  Cancel
+                </Button>
+              </DialogClose>
+              <Button
+                onClick={handleUpdateProgress}
+                className="bg-olive-green-500 hover:bg-olive-green-600"
+                size="sm"
+                disabled={
+                  (!totalPages && !initialTotalPages) ||
+                  errorMessage !== "" ||
+                  currentPage >
+                    (Number.parseInt(totalPages || initialTotalPages) || 0)
+                }
+              >
+                Save
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
