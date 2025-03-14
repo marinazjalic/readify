@@ -1,7 +1,7 @@
 "use client";
 import { getSavedBooksByUser } from "@/actions/books/getSavedBooksByUser";
 import { useSession } from "next-auth/react";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { DisplayBook } from "@/types";
 import BookScrollDisplay from "@/components/books/BookScrollDisplay";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,6 @@ export default function SavedBooks() {
     if (session?.user?.id) {
       setIsLoading(true);
       setCurrentBookShelf("ALL");
-
       fetchSavedBooks();
     }
   }, [session]);
@@ -95,6 +94,34 @@ export default function SavedBooks() {
     }
   };
 
+  // Combined function to handle both progress and page count updates
+  const handleUpdateReadingProgress = async (
+    bookKey: string,
+    currentPage: number,
+    pageCount?: number
+  ) => {
+    if (!session?.user?.id) return;
+
+    try {
+      const updateData: { progress: number; pageCount?: number } = {
+        progress: currentPage,
+      };
+      if (pageCount !== undefined) {
+        updateData.pageCount = pageCount;
+      }
+      const result = await updateSavedBook(
+        bookKey,
+        session.user.id,
+        updateData
+      );
+      if (result) {
+        fetchSavedBooks();
+      }
+    } catch (error) {
+      console.error("Error updating reading progress:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 text-gray-600">
       <div className="bg-white py-3 mx-2 sm:mx-4 md:mx-5 rounded-lg shadow-md mt-4">
@@ -108,6 +135,7 @@ export default function SavedBooks() {
           showProgress={true}
           onPinBook={handlePinBook}
           onUpdateStatus={handleUpdateStatus}
+          onUpdateProgress={handleUpdateReadingProgress}
         />
       </div>
 
@@ -145,6 +173,7 @@ export default function SavedBooks() {
           showProgress={false}
           onPinBook={handlePinBook}
           onUpdateStatus={handleUpdateStatus}
+          onUpdateProgress={handleUpdateReadingProgress}
         />
       </div>
     </div>
