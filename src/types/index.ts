@@ -21,5 +21,6 @@ export type DisplayBook = BookDetails & {
     dateAdded: Date;
     dateUpdated: Date;
     isPinned?: boolean;
+    pageCount?: number;
   };
 };

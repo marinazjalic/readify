@@ -27,6 +27,7 @@ export async function getSavedBooksByUser(
             dateAdded: book.dateAdded,
             dateUpdated: book.dateUpdated,
             isPinned: book.isPinned || undefined,
+            pageCount: book.pageCount || undefined,
           },
         };
         return bookDetails;

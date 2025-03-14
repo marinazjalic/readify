@@ -7,7 +7,12 @@ import { ReadingStatus } from "@prisma/client";
 export async function updateSavedBook(
   bookKey: string,
   userId: string,
-  data: { status?: ReadingStatus; progress?: number; isPinned?: boolean }
+  data: {
+    status?: ReadingStatus;
+    progress?: number;
+    isPinned?: boolean;
+    pageCount?: number;
+  }
 ): Promise<SavedBook | null> {
   try {
     return await prisma.savedBook.update({
