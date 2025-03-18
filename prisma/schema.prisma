@@ -31,6 +31,11 @@ model User {
   accounts        Account[]
   sessions        Session[]
 
+  followingIds String[] @db.ObjectId
+  followerIds  String[] @db.ObjectId
+  following    User[]   @relation("UserFollows", fields: [followingIds], references: [id])
+  followers    User[]   @relation("UserFollows", references: [id], fields: [followerIds])
+
   @@map("users")
 }
 

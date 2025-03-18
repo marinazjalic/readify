@@ -3,6 +3,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "../ui/button";
+import { useSession } from "next-auth/react";
+import { follow } from "@/actions/following/follow";
 
 interface ReviewCardProps {
   review: ReviewDetails;
@@ -24,6 +27,11 @@ function StarRating({ value }: { value: number }) {
 }
 
 export default function ReviewCard({ review }: ReviewCardProps) {
+  const handleFollowButton = async (userId: string, followedBy: string) => {
+    await follow(userId, followedBy);
+  };
+  const { data: session } = useSession();
+
   return (
     <Card key={review.id}>
       <CardContent className="p-4">
@@ -43,6 +51,19 @@ export default function ReviewCard({ review }: ReviewCardProps) {
             <p className="text-xs font-semibold pt-3">
               {review.user.firstName + " " + review.user.lastName[0] + ". "}
             </p>
+
+            {session && session.user.id != review.userId && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-sky-400 hover:bg-transparent hover:underline hover:text-sky-400"
+                onClick={() =>
+                  handleFollowButton(review.userId, session.user.id)
+                }
+              >
+                Follow
+              </Button>
+            )}
           </div>
 
           <div className="flex-1 space-y-2">
