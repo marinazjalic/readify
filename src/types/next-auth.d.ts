@@ -10,6 +10,8 @@ declare module "next-auth" {
       profileImageUrl?: string | null;
       name?: string | null;
       image?: string | null;
+      followingIds?: string[];
+      followerIds?: string[];
     };
   }
 
@@ -17,6 +19,8 @@ declare module "next-auth" {
     firstName?: string;
     lastName?: string;
     profileImageUrl?: string | null;
+    followingIds?: string[];
+    followerIds?: string[];
   }
 }
 
@@ -26,5 +30,7 @@ declare module "next-auth/jwt" {
     firstName?: string;
     lastName?: string;
     profileImageUrl?: string | null;
+    followingIds?: string[];
+    followerIds?: string[];
   }
 }

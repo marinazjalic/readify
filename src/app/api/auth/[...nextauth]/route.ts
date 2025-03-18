@@ -44,6 +44,8 @@ const handler = NextAuth({
           firstName: user.firstName,
           lastName: user.lastName,
           profileImageUrl: user.profileImageUrl,
+          followingIds: user.followingIds,
+          followerIds: user.followerIds,
         };
       },
     }),
@@ -64,6 +66,8 @@ const handler = NextAuth({
           firstName: firstName,
           lastName: lastName,
           profileImageUrl: profile.picture,
+          followingIds: [],
+          followerIds: [],
         };
       },
     }),
@@ -79,6 +83,8 @@ const handler = NextAuth({
         if ("lastName" in user) token.lastName = user.lastName;
         if ("profileImageUrl" in user)
           token.profileImageUrl = user.profileImageUrl;
+        token.followerIds = user.followerIds || [];
+        token.followingIds = user.followingIds || [];
       }
       return token;
     },
@@ -91,6 +97,9 @@ const handler = NextAuth({
           session.user.lastName = token.lastName as string;
         if ("profileImageUrl" in token)
           session.user.profileImageUrl = token.profileImageUrl as string | null;
+
+        session.user.followerIds = token.followerIds || [];
+        session.user.followingIds = token.followingIds || [];
       }
       return session;
     },
