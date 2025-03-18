@@ -39,6 +39,7 @@ export default function BookDetails({ params }: { params: { id: string } }) {
   const [wantToRead, setWantToRead] = useState(false);
   const [bookDetails, setBookDetails] = useState<any>(null);
   const [bookReviews, setBookReviews] = useState<ReviewDetails[]>([]);
+  const [bookRating, setBookRating] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -50,6 +51,7 @@ export default function BookDetails({ params }: { params: { id: string } }) {
         try {
           const details = await getBookByKey(currentBook.key, currentBook);
           const reviews = await getReviewsByBook(currentBook.key);
+          getRating(reviews);
           setBookDetails(details);
           setBookReviews(reviews);
           setIsLoading(false);
@@ -63,6 +65,14 @@ export default function BookDetails({ params }: { params: { id: string } }) {
 
   const handleGenreBtnClick = async (genre: string) => {
     router.push(`/pages/books?filter=subject&query=${genre}`);
+  };
+
+  const getRating = (reviews: ReviewDetails[]) => {
+    const ratingSum = reviews
+      .filter((review) => review.rating)
+      .reduce((sum, review) => sum + review.rating, 0);
+    const avgRating = ratingSum / reviews.length;
+    setBookRating(avgRating);
   };
 
   return (
@@ -99,14 +109,12 @@ export default function BookDetails({ params }: { params: { id: string } }) {
           {currentBook?.author}
         </p>
 
-        {/* <div className="flex items-center mb-3">
-          {" "}
-          //handle ratings later
-          <StarRating value={book.rating} />
+        <div className="flex items-center mb-3">
+          <StarRating value={bookRating} />
           <span className="ml-2 text-sm">
-            {book.rating.toFixed(1)} ({Math.floor(book.rating * 20)}%)
+            {bookRating.toFixed(1)} ({Math.floor(bookRating * 20)}%)
           </span>
-        </div> */}
+        </div>
 
         <div className="relative min-h-[400px]">
           {isLoading ? (
