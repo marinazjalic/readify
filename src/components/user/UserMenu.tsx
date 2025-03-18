@@ -6,9 +6,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Users, User, LogOut } from "lucide-react";
+import { User, LogOut, Newspaper, Book } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface UserMenuProps {
   userName: string;
@@ -21,14 +22,33 @@ export default function UserMenu({
   userEmail,
   userProfileImg,
 }: UserMenuProps) {
+  const router = useRouter();
+
+  const handleBookIconClick = () => {
+    router.push("/pages/books/savedBooks");
+  };
+
+  const handleNewsIconClick = () => {
+    router.push("/pages/user-home");
+  };
+
   return (
     <div className="flex items-center">
       <Button
         variant="ghost"
         size="icon"
         className="rounded-full hover:bg-olive-green-500 text-navy-600 hover:text-gray-300 mr-4"
+        onClick={handleBookIconClick}
       >
-        <Users className="h-5 w-5" />
+        <Book className="h-5 w-5" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="rounded-full hover:bg-olive-green-500 text-navy-600 hover:text-gray-300 mr-4"
+        onClick={handleNewsIconClick}
+      >
+        <Newspaper className="h-5 w-5" />
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
