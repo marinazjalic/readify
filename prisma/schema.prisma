@@ -140,6 +140,7 @@ model Activity {
   id           String       @id @default(auto()) @map("_id") @db.ObjectId
   userId       String       @db.ObjectId
   bookKey      String?
+  bookTitle    String?
   activityType ActivityType
   date         DateTime     @default(now())
 

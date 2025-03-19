@@ -8,6 +8,7 @@ export async function createActivity(
   userId: string,
   activityType: ActivityType,
   bookKey?: string,
+  bookTitle?: string,
   referenceType?: ReferenceType,
   referenceId?: string,
   discussion?: string
@@ -17,6 +18,7 @@ export async function createActivity(
       data: {
         userId: userId,
         bookKey: bookKey ?? undefined,
+        bookTitle: bookTitle ?? undefined,
         activityType: activityType,
         referenceType: referenceType ?? undefined,
         referenceId: referenceId ?? undefined,

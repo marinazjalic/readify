@@ -64,6 +64,7 @@ export default function ReviewForm({
           session.user.id,
           ActivityType.REVIEWED,
           bookId,
+          bookTitle,
           ReferenceType.REVIEW,
           review.data?.id
         );

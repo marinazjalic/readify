@@ -79,7 +79,11 @@ export default function SavedBooks() {
     }
   };
 
-  const handleUpdateStatus = async (bookKey: string, status: string) => {
+  const handleUpdateStatus = async (
+    bookKey: string,
+    status: string,
+    bookTitle: string
+  ) => {
     if (!session?.user?.id) return;
     try {
       if (status in ReadingStatus) {
@@ -91,7 +95,8 @@ export default function SavedBooks() {
           await createActivity(
             session.user.id,
             ActivityType.UPDATED_STATUS,
-            bookKey
+            bookKey,
+            bookTitle
           );
         }
       } else {
@@ -106,6 +111,7 @@ export default function SavedBooks() {
   const handleUpdateReadingProgress = async (
     bookKey: string,
     currentPage: number,
+    bookTitle: string,
     pageCount?: number
   ) => {
     if (!session?.user?.id) return;
@@ -127,7 +133,8 @@ export default function SavedBooks() {
         await createActivity(
           session.user.id,
           ActivityType.UPDATED_PROGRESS,
-          bookKey
+          bookKey,
+          bookTitle
         );
       }
     } catch (error) {

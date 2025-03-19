@@ -30,10 +30,11 @@ import { ReadingStatus } from "@prisma/client";
 interface BookScrollProps {
   savedBooks: DisplayBook[];
   showProgress: boolean;
-  onUpdateStatus?: (bookKey: string, status: string) => void;
+  onUpdateStatus?: (bookKey: string, status: string, bookTitle: string) => void;
   onUpdateProgress?: (
     bookKey: string,
     progress: number,
+    bookTitle: string,
     pageCount?: number
   ) => void;
   onPinBook?: (bookKey: string, isPinned: boolean) => void;
@@ -109,7 +110,7 @@ export default function BookScrollDisplay({
 
   const handleUpdateStatus = (status: string) => {
     if (selectedBook && onUpdateStatus) {
-      onUpdateStatus(selectedBook.key, status);
+      onUpdateStatus(selectedBook.key, status, selectedBook.title);
     }
     setContextMenuOpen(false);
   };
@@ -167,6 +168,7 @@ export default function BookScrollDisplay({
       onUpdateProgress(
         selectedBook.key,
         currentPage,
+        selectedBook.title,
         totalPagesChanged ? Number.parseInt(totalPages) : undefined
       );
     }

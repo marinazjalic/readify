@@ -31,7 +31,9 @@ export default function Newsfeed() {
       {isLoading ? (
         <p>...loading</p>
       ) : (
-        newsfeed.map((activity) => <NewsItem key={activity.id} />)
+        newsfeed.map((activity) => (
+          <NewsItem key={activity.id} item={activity} />
+        ))
       )}
     </main>
   );
