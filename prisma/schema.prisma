@@ -19,17 +19,32 @@ enum ReadingStatus {
   COMPLETED
 }
 
+enum ReferenceType {
+  BOOK
+  REVIEW
+  SAVED_BOOK
+}
+
+enum ActivityType {
+  ADDED_TO_LIST
+  REVIEWED
+  UPDATED_PROGRESS
+  UPDATED_STATUS
+  DISCUSSION
+}
+
 model User {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
   firstName       String
   lastName        String
-  email           String    @unique
+  email           String     @unique
   password        String
   profileImageUrl String?
-  dateCreated     DateTime  @default(now())
+  dateCreated     DateTime   @default(now())
   reviews         Review[]
   accounts        Account[]
   sessions        Session[]
+  activities      Activity[]
 
   followingIds String[] @db.ObjectId
   followerIds  String[] @db.ObjectId
@@ -119,4 +134,18 @@ model Review {
   date    DateTime @default(now())
 
   @@map("reviews")
+}
+
+model Activity {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String       @db.ObjectId
+  bookKey      String?
+  activityType ActivityType
+  date         DateTime     @default(now())
+
+  referenceType ReferenceType?
+  referenceId   String?        @db.ObjectId
+  discussion    String?
+
+  user User @relation(fields: [userId], references: [id])
 }
