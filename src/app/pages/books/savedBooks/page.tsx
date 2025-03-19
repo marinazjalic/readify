@@ -7,6 +7,9 @@ import BookScrollDisplay from "@/components/books/BookScrollDisplay";
 import { Button } from "@/components/ui/button";
 import { ReadingStatus } from "@prisma/client";
 import { updateSavedBook } from "@/actions/books/updateSavedBook";
+import { createActivity } from "@/actions/activity/createActivity";
+import { ActivityType } from "@prisma/client";
+import { ReferenceType } from "@prisma/client";
 
 export default function SavedBooks() {
   const { data: session } = useSession();
@@ -85,6 +88,11 @@ export default function SavedBooks() {
         });
         if (result) {
           fetchSavedBooks();
+          await createActivity(
+            session.user.id,
+            ActivityType.UPDATED_STATUS,
+            bookKey
+          );
         }
       } else {
         console.error("Invalid reading status:", status);
@@ -116,6 +124,11 @@ export default function SavedBooks() {
       );
       if (result) {
         fetchSavedBooks();
+        await createActivity(
+          session.user.id,
+          ActivityType.UPDATED_PROGRESS,
+          bookKey
+        );
       }
     } catch (error) {
       console.error("Error updating reading progress:", error);

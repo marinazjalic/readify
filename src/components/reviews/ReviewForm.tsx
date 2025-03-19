@@ -20,6 +20,8 @@ import { createReview } from "@/actions/reviews/createReview";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Montserrat } from "next/font/google";
+import { createActivity } from "@/actions/activity/createActivity";
+import { ActivityType, ReferenceType } from "@prisma/client";
 
 interface ReviewsProps {
   bookId: string;
@@ -55,6 +57,17 @@ export default function ReviewForm({
         reviewContent,
         reviewSubject
       );
+
+      //creating news feed activity
+      if (review.success) {
+        await createActivity(
+          session.user.id,
+          ActivityType.REVIEWED,
+          bookId,
+          ReferenceType.REVIEW,
+          review.data?.id
+        );
+      }
     }
 
     setIsDialogOpen(false);
