@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { ActivityDetails } from "@/types";
 import {
   Activity,
   ActivityType,
@@ -8,7 +9,9 @@ import {
   SavedBook,
 } from "@prisma/client";
 
-export async function getActivitiesForFeed(currentUserId: string) {
+export async function getActivitiesForFeed(
+  currentUserId: string
+): Promise<ActivityDetails[]> {
   const currentUser = await prisma.user.findUnique({
     where: { id: currentUserId },
     select: { followingIds: true },

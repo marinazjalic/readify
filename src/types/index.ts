@@ -1,4 +1,4 @@
-import type { ReadingStatus } from "@prisma/client";
+import type { ReadingStatus, Activity, User, Review, SavedBook } from "@prisma/client";
 
 export type BookDetails = {
   title: string;
@@ -23,4 +23,11 @@ export type DisplayBook = BookDetails & {
     isPinned?: boolean;
     pageCount?: number;
   };
+};
+
+export type ActivityDetails = Activity & {
+  activityDescription: string;
+  user: User;
+  review?: Review;
+  savedBook?: SavedBook;
 };

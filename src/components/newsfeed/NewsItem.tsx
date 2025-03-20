@@ -2,15 +2,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Activity, User, SavedBook, Review } from "@prisma/client";
 import StarRating from "../StarRating";
 import { Star } from "lucide-react";
+import { ActivityDetails } from "@/types";
 
 interface NewsItemProps {
-  item: Activity & {
-    activityDescription?: string;
-    user: User;
-    review?: Review;
-    savedBook?: SavedBook;
-  };
+  item: ActivityDetails;
 }
+
 export default function NewsItem({ item }: NewsItemProps) {
   const formatRelativeTime = (date: Date) => {
     const now = new Date();

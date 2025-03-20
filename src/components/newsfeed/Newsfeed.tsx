@@ -4,11 +4,11 @@ import { getActivitiesForFeed } from "@/actions/activity/getActivities";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import NewsItem from "./NewsItem";
-import { Activity } from "@prisma/client";
+import { ActivityDetails } from "@/types";
 
 export default function Newsfeed() {
   const { data: session } = useSession();
-  const [newsfeed, setNewsfeed] = useState<Activity[]>([]);
+  const [newsfeed, setNewsfeed] = useState<ActivityDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const getNewsFeed = async () => {

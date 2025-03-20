@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function UserProfile() {
   return (
-    <aside className="w-full md:w-[30%] md:fixed md:h-screen p-4 bg-white mt-10 mb-10 rounded-lg border ml-2">
+    <aside className="w-full md:w-[27%] md:fixed md:h-[77vh] p-4 bg-white mt-7 ml-5 border ml-2">
       <div className="flex flex-col items-center mb-6">
         <Avatar className="h-32 w-32 md:h-40 md:w-40 lg:h-48 lg:w-48 mb-4">
           <AvatarImage src={undefined} alt="User avatar" />
