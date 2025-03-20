@@ -37,16 +37,17 @@ export async function getActivitiesForFeed(
     },
   });
 
-  return activities.map((activity) => {
-    return {
-      ...activity,
-      activityDescription: getActivityDescription(
-        activity.activityType,
-        activity.bookTitle || "",
-        activity.savedBook || undefined
-      ),
-    };
-  });
+  return activities.map((activity) => ({
+    ...activity,
+    activityDescription: getActivityDescription(
+      activity.activityType,
+      activity.bookTitle || "",
+      activity.savedBook || undefined
+    ),
+    review: activity.review || undefined,
+    savedBook: activity.savedBook || undefined,
+    user: activity.user,
+  }));
 }
 
 function getActivityDescription(
