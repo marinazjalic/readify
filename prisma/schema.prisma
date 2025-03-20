@@ -26,7 +26,6 @@ enum ReferenceType {
 }
 
 enum ActivityType {
-  ADDED_TO_LIST
   REVIEWED
   UPDATED_PROGRESS
   UPDATED_STATUS
@@ -119,6 +118,8 @@ model SavedBook {
   isPinned    Boolean?
   pageCount   Int?
 
+  activities Activity[]
+
   @@unique([userId, bookKey])
   @@map("savedBooks")
 }
@@ -133,6 +134,8 @@ model Review {
   rating  Int
   date    DateTime @default(now())
 
+  activities Activity[]
+
   @@map("reviews")
 }
 
@@ -144,9 +147,11 @@ model Activity {
   activityType ActivityType
   date         DateTime     @default(now())
 
-  referenceType ReferenceType?
-  referenceId   String?        @db.ObjectId
-  discussion    String?
+  discussion  String?
+  savedBookId String? @db.ObjectId
+  reviewId    String? @db.ObjectId
 
-  user User @relation(fields: [userId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
+  savedBook SavedBook? @relation(fields: [savedBookId], references: [id])
+  review    Review?    @relation(fields: [reviewId], references: [id])
 }

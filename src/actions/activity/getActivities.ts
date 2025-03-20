@@ -1,7 +1,12 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { Activity, ActivityType } from "@prisma/client";
+import {
+  Activity,
+  ActivityType,
+  ReadingStatus,
+  SavedBook,
+} from "@prisma/client";
 
 export async function getActivitiesForFeed(currentUserId: string) {
   const currentUser = await prisma.user.findUnique({
@@ -21,6 +26,8 @@ export async function getActivitiesForFeed(currentUserId: string) {
     },
     include: {
       user: true,
+      savedBook: true,
+      review: true,
     },
     orderBy: {
       date: "desc",
@@ -30,27 +37,37 @@ export async function getActivitiesForFeed(currentUserId: string) {
   return activities.map((activity) => {
     return {
       ...activity,
-      activityDescription: getActivityDescription(activity.activityType),
+      activityDescription: getActivityDescription(
+        activity.activityType,
+        activity.bookTitle || "",
+        activity.savedBook || undefined
+      ),
     };
   });
 }
 
 function getActivityDescription(
   activityType: ActivityType,
-  bookTitle?: string
+  bookTitle?: string,
+  savedBook?: SavedBook
 ): string {
   switch (activityType) {
-    case ActivityType.ADDED_TO_LIST:
-      return `added ${bookTitle} to their reading list.`;
-      break;
     case ActivityType.REVIEWED:
       return `left a review for ${bookTitle}.`;
       break;
     case ActivityType.UPDATED_PROGRESS:
-      return `updated their reading progress.`;
+      return `is on page ${savedBook?.progress}/${savedBook?.pageCount} of ${bookTitle}`;
       break;
     case ActivityType.UPDATED_STATUS:
-      return `finished reading ${bookTitle}`;
+      if (savedBook?.status === ReadingStatus.COMPLETED) {
+        return `finished reading ${bookTitle}`;
+      }
+      if (savedBook?.status === ReadingStatus.IN_PROGRESS) {
+        return `started reading ${bookTitle}`;
+      }
+      if (savedBook?.status === ReadingStatus.TO_READ) {
+        return `added ${bookTitle} to their reading list`;
+      } else return "";
       break;
     default:
       return "";

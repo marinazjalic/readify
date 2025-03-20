@@ -65,7 +65,7 @@ export default function ReviewForm({
           ActivityType.REVIEWED,
           bookId,
           bookTitle,
-          ReferenceType.REVIEW,
+          undefined,
           review.data?.id
         );
       }

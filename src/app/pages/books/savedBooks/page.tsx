@@ -96,7 +96,10 @@ export default function SavedBooks() {
             session.user.id,
             ActivityType.UPDATED_STATUS,
             bookKey,
-            bookTitle
+            bookTitle,
+            undefined,
+            undefined,
+            result.id
           );
         }
       } else {
@@ -134,7 +137,10 @@ export default function SavedBooks() {
           session.user.id,
           ActivityType.UPDATED_PROGRESS,
           bookKey,
-          bookTitle
+          bookTitle,
+          undefined,
+          undefined,
+          result.id
         );
       }
     } catch (error) {

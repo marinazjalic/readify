@@ -9,9 +9,9 @@ export async function createActivity(
   activityType: ActivityType,
   bookKey?: string,
   bookTitle?: string,
-  referenceType?: ReferenceType,
-  referenceId?: string,
-  discussion?: string
+  discussion?: string,
+  reviewId?: string,
+  savedBookId?: string
 ): Promise<{ success: boolean; data?: Activity }> {
   try {
     const activity = await prisma.activity.create({
@@ -20,8 +20,8 @@ export async function createActivity(
         bookKey: bookKey ?? undefined,
         bookTitle: bookTitle ?? undefined,
         activityType: activityType,
-        referenceType: referenceType ?? undefined,
-        referenceId: referenceId ?? undefined,
+        reviewId: reviewId ?? undefined,
+        savedBookId: savedBookId ?? undefined,
         discussion: discussion ?? undefined,
       },
     });
