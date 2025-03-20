@@ -122,6 +122,7 @@ export default function ReviewForm({
                 <div className="flex flex-col items-center gap-2">
                   <StarRating
                     value={rating}
+                    className="w-5 h-5"
                     onChange={handleRatingChange}
                     editable
                   />

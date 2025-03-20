@@ -6,24 +6,10 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
 import { follow } from "@/actions/following/follow";
+import StarRating from "../StarRating";
 
 interface ReviewCardProps {
   review: ReviewDetails;
-}
-
-function StarRating({ value }: { value: number }) {
-  return (
-    <div className="flex">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <Star
-          key={star}
-          className={`w-4 h-4 ${
-            star <= value ? "text-yellow-400 fill-current" : "text-gray-300"
-          }`}
-        />
-      ))}
-    </div>
-  );
 }
 
 export default function ReviewCard({ review }: ReviewCardProps) {
@@ -70,7 +56,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
             <div className="flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
-                  <StarRating value={review.rating} />
+                  <StarRating value={review.rating} className="w-3.5 h-3.5" />
                   <span className="text-xs text-muted-foreground">
                     {new Date(review.date).toLocaleDateString()}
                   </span>

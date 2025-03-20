@@ -15,25 +15,9 @@ import { getReviewsByBook } from "@/actions/reviews/getReviewsByBook";
 import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Reviews from "@/components/reviews/Reviews";
+import StarRating from "@/components/StarRating";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
-
-function StarRating({ value }: { value: number }) {
-  return (
-    <div className="flex">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <Star
-          key={star}
-          className={`w-4 h-4 ${
-            star <= Math.round(value)
-              ? "text-yellow-400 fill-current"
-              : "text-gray-300"
-          }`}
-        />
-      ))}
-    </div>
-  );
-}
 
 export default function BookDetails({ params }: { params: { id: string } }) {
   const [wantToRead, setWantToRead] = useState(false);
@@ -110,7 +94,7 @@ export default function BookDetails({ params }: { params: { id: string } }) {
         </p>
 
         <div className="flex items-center mb-3">
-          <StarRating value={bookRating} />
+          <StarRating value={bookRating} className="w-4 h-4" />
           <span className="ml-2 text-sm">
             {bookRating.toFixed(1)} ({Math.floor(bookRating * 20)}%)
           </span>

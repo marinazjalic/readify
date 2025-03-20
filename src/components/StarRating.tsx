@@ -1,38 +1,44 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 
 interface StarRatingProps {
-  value: number
-  onChange?: (rating: number) => void
-  editable?: boolean
+  value: number;
+  className: string;
+  onChange?: (rating: number) => void;
+  editable?: boolean;
 }
 
-export default function StarRating({ value, onChange, editable = false }: StarRatingProps) {
-  const [hoverRating, setHoverRating] = useState(0)
+export default function StarRating({
+  value,
+  className,
+  onChange,
+  editable = false,
+}: StarRatingProps) {
+  const [hoverRating, setHoverRating] = useState(0);
 
   const handleStarClick = (rating: number) => {
     if (editable && onChange) {
-      onChange(rating)
+      onChange(rating);
     }
-  }
+  };
 
   const handleStarHover = (rating: number) => {
     if (editable) {
-      setHoverRating(rating)
+      setHoverRating(rating);
     }
-  }
+  };
 
   const handleMouseLeave = () => {
-    setHoverRating(0)
-  }
+    setHoverRating(0);
+  };
 
   return (
     <div className="flex" onMouseLeave={handleMouseLeave}>
       {[1, 2, 3, 4, 5].map((star) => (
         <svg
           key={star}
-          className={`w-6 h-6 ${
+          className={`${className} ${
             star <= (hoverRating || value) ? "text-yellow-400" : "text-gray-300"
           } ${editable ? "cursor-pointer" : ""}`}
           onClick={() => handleStarClick(star)}
@@ -47,6 +53,5 @@ export default function StarRating({ value, onChange, editable = false }: StarRa
         </svg>
       ))}
     </div>
-  )
+  );
 }
-
