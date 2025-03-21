@@ -45,6 +45,9 @@ export default function NewsItem({ item }: NewsItemProps) {
               <p className="mt-0.5 ml-0.5">{item.review.content}</p>
             </div>
           )}
+          {item.discussion && (
+            <p className="text-xs text-gray-700 mt-2 ">{item.discussion}</p>
+          )}
         </div>
       </div>
 

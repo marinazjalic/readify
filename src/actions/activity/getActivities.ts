@@ -73,6 +73,9 @@ function getActivityDescription(
         return `added ${bookTitle} to their reading list`;
       } else return "";
       break;
+    case ActivityType.DISCUSSION:
+      return "started a discussion.";
+      break;
     default:
       return "";
   }
