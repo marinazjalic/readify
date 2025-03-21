@@ -2,11 +2,12 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Navbar from "@/components/navbar/Navbar";
 import SessionProvider from "@/components/AuthProvider";
+import { UserProvider } from "@/context/UserContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Book Collection",
+  title: "Readify",
   description: "Display of book collection",
 };
 
@@ -19,8 +20,10 @@ export default function RootLayout({
     <html lang="en">
       <SessionProvider>
         <body className={inter.className}>
-          <Navbar />
-          {children}
+          <UserProvider>
+            <Navbar />
+            {children}
+          </UserProvider>
         </body>
       </SessionProvider>
     </html>

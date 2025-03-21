@@ -4,8 +4,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import Link from "next/link";
+import { useUserContext } from "@/context/UserContext";
+import { ReadingStatus } from "@prisma/client";
 
 export default function UserProfile() {
+  const {
+    firstName,
+    lastName,
+    email,
+    profileImageUrl,
+    followerIds,
+    followingIds,
+    savedBooks,
+    isLoadingBooks,
+  } = useUserContext();
+
   return (
     <aside className="w-full md:w-[27%] md:fixed md:h-[77vh] p-4 bg-white mt-7 ml-5 border ml-2">
       <div className="flex flex-col items-center mb-6">
@@ -14,21 +27,24 @@ export default function UserProfile() {
           <AvatarFallback>U</AvatarFallback>
         </Avatar>
 
-        <h3 className="text-lg font-medium">Name</h3>
-        <p className="text-xs text-gray-400 mb-2">email</p>
+        <h3 className="text-lg font-medium">
+          {firstName} {lastName}
+        </h3>
+        <p className="text-xs text-gray-400 mb-2">{email}</p>
 
         <div className="flex gap-4">
           <Link
             href="/followers"
             className="text-blue-500 hover:underline text-xs"
           >
-            0 followers
+            {followerIds?.length} follower{" "}
+            {followerIds?.length === 1 ? "" : "s"}
           </Link>
           <Link
             href="/following"
             className="text-blue-500 hover:underline text-xs"
           >
-            0 following
+            {followingIds?.length} following
           </Link>
         </div>
       </div>
@@ -50,13 +66,28 @@ export default function UserProfile() {
           />
           <div className="flex flex-col text-xs text-gray-500 ml-2 mt-0.5 space-y-1">
             <Link href="/" className="hover:underline">
-              0 Want to Read
+              {
+                savedBooks?.filter(
+                  (book) => book.savedInfo?.status === ReadingStatus.TO_READ
+                ).length
+              }{" "}
+              Want to Read
             </Link>
             <Link href="/" className="hover:underline">
-              0 Currently Reading
+              {
+                savedBooks?.filter(
+                  (book) => book.savedInfo?.status === ReadingStatus.IN_PROGRESS
+                ).length
+              }{" "}
+              Currently Reading
             </Link>
             <Link href="/" className="hover:underline">
-              0 Read
+              {
+                savedBooks?.filter(
+                  (book) => book.savedInfo?.status === ReadingStatus.COMPLETED
+                ).length
+              }{" "}
+              Read
             </Link>
           </div>
         </div>
