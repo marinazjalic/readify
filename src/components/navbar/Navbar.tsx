@@ -86,7 +86,7 @@ export default function Navbar() {
           <NavDropDown />
         </div>
       </nav>
-      <div className="h-[calc(64px+50px)]"></div>
+      <div className="h-[calc(64px+50px)] bg-cream-100"></div>
     </>
   );
 }

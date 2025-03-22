@@ -7,7 +7,7 @@ export default async function Home() {
   const books = await getAllBooks();
 
   return (
-    <div>
+    <div className="bg-cream-100 pt-7">
       <Header />
       <div className="flex">
         <Newsletter />

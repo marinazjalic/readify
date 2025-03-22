@@ -3,20 +3,21 @@ import Image from "next/image";
 
 export default function Header() {
   return (
-    <header className="relative w-full h-[300px] bg-cream-header py-2 mt-7">
+    <header className="relative w-full h-[300px] bg-light-blue py-2">
       <div className="container mx-auto px-4 flex items-center">
         <Image
-          src="/assets/header.png"
+          src="/assets/header-img-person.png"
           alt="header"
-          width={210}
-          height={270}
+          width={230}
+          height={290}
           objectFit="cover"
+          className="mt-2"
         />
         <Image
-          src="/assets/header-txt.png"
+          src="/assets/header-img-text.png"
           alt="header"
-          width={360}
-          height={410}
+          width={480}
+          height={450}
           objectFit="cover"
           className="mt-12 ml-12"
         />

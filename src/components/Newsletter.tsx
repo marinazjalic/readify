@@ -10,14 +10,14 @@ const allura = Allura({
 
 export default function Newsletter() {
   return (
-    <div className="hidden md:block w-[30%] h-120px bg-white border-r mt-4 mr-2 flex-col justify-center text-gray-600 ml-2">
+    <div className="hidden md:block w-[30%] h-120px bg-cream-100 border-r mt-4 mr-2 flex-col justify-center text-gray-600 ml-2">
       <h3 className={`text-2xl ${lora.className} italics`}>
         Looking for your next read?
       </h3>
       <h1 className="text-sm mt-2 ">Top Book This Week</h1>
 
       {/* temp placeholder for top book */}
-      <div className="bg-white w-[97%] h-40 mt-2 flex">
+      <div className="w-[97%] h-40 mt-2 flex">
         <div className="h-full w-28 flex-shrink-0 relative">
           <Image
             src="/assets/66ddd80562024b171a6fb6cd.jpg"
@@ -74,7 +74,7 @@ export default function Newsletter() {
           height={23}
           className="mt-1 mr-2 mb-2"
         />
-        <Button className="bg-white hover:bg-white text-gray-500 text-xs border-none shadow-none px-0 hover:underline">
+        <Button className="bg-cream-100 hover:bg-cream-100 text-gray-500 text-xs border-none shadow-none px-0 hover:underline">
           Discover New Releases This Spring
         </Button>
         <Image
@@ -86,7 +86,7 @@ export default function Newsletter() {
         />
       </div>
 
-      <div className="bg-white mt-2 flex border-b-2 border-olive-green-100">
+      <div className="mt-2 flex border-b-2 border-olive-green-100">
         <div className="w-[35%]">
           <h3 className={`text-5xl ${allura.className} mb-1`}>Sign In</h3>
         </div>

@@ -37,7 +37,7 @@ export default function UserMenu({
       <Button
         variant="ghost"
         size="icon"
-        className="rounded-full hover:bg-olive-green-500 text-cream-header hover:text-gray-300 mr-4 transition-all duration-200 relative group"
+        className="rounded-full hover:bg-olive-green-500 text-cream-100 hover:text-gray-300 mr-4 transition-all duration-200 relative group"
         onClick={handleBookIconClick}
       >
         <BookOpen className="h-5 w-5" />
@@ -48,7 +48,7 @@ export default function UserMenu({
       <Button
         variant="ghost"
         size="icon"
-        className="rounded-full hover:bg-olive-green-500 text-cream-header hover:text-gray-300 mr-4 transition-all duration-200 relative group"
+        className="rounded-full hover:bg-olive-green-500 text-cream-100 hover:text-gray-300 mr-4 transition-all duration-200 relative group"
         onClick={handleNewsIconClick}
       >
         <RssIcon className="h-5 w-5" />

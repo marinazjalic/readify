@@ -28,7 +28,7 @@ module.exports = {
           "400": "#8ba798",
           "500": "#759684",
         },
-        "cream-header": "#efefe7",
+        "light-blue": "#e6f2ff",
         teracota: {
           "500": "#e47c67",
           "600": "#e2725b",
@@ -38,7 +38,8 @@ module.exports = {
           "600": "#0A2342",
         },
         cream: {
-          "100": "#FFF8E7",
+          "100": "#F9F9F7",
+          "200": "#efefe7",
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

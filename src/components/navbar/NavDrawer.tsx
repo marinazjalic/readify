@@ -39,19 +39,19 @@ export default function NavDrawer() {
           <Button
             variant="ghost"
             size="icon"
-            className="mr-2 lg-xl:hidden hover:bg-olive-green-500 text-cream-header hover:text-gray-200"
+            className="mr-2 lg-xl:hidden hover:bg-olive-green-500 text-cream-200 hover:text-gray-200"
           >
             <Menu className="h-6 w-6" />
           </Button>
         </SheetTrigger>
         <SheetContent
           side="left"
-          className="w-[300px] sm:w-[400px] p-0 bg-cream-header text-navy-500"
+          className="w-[300px] sm:w-[400px] p-0 bg-cream-200 text-navy-500"
         >
           {selectedGenre && (
             <Button
               variant="ghost"
-              className="flex items-center justify-start mt-2 text-navy-600 hover:bg-cream-header hover:text-gray-500"
+              className="flex items-center justify-start mt-2 text-navy-600 hover:bg-cream-200 hover:text-gray-500"
               onClick={() => setSelectedGenre(null)}
             >
               <ChevronLeft className="h-4 w-4 mr-2" />
@@ -85,7 +85,7 @@ export default function NavDrawer() {
                         <Button
                           key={index}
                           variant="ghost"
-                          className="justify-start px-6 py-3 text-left rounded-none hover:bg-cream-header hover:text-gray-500"
+                          className="justify-start px-6 py-3 text-left rounded-none hover:bg-cream-200 hover:text-gray-500"
                           onClick={() => {
                             handleGenreClick(subgenre);
                           }}
@@ -103,7 +103,7 @@ export default function NavDrawer() {
                     <Button
                       key={genre}
                       variant="ghost"
-                      className="flex items-center justify-between px-4 py-3 text-left rounded-none hover:bg-cream-header hover:text-gray-500"
+                      className="flex items-center justify-between px-4 py-3 text-left rounded-none hover:bg-cream-200 hover:text-gray-500"
                       onClick={() => setSelectedGenre(genre)}
                     >
                       <span>{genre}</span>
