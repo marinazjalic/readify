@@ -53,7 +53,7 @@ export default function Navbar() {
                 <Input
                   type="text"
                   placeholder="Search..."
-                  className="w-full pl-10 pr-4 py-2 rounded-lg border-gray-100 bg-gray-100 focus:border-navy-600 focus:ring-0 focus:outline-none focus:border-gray-100"
+                  className="search-input w-full pl-10 pr-4 py-2 rounded-lg border-gray-100 bg-gray-100 focus:border-navy-600 focus:ring-0 focus:outline-none focus:border-gray-100 transition-colors"
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleSearchSubmit}
                   value={searchQuery}

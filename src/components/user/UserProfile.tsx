@@ -77,7 +77,7 @@ export default function UserProfile() {
             href="/followers"
             className="text-blue-500 hover:underline text-xs"
           >
-            {followerIds?.length} follower{" "}
+            {followerIds?.length} follower
             {followerIds?.length === 1 ? "" : "s"}
           </Link>
           <Link

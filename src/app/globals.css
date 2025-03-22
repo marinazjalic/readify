@@ -68,13 +68,29 @@
   }
 }
 
+button[data-radix-collection-item],
+[data-radix-popper-content-wrapper] [role="dialog"] button[type="button"],
+[role="dialog"] button:focus,
+[role="dialog"] button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
 
+.fixed.right-4.top-4 button {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+.search-input {
+  @apply text-gray-400;
+}
+
+.search-input:focus {
+  @apply text-gray-600 text-sm;
+}
+
+.search-input::placeholder {
+  @apply text-gray-400;
 }

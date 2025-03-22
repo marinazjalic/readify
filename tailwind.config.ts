@@ -16,6 +16,9 @@ module.exports = {
       },
     },
     extend: {
+      screens: {
+        "lg-xl": "1145px",
+      },
       colors: {
         "forest-green": "#228B22",
         "forest-green-dark": "#006400",

@@ -30,7 +30,7 @@ export default function NavDropDown() {
   };
 
   return (
-    <div className="flex justify-start items-center py-2 relative hidden lg:flex">
+    <div className="flex justify-start items-center py-2 relative hidden lg-xl:flex">
       {Array.from(subjectMap.entries()).map(([key, value]) => (
         <DropdownMenu
           key={key}
@@ -40,12 +40,12 @@ export default function NavDropDown() {
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="text-navy-600 hover:text-navy-600 hover:bg-olive-green-500 relative group px-4 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+              className="text-xs text-cream-header hover:text-cream-header hover:bg-olive-green-500 relative group px-4 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
               onMouseEnter={() => handleMouseEnter(key)}
               onMouseLeave={handleMouseLeave}
             >
               {key}
-              <span className="absolute bottom-1 left-0 w-full h-0.5 bg-navy-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-out"></span>
+              <span className="absolute bottom-1 left-0 w-full h-0.5 bg-cream-header transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-out"></span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent

@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { User, LogOut, Newspaper, Book } from "lucide-react";
+import { User, LogOut, Newspaper, BookOpen, RssIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -37,18 +37,24 @@ export default function UserMenu({
       <Button
         variant="ghost"
         size="icon"
-        className="rounded-full hover:bg-olive-green-500 text-navy-600 hover:text-gray-300 mr-4"
+        className="rounded-full hover:bg-olive-green-500 text-cream-header hover:text-gray-300 mr-4 transition-all duration-200 relative group"
         onClick={handleBookIconClick}
       >
-        <Book className="h-5 w-5" />
+        <BookOpen className="h-5 w-5" />
+        <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+          Library
+        </span>
       </Button>
       <Button
         variant="ghost"
         size="icon"
-        className="rounded-full hover:bg-olive-green-500 text-navy-600 hover:text-gray-300 mr-4"
+        className="rounded-full hover:bg-olive-green-500 text-cream-header hover:text-gray-300 mr-4 transition-all duration-200 relative group"
         onClick={handleNewsIconClick}
       >
-        <Newspaper className="h-5 w-5" />
+        <RssIcon className="h-5 w-5" />
+        <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+          Newsfeed
+        </span>
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
