@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import Carousel from "@/components/carousel/Carousel";
 import getAllBooks from "@/actions/books/getAllBooks";
-import Newsletter from "@/components/Newsletter";
+import Newsletter from "@/components/newsletter/Newsletter";
 
 export default async function Home() {
   const books = await getAllBooks();

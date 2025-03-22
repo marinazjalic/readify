@@ -1,6 +1,8 @@
 import { Lora, Allura } from "next/font/google";
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
+import { Award } from "lucide-react";
+import TopBook from "./TopBook";
 
 const lora = Lora({ subsets: ["latin"] });
 const allura = Allura({
@@ -11,38 +13,7 @@ const allura = Allura({
 export default function Newsletter() {
   return (
     <div className="hidden md:block w-[30%] h-120px bg-cream-100 border-r mt-4 mr-2 flex-col justify-center text-gray-600 ml-2">
-      <h3 className={`text-2xl ${lora.className} italics`}>
-        Looking for your next read?
-      </h3>
-      <h1 className="text-sm mt-2 ">Top Book This Week</h1>
-
-      {/* temp placeholder for top book */}
-      <div className="w-[97%] h-40 mt-2 flex">
-        <div className="h-full w-28 flex-shrink-0 relative">
-          <Image
-            src="/assets/66ddd80562024b171a6fb6cd.jpg"
-            alt="Book cover"
-            fill
-            className="object-contain object-left"
-          />
-        </div>
-
-        <div className="flex-grow pl-2 flex flex-col">
-          <h4 className="text-md font-medium">Book Title</h4>
-          <p className="text-sm text-gray-600">Author Name</p>
-        </div>
-      </div>
-
-      <div className="mr-2 border-t-2 mt-2">
-        <h3 className={`${lora.className} text-lg mt-2`}>
-          See what your friends are reading!
-        </h3>
-        <p className="text-xs">
-          Connect with others, share your thoughts, and host your next book
-          club.
-        </p>
-      </div>
-
+      <TopBook />
       {/* reading challenge container */}
       <div className="border-t-2 border-b-2 border-olive-green-100 w-[97%] mt-2 mr-2 flex">
         <div className="flex-shrink-0 w-16 sm:w-20 md:w-[5.5rem] flex items-center justify-center">
