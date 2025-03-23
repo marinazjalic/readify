@@ -1,8 +1,6 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import Image from "next/image";
 import Link from "next/link";
 import { useUserContext } from "@/context/UserContext";
 import { ReadingStatus } from "@prisma/client";
@@ -17,6 +15,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { BookOpen, BookMarked } from "lucide-react";
+import { Montserrat, Lora } from "next/font/google";
+
+const montserrat = Montserrat({ subsets: ["latin"] });
+const lora = Lora({ subsets: ["latin"] });
 
 export default function UserProfile() {
   const {
@@ -54,109 +57,151 @@ export default function UserProfile() {
   };
 
   return (
-    <aside className="w-full md:w-[27%] md:fixed md:h-[77vh] p-4 bg-white mt-7 ml-5 border ml-2">
-      <div className="flex flex-col items-center mb-6">
-        <Avatar className="h-32 w-32 md:h-40 md:w-40 lg:h-48 lg:w-48 mb-4">
-          <AvatarImage src={profileImageUrl} alt="User avatar" />
-          <AvatarFallback>
-            {firstName && lastName
-              ? `${firstName[0]}${lastName[0]}`
-              : email
-              ? email[0].toUpperCase()
-              : "U"}
-          </AvatarFallback>
-        </Avatar>
+    <aside className="w-full md:w-[27%] bg-white md:fixed md:h-[90vh] border border-olive-green-100 rounded-md shadow-sm overflow-auto">
+      {/* Profile Header */}
+      <div className="pt-6 pb-4 px-4 border-b border-olive-green-100">
+        <div className="flex flex-col items-center">
+          <Avatar className="h-40 w-40 md:h-36 w-36 lg:h-40 lg:w-40 shadow-sm mb-4">
+            <AvatarImage src={profileImageUrl} alt="User avatar" />
+            <AvatarFallback className="bg-olive-green-400 text-white text-3xl">
+              {firstName && lastName
+                ? `${firstName[0]}${lastName[0]}`
+                : email
+                ? email[0].toUpperCase()
+                : "U"}
+            </AvatarFallback>
+          </Avatar>
 
-        <h3 className="text-lg font-medium">
-          {firstName} {lastName}
-        </h3>
-        <p className="text-xs text-gray-400 mb-2">{email}</p>
+          <h3 className={`${montserrat.className} text-lg text-navy-600`}>
+            {firstName} {lastName}
+          </h3>
+          <p className={`${montserrat.className} text-xs text-gray-400 mb-3`}>
+            {email}
+          </p>
 
-        <div className="flex gap-4">
-          <Link
-            href="/followers"
-            className="text-blue-500 hover:underline text-xs"
-          >
-            {followerIds?.length} follower
-            {followerIds?.length === 1 ? "" : "s"}
-          </Link>
-          <Link
-            href="/following"
-            className="text-blue-500 hover:underline text-xs"
-          >
-            {followingIds?.length} following
-          </Link>
-        </div>
-      </div>
-
-      <Separator className="mx-auto w-[90%] md:w-[80%]" />
-
-      <div className="py-4">
-        <h3 className="text-sm text-navy-600 mb-2 px-4">
-          VIEW VIRTUAL LIBRARY
-        </h3>
-
-        <div className="flex items-start px-2">
-          <Image
-            src="/assets/saved-book-icon.png"
-            alt="Book icon"
-            width={60}
-            height={60}
-            className="flex-shrink-0"
-          />
-          <div className="flex flex-col text-xs text-gray-500 ml-2 mt-0.5 space-y-1">
-            <Link href="/" className="hover:underline">
-              {savedBooks?.filter(
-                (book) => book.savedInfo?.status === ReadingStatus.TO_READ
-              ).length || 0}{" "}
-              Want to Read
+          <div className="flex gap-6 text-sm">
+            <Link
+              href="/followers"
+              className="text-navy-500 hover:text-teracota-500 transition-colors flex flex-col items-center"
+            >
+              <span className="font-medium">{followerIds?.length || 0}</span>
+              <span className="text-xs">
+                Follower{followerIds?.length === 1 ? "" : "s"}
+              </span>
             </Link>
-            <Link href="/" className="hover:underline">
-              {savedBooks?.filter(
-                (book) => book.savedInfo?.status === ReadingStatus.IN_PROGRESS
-              ).length || 0}{" "}
-              Currently Reading
-            </Link>
-            <Link href="/" className="hover:underline">
-              {savedBooks?.filter(
-                (book) => book.savedInfo?.status === ReadingStatus.COMPLETED
-              ).length || 0}{" "}
-              Read
+            <Link
+              href="/following"
+              className="text-navy-500 hover:text-teracota-500 transition-colors flex flex-col items-center"
+            >
+              <span className="font-medium">{followingIds?.length || 0}</span>
+              <span className="text-xs">Following</span>
             </Link>
           </div>
         </div>
       </div>
 
-      <Separator className="mx-auto w-[90%] md:w-[80%]" />
+      {/* Virtual Library */}
+      <div className="py-4 px-4 border-b border-olive-green-100">
+        <div className="flex items-center gap-2 border-l-4 border-olive-green-500 pl-2 mb-3">
+          <BookOpen className="h-5 w-5 text-olive-green-500" />
+          <h3
+            className={`${lora.className} text-sm text-olive-green-500 uppercase tracking-wide`}
+          >
+            Virtual Library
+          </h3>
+        </div>
 
-      <div className="py-4">
-        <h3 className="text-sm text-navy-600 px-4">READING CHALLENGE</h3>
-        <div className="w-[85%] ml-4">
-          <div className="bg-gray-300 w-full h-2.5 rounded-md mt-2">
+        <div className="flex items-start">
+          <div className="flex flex-col text-xs ml-3 space-y-0.5">
+            <Link
+              href="/"
+              className="text-gray-500 hover:text-teracota-500 transition-colors flex items-center"
+            >
+              <span className="text-xs mr-2">
+                {savedBooks?.filter(
+                  (book) => book.savedInfo?.status === ReadingStatus.TO_READ
+                ).length || 0}
+              </span>
+              <span>Want to Read</span>
+            </Link>
+            <Link
+              href="/"
+              className="text-gray-500 hover:text-teracota-500 transition-colors flex items-center"
+            >
+              <span className="font-medium mr-2">
+                {savedBooks?.filter(
+                  (book) => book.savedInfo?.status === ReadingStatus.IN_PROGRESS
+                ).length || 0}
+              </span>
+              <span>Currently Reading</span>
+            </Link>
+            <Link
+              href="/"
+              className="text-gray-500 hover:text-teracota-500 transition-colors flex items-center"
+            >
+              <span className="font-medium mr-2">
+                {savedBooks?.filter(
+                  (book) => book.savedInfo?.status === ReadingStatus.COMPLETED
+                ).length || 0}
+              </span>
+              <span>Read</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Reading Challenge */}
+      <div className="py-4 px-4">
+        <div className="flex items-center gap-2 border-l-4 border-olive-green-500 pl-2 mb-3">
+          <BookMarked className="h-5 w-5 text-olive-green-500" />
+          <h3
+            className={`${lora.className} text-sm text-olive-green-500 uppercase tracking-wide`}
+          >
+            {currentYear} Reading Challenge
+          </h3>
+        </div>
+
+        <div className=" rounded-md p-3 ">
+          <div className="flex items-center mb-3">
+            {/* <BookMarked className="w-5 h-5 text-teracota-500 mr-2" /> */}
+            <span className="text-gray-500 text-xs">
+              {completedBooksCount} of {readingGoal} books completed
+            </span>
+          </div>
+
+          <div className="w-full bg-cream-100 h-3 rounded-full mb-3 overflow-hidden border border-olive-green-100">
             <div
-              className="bg-olive-green-500 h-full rounded-md transition-all duration-300"
+              className="bg-teracota-500 h-full rounded-full transition-all duration-300"
               style={{ width: `${progressPercentage}%` }}
             ></div>
           </div>
-          <div className="flex flex-row text-xxs text-gray-500 mt-1">
-            <p>
-              {completedBooksCount}/{readingGoal} books read
-            </p>
+
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-olive-green-400">
+              {Math.round(progressPercentage)}% complete
+            </span>
             <button
-              className="ml-auto hover:text-blue-500 transition-colors"
+              className="text-teracota-500 hover:text-teracota-600 transition-colors font-medium"
               onClick={() => setIsGoalDialogOpen(true)}
             >
               Update goal
             </button>
           </div>
+
+          {completedBooksCount >= readingGoal && readingGoal > 0 && (
+            <div className="mt-3 text-xs text-center p-2 bg-light-blue rounded-md text-navy-500 italic border border-olive-green-100">
+              Congratulations! You've reached your reading goal for{" "}
+              {currentYear}! 🎉
+            </div>
+          )}
         </div>
       </div>
 
       {/* Reading Goal Dialog */}
       <Dialog open={isGoalDialogOpen} onOpenChange={setIsGoalDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] bg-cream-100 border-olive-green-100">
           <DialogHeader>
-            <DialogTitle className="text-navy-500 text-center text-xl font-semibold">
+            <DialogTitle className="text-navy-600 text-center text-xl font-serif">
               Reading Challenge {currentYear}
             </DialogTitle>
           </DialogHeader>
@@ -164,7 +209,7 @@ export default function UserProfile() {
           <div className="py-6">
             <Label
               htmlFor="goal"
-              className="text-dusty-rose text-center block mb-2"
+              className="text-olive-green-500 text-center block mb-4 font-medium"
             >
               How many books do you want to read in {currentYear}?
             </Label>
@@ -178,15 +223,18 @@ export default function UserProfile() {
                 onChange={(e) =>
                   setNewGoal(Number.parseInt(e.target.value) || 1)
                 }
-                className="w-24 text-center text-lg"
+                className="w-24 text-center text-lg bg-cream-200 border-olive-green-100"
               />
             </div>
 
-            <div className="text-xs mt-4 text-center text-sm text-muted-foreground">
-              You've read {completedBooksCount}{" "}
-              {completedBooksCount === 1 ? "book" : "books"} so far.
+            <div className="mt-6 text-center text-sm text-navy-500">
+              <p>
+                You've read {completedBooksCount}{" "}
+                {completedBooksCount === 1 ? "book" : "books"} so far.
+              </p>
+
               {completedBooksCount > 0 && (
-                <div className="mt-2">
+                <div className="mt-2 italic">
                   {completedBooksCount >= readingGoal
                     ? "Congratulations! You've reached your goal! 🎉"
                     : `${
@@ -197,17 +245,17 @@ export default function UserProfile() {
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="gap-2">
             <Button
               variant="outline"
               onClick={() => setIsGoalDialogOpen(false)}
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto border-olive-green-400 text-navy-500 hover:bg-cream-200"
             >
               Cancel
             </Button>
             <Button
               onClick={handleGoalUpdate}
-              className="w-full sm:w-auto bg-olive-green-500 hover:bg-olive-green-600"
+              className="w-full sm:w-auto bg-olive-green-500 hover:bg-olive-green-400 text-white"
             >
               Update Goal
             </Button>
