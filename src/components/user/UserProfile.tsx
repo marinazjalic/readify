@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BookOpen, BookMarked } from "lucide-react";
 import { Montserrat, Lora } from "next/font/google";
+import UserFollowingList from "./UserList";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 const lora = Lora({ subsets: ["latin"] });
@@ -36,6 +37,9 @@ export default function UserProfile() {
   const [readingGoal, setReadingGoal] = useState(0);
   const [newGoal, setNewGoal] = useState(readingGoal);
   const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
+  const [view, setView] = useState<"default" | "followers" | "following">(
+    "default"
+  );
 
   const completedBooksCount =
     savedBooks?.filter(
@@ -80,122 +84,133 @@ export default function UserProfile() {
           </p>
 
           <div className="flex gap-6 text-sm">
-            <Link
-              href="/followers"
+            <button
+              onClick={() => setView("followers")}
               className="text-navy-500 hover:text-teracota-500 transition-colors flex flex-col items-center"
             >
               <span className="font-medium">{followerIds?.length || 0}</span>
               <span className="text-xs">
                 Follower{followerIds?.length === 1 ? "" : "s"}
               </span>
-            </Link>
-            <Link
-              href="/following"
+            </button>
+            <button
+              onClick={() => setView("following")}
               className="text-navy-500 hover:text-teracota-500 transition-colors flex flex-col items-center"
             >
               <span className="font-medium">{followingIds?.length || 0}</span>
               <span className="text-xs">Following</span>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Virtual Library */}
-      <div className="py-4 px-4 border-b border-olive-green-100">
-        <div className="flex items-center gap-2 border-l-4 border-olive-green-500 pl-2 mb-3">
-          <BookOpen className="h-5 w-5 text-olive-green-500" />
-          <h3
-            className={`${lora.className} text-sm text-olive-green-500 uppercase tracking-wide`}
-          >
-            Virtual Library
-          </h3>
-        </div>
-
-        <div className="flex items-start">
-          <div className="flex flex-col text-xs ml-3 space-y-0.5">
-            <Link
-              href="/"
-              className="text-gray-500 hover:text-teracota-500 transition-colors flex items-center"
-            >
-              <span className="text-xs mr-2">
-                {savedBooks?.filter(
-                  (book) => book.savedInfo?.status === ReadingStatus.TO_READ
-                ).length || 0}
-              </span>
-              <span>Want to Read</span>
-            </Link>
-            <Link
-              href="/"
-              className="text-gray-500 hover:text-teracota-500 transition-colors flex items-center"
-            >
-              <span className="font-medium mr-2">
-                {savedBooks?.filter(
-                  (book) => book.savedInfo?.status === ReadingStatus.IN_PROGRESS
-                ).length || 0}
-              </span>
-              <span>Currently Reading</span>
-            </Link>
-            <Link
-              href="/"
-              className="text-gray-500 hover:text-teracota-500 transition-colors flex items-center"
-            >
-              <span className="font-medium mr-2">
-                {savedBooks?.filter(
-                  (book) => book.savedInfo?.status === ReadingStatus.COMPLETED
-                ).length || 0}
-              </span>
-              <span>Read</span>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Reading Challenge */}
-      <div className="py-4 px-4">
-        <div className="flex items-center gap-2 border-l-4 border-olive-green-500 pl-2 mb-3">
-          <BookMarked className="h-5 w-5 text-olive-green-500" />
-          <h3
-            className={`${lora.className} text-sm text-olive-green-500 uppercase tracking-wide`}
-          >
-            {currentYear} Reading Challenge
-          </h3>
-        </div>
-
-        <div className=" rounded-md p-3 ">
-          <div className="flex items-center mb-3">
-            {/* <BookMarked className="w-5 h-5 text-teracota-500 mr-2" /> */}
-            <span className="text-gray-500 text-xs">
-              {completedBooksCount} of {readingGoal} books completed
-            </span>
-          </div>
-
-          <div className="w-full bg-cream-100 h-3 rounded-full mb-3 overflow-hidden border border-olive-green-100">
-            <div
-              className="bg-teracota-500 h-full rounded-full transition-all duration-300"
-              style={{ width: `${progressPercentage}%` }}
-            ></div>
-          </div>
-
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-olive-green-400">
-              {Math.round(progressPercentage)}% complete
-            </span>
-            <button
-              className="text-teracota-500 hover:text-teracota-600 transition-colors font-medium"
-              onClick={() => setIsGoalDialogOpen(true)}
-            >
-              Update goal
             </button>
           </div>
-
-          {completedBooksCount >= readingGoal && readingGoal > 0 && (
-            <div className="mt-3 text-xs text-center p-2 bg-light-blue rounded-md text-navy-500 italic border border-olive-green-100">
-              Congratulations! You've reached your reading goal for{" "}
-              {currentYear}! 🎉
-            </div>
-          )}
         </div>
       </div>
+
+      {view === "default" ? (
+        <>
+          {/* Virtual Library */}
+          <div className="py-4 px-4 border-b border-olive-green-100">
+            <div className="flex items-center gap-2 border-l-4 border-olive-green-500 pl-2 mb-3">
+              <BookOpen className="h-5 w-5 text-olive-green-500" />
+              <h3
+                className={`${lora.className} text-sm text-olive-green-500 uppercase tracking-wide`}
+              >
+                Virtual Library
+              </h3>
+            </div>
+
+            <div className="flex items-start">
+              <div className="flex flex-col text-xs ml-3 space-y-0.5">
+                <Link
+                  href="/"
+                  className="text-gray-500 hover:text-teracota-500 transition-colors flex items-center"
+                >
+                  <span className="text-xs mr-2">
+                    {savedBooks?.filter(
+                      (book) => book.savedInfo?.status === ReadingStatus.TO_READ
+                    ).length || 0}
+                  </span>
+                  <span>Want to Read</span>
+                </Link>
+                <Link
+                  href="/"
+                  className="text-gray-500 hover:text-teracota-500 transition-colors flex items-center"
+                >
+                  <span className="font-medium mr-2">
+                    {savedBooks?.filter(
+                      (book) =>
+                        book.savedInfo?.status === ReadingStatus.IN_PROGRESS
+                    ).length || 0}
+                  </span>
+                  <span>Currently Reading</span>
+                </Link>
+                <Link
+                  href="/"
+                  className="text-gray-500 hover:text-teracota-500 transition-colors flex items-center"
+                >
+                  <span className="font-medium mr-2">
+                    {savedBooks?.filter(
+                      (book) =>
+                        book.savedInfo?.status === ReadingStatus.COMPLETED
+                    ).length || 0}
+                  </span>
+                  <span>Read</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Reading Challenge */}
+          <div className="py-4 px-4">
+            <div className="flex items-center gap-2 border-l-4 border-olive-green-500 pl-2 mb-3">
+              <BookMarked className="h-5 w-5 text-olive-green-500" />
+              <h3
+                className={`${lora.className} text-sm text-olive-green-500 uppercase tracking-wide`}
+              >
+                {currentYear} Reading Challenge
+              </h3>
+            </div>
+
+            <div className=" rounded-md p-3 ">
+              <div className="flex items-center mb-3">
+                <span className="text-gray-500 text-xs">
+                  {completedBooksCount} of {readingGoal} books completed
+                </span>
+              </div>
+
+              <div className="w-full bg-cream-100 h-3 rounded-full mb-3 overflow-hidden border border-olive-green-100">
+                <div
+                  className="bg-teracota-500 h-full rounded-full transition-all duration-300"
+                  style={{ width: `${progressPercentage}%` }}
+                ></div>
+              </div>
+
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-olive-green-400">
+                  {Math.round(progressPercentage)}% complete
+                </span>
+                <button
+                  className="text-teracota-500 hover:text-teracota-600 transition-colors font-medium"
+                  onClick={() => setIsGoalDialogOpen(true)}
+                >
+                  Update goal
+                </button>
+              </div>
+
+              {completedBooksCount >= readingGoal && readingGoal > 0 && (
+                <div className="mt-3 text-xs text-center p-2 bg-light-blue rounded-md text-navy-500 italic border border-olive-green-100">
+                  Congratulations! You've reached your reading goal for{" "}
+                  {currentYear}! 🎉
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      ) : (
+        <UserFollowingList
+          type={view}
+          userIds={view === "followers" ? followerIds : followingIds}
+          onBack={() => setView("default")}
+        />
+      )}
 
       {/* Reading Goal Dialog */}
       <Dialog open={isGoalDialogOpen} onOpenChange={setIsGoalDialogOpen}>
