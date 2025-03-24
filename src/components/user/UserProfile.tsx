@@ -57,7 +57,7 @@ export default function UserProfile() {
   };
 
   return (
-    <aside className="w-full md:w-[27%] bg-white md:fixed md:h-[90vh] border border-olive-green-100 rounded-md shadow-sm overflow-auto">
+    <aside className="w-full md:w-[27%] bg-white md:fixed md:h-[90vh] mt-5 border border-olive-green-100  overflow-auto">
       {/* Profile Header */}
       <div className="pt-6 pb-4 px-4 border-b border-olive-green-100">
         <div className="flex flex-col items-center">

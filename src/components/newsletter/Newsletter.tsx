@@ -1,10 +1,11 @@
-import { Lora, Allura } from "next/font/google";
+import { Lora, Allura, Montserrat } from "next/font/google";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { Award } from "lucide-react";
 import TopBook from "./TopBook";
 
 const lora = Lora({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ["latin"] });
 const allura = Allura({
   subsets: ["latin"],
   weight: "400",
@@ -57,13 +58,15 @@ export default function Newsletter() {
         />
       </div>
 
-      <div className="mt-2 flex border-b-2 border-olive-green-100">
-        <div className="w-[35%]">
-          <h3 className={`text-5xl ${allura.className} mb-1`}>Sign In</h3>
-        </div>
-        <p className={`${lora.className} text-xxs w-[55%] ml-4 mt-1`}>
-          Start curating your virtual library and unlock personalized
-          recommendations.
+      <div className={`${lora.className} text-center mt-2 text-gray-500`}>
+        <h4 className="text-lg text-gray-800">
+          Join Our Community of Book Lovers!
+        </h4>
+        <p
+          className={`${montserrat.className} text-xs ml-2 mr-2 text-gray-600 mt-1`}
+        >
+          Sign up today to curate your virtual library, track your reading
+          progress, and connect with others to see what they're reading!
         </p>
       </div>
     </div>

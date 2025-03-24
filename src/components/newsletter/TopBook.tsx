@@ -7,7 +7,7 @@ const lora = Lora({ subsets: ["latin"] });
 export default function TopBook() {
   return (
     <div>
-      <h3 className={`text-2xl ${lora.className} italics text-navy-600`}>
+      <h3 className={`text-2xl ${lora.className} italics text-gray-600`}>
         Looking for your next read?
       </h3>
 
