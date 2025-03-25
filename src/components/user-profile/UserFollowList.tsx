@@ -7,6 +7,9 @@ import { ArrowLeft } from "lucide-react";
 import { Lora } from "next/font/google";
 import { useUserContext } from "@/context/UserContext";
 import { getByIds } from "@/actions/following/getByIds";
+import { follow } from "@/actions/following/follow";
+import { unfollow } from "@/actions/following/unfollow";
+import { useRouter } from "next/navigation";
 
 const lora = Lora({ subsets: ["latin"] });
 
@@ -24,14 +27,15 @@ interface UserListProps {
   onBack: () => void;
 }
 
-export default function UserFollowingList({
+export default function UserFollowList({
   type,
   userIds = [],
   onBack,
 }: UserListProps) {
   const [users, setUsers] = useState<UserDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { followingIds } = useUserContext();
+  const { userId, followingIds, updateFollowingIds } = useUserContext();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -59,6 +63,23 @@ export default function UserFollowingList({
 
     fetchUsers();
   }, [type, userIds, followingIds]);
+
+  const handleFollowButton = async (
+    userToFollow: string,
+    isFollowing: string
+  ) => {
+    if (isFollowing === "unfollow") {
+      const newUserIds = followingIds!.filter((id) => id != userToFollow);
+      updateFollowingIds(newUserIds);
+      await unfollow(userToFollow, userId);
+    } else {
+      const newUserIds = followingIds
+        ? [...followingIds, userToFollow]
+        : [userToFollow];
+      await follow(userToFollow, userId);
+      updateFollowingIds(newUserIds);
+    }
+  };
 
   return (
     <div className="py-4 px-4">
@@ -110,6 +131,12 @@ export default function UserFollowingList({
               <Button
                 variant={user.isFollowing ? "outline" : "default"}
                 size="sm"
+                onClick={() =>
+                  handleFollowButton(
+                    user.id,
+                    user.isFollowing ? "unfollow" : "follow"
+                  )
+                }
                 className={
                   user.isFollowing
                     ? "border-olive-green-400 text-navy-500 hover:bg-cream-200 text-xs h-8"

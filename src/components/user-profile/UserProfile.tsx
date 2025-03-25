@@ -7,7 +7,7 @@ import { ReadingStatus } from "@prisma/client";
 import { useState } from "react";
 import { BookOpen, BookMarked } from "lucide-react";
 import { Montserrat, Lora } from "next/font/google";
-import UserFollowingList from "./UserList";
+import UserFollowList from "./UserFollowList";
 import ReadingGoalDialog from "./ReadingGoalDialog";
 import VirtualLibrary from "./VirtualLibraryBox";
 import ReadingChallengeBox from "./ReadingChallengeBox";
@@ -87,7 +87,7 @@ export default function UserProfile() {
           />
         </>
       ) : (
-        <UserFollowingList
+        <UserFollowList
           type={view}
           userIds={view === "followers" ? followerIds : followingIds}
           onBack={() => setView("default")}

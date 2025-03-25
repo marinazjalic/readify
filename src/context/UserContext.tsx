@@ -4,7 +4,7 @@ import type React from "react";
 import { createContext, useState, useContext, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { getSavedBooksByUser } from "@/actions/books/getSavedBooksByUser";
-import { DisplayBook } from "@/types";
+import type { DisplayBook } from "@/types";
 
 type UserContextType = {
   userId: string;
@@ -17,6 +17,8 @@ type UserContextType = {
   savedBooks: DisplayBook[] | undefined;
   isLoadingBooks: boolean;
   refreshSavedBooks: () => Promise<void>;
+  updateFollowingIds: (newFollowingIds: string[]) => void;
+  updateFollowerIds: (newFollowerIds: string[]) => void;
 };
 
 const defaultValue: UserContextType = {
@@ -30,6 +32,8 @@ const defaultValue: UserContextType = {
   savedBooks: [],
   isLoadingBooks: false,
   refreshSavedBooks: async () => {},
+  updateFollowingIds: () => {},
+  updateFollowerIds: () => {},
 };
 
 const UserContext = createContext<UserContextType>(defaultValue);
@@ -82,6 +86,14 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     await fetchSavedBooks(userId);
   };
 
+  const updateFollowingIds = (newFollowingIds: string[]) => {
+    setFollowingIds(newFollowingIds);
+  };
+
+  const updateFollowerIds = (newFollowerIds: string[]) => {
+    setFollowerIds(newFollowerIds);
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -95,6 +107,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         savedBooks,
         isLoadingBooks,
         refreshSavedBooks,
+        updateFollowingIds,
+        updateFollowerIds,
       }}
     >
       {children}
