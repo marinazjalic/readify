@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ReadingStatus } from "@prisma/client";
+import ReadingProgressDialog from "./ReadingProgressDialog";
 
 interface BookScrollProps {
   savedBooks: DisplayBook[];
@@ -149,6 +150,7 @@ export default function BookScrollDisplay({
   };
 
   const handleUpdateProgress = () => {
+    console.log("SAVED");
     // get effective total pages - either the current input or the initial value if not changed
     const effectiveTotalPages = totalPages || initialTotalPages;
     if (!effectiveTotalPages || effectiveTotalPages === "0") {
@@ -190,6 +192,10 @@ export default function BookScrollDisplay({
 
     if (pageCount <= 0) return 0;
     return Math.min(Math.round((progress / pageCount) * 100), 100);
+  };
+
+  const handleCancelProgressDialog = async () => {
+    setProgressDialogOpen(false);
   };
 
   return (
@@ -387,93 +393,19 @@ export default function BookScrollDisplay({
         </div>
       )}
 
-      {/* Progress Update Dialog */}
-      <Dialog open={progressDialogOpen} onOpenChange={setProgressDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Update Reading Progress</DialogTitle>
-            {selectedBook && (
-              <p className="text-sm text-gray-500 mt-1">{selectedBook.title}</p>
-            )}
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <div className="col-span-4 flex items-center gap-2 text-sm text-gray-600">
-                <p>Pages read</p>
-                <Input
-                  id="currentPage"
-                  type="number"
-                  min="0"
-                  placeholder={initialCurrentPage.toString()}
-                  value={currentPage}
-                  onChange={(e) => {
-                    const value = Number.parseInt(e.target.value);
-                    setCurrentPage(isNaN(value) ? 0 : value);
-                    setErrorMessage("");
-                  }}
-                  className="w-20 h-6"
-                />
-                <p>/</p>
-                <Input
-                  id="totalPages"
-                  type="text"
-                  placeholder={initialTotalPages || "Total pages"}
-                  value={totalPages}
-                  onChange={(e) => {
-                    setTotalPages(e.target.value);
-                    setErrorMessage("");
-                  }}
-                  className="w-20 h-6"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-row items-center justify-between mt-4">
-            {errorMessage ? (
-              <div className="flex items-center text-red-500 text-xxs">
-                <AlertCircle className="h-3 w-3 mr-1" />
-                <p>{errorMessage}</p>
-              </div>
-            ) : currentPage >
-              (Number.parseInt(totalPages || initialTotalPages) || 0) ? (
-              <p className="text-xxs text-red-500">
-                Current page cannot exceed total pages.
-              </p>
-            ) : !totalPages && !initialTotalPages ? (
-              <p className="text-xxs text-red-500">
-                Please input the total page count.
-              </p>
-            ) : (
-              <div className="text-xxs text-gray-500">
-                {currentPage !== initialCurrentPage ||
-                (totalPages !== initialTotalPages && totalPages !== "")
-                  ? "Changes will be saved"
-                  : "No changes detected"}
-              </div>
-            )}
-            <div className="flex space-x-2">
-              <DialogClose asChild>
-                <Button variant="outline" size="sm">
-                  Cancel
-                </Button>
-              </DialogClose>
-              <Button
-                onClick={handleUpdateProgress}
-                className="bg-olive-green-500 hover:bg-olive-green-600"
-                size="sm"
-                disabled={
-                  (!totalPages && !initialTotalPages) ||
-                  errorMessage !== "" ||
-                  currentPage >
-                    (Number.parseInt(totalPages || initialTotalPages) || 0)
-                }
-              >
-                Save
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ReadingProgressDialog
+        dialogOpen={progressDialogOpen}
+        selectedBook={selectedBook}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        initialCurrentPage={initialCurrentPage}
+        initialTotalPages={initialTotalPages}
+        errorMessage={errorMessage}
+        onCurrentPageChange={setCurrentPage}
+        onTotalPageChange={setTotalPages}
+        onSave={handleUpdateProgress}
+        onCancel={handleCancelProgressDialog}
+      />
     </div>
   );
 }
