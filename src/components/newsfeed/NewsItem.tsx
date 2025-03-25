@@ -27,21 +27,24 @@ export default function NewsItem({ item }: NewsItemProps) {
   const getActivityDetails = () => {
     if (item.review) {
       return {
-        icon: <Star className="w-4 h-4 text-white" />,
-        bgColor: "bg-dusty-rose",
-        textColor: "text-white",
+        icon: <Star className="w-3.5 h-3.5 text-amber-500" />,
+        borderColor: "border-amber-500",
+        textColor: "text-amber-500",
+        margins: "mt-0.5 ml-1",
       };
     } else if (item.discussion) {
       return {
-        icon: <MessageCircle className="h-4 w-4 text-gray-500" />,
-        bgColor: "bg-light-blue",
-        textColor: "text-gray-500",
+        icon: <MessageCircle className="h-3.5 w-3.5 text-sky-300" />,
+        borderColor: "border-sky-300",
+        textColor: "text-sky-300",
+        margins: "mt-0.5 ml-0.5",
       };
     } else {
       return {
-        icon: <BookOpen className="h-4 w-4 text-gray-500" />,
-        bgColor: "bg-olive-green-100",
-        textColor: "text-gray-500",
+        icon: <BookOpen className="h-3.5 w-3.5 text-olive-green-500" />,
+        borderColor: "border-olive-green-500",
+        textColor: "text-olive-green-500",
+        margins: "mt-0 ml-1",
       };
     }
   };
@@ -66,10 +69,14 @@ export default function NewsItem({ item }: NewsItemProps) {
               const activityDetails = getActivityDetails();
               return (
                 <div
-                  className={`flex items-center ml-2 px-2 py-0.5 ${activityDetails.bgColor} rounded-full`}
+                  className={`flex items-center h-6 pl-1.5 ${activityDetails.borderColor}`}
                 >
-                  {activityDetails.icon}
-                  <p className={`text-xxs ${activityDetails.textColor} ml-1`}>
+                  <div className="flex items-center justify-center">
+                    {activityDetails.icon}
+                  </div>
+                  <p
+                    className={`text-xxs ${activityDetails.textColor} ${activityDetails.margins}`}
+                  >
                     {item.activityDescription}
                   </p>
                 </div>
