@@ -16,6 +16,7 @@ interface BookCardProps {
 export default function BookCard({ book, enableSaving }: BookCardProps) {
   const router = useRouter();
   const setCurrentBook = useBookStore((state) => state.setCurrentBook);
+  const setCompleteObj = useBookStore((state) => state.setCompleteObj);
   const [likedBooks, setLikedBooks] = useState<Set<string>>(new Set());
   const { data: session } = useSession();
 
@@ -63,6 +64,7 @@ export default function BookCard({ book, enableSaving }: BookCardProps) {
   };
   const handleCoverClick = (book: BookDetails) => {
     setCurrentBook(book);
+    setCompleteObj(false);
     router.push(`/pages/books/${book.key}`);
   };
   return (

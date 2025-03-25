@@ -5,15 +5,19 @@ import Newsletter from "@/components/newsletter/Newsletter";
 
 export default async function Home() {
   const books = await getAllBooks();
-  const thrillers = books.filter((book) => book.genres.includes("Thriller"));
-  const romance = books.filter((book) => book.genres.includes("Romance"));
+  const thrillers = books
+    .filter((book) => book.genres.includes("Thriller"))
+    .reverse();
+  const romance = books
+    .filter((book) => book.genres.includes("Romance"))
+    .reverse();
 
   return (
     <div className="bg-cream-100 pt-7">
       <Header />
       <div className="flex">
         <Newsletter />
-        <div className="w-[70%]">
+        <div className="w-full md:w-[70%]">
           <Carousel text="Top Rated" books={books} />
           <Carousel text="Thrillers" books={thrillers} />
           <Carousel text="Romance" books={romance} />

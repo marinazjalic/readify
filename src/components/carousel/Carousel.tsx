@@ -22,6 +22,7 @@ interface CarouselProps {
 export default function Carousel({ text, books }: CarouselProps) {
   const router = useRouter();
   const setCurrentBook = useBookStore((state) => state.setCurrentBook);
+  const setCompleteObj = useBookStore((state) => state.setCompleteObj);
 
   const handleCoverClick = async (book: Book) => {
     if (book.bookKey) {
@@ -31,8 +32,12 @@ export default function Carousel({ text, books }: CarouselProps) {
         cover: book.coverUrl || "",
         key: book.bookKey,
         publish_date: book.publish_date?.toISOString() || undefined,
+        description: book.description || undefined,
+        genres: book.genres,
       };
       setCurrentBook(bookDetails);
+      setCompleteObj(true);
+
       router.push(`../pages/books/${book.bookKey}`);
     }
   };

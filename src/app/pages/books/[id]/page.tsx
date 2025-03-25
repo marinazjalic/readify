@@ -18,35 +18,35 @@ export default function BookDetails({ params }: { params: { id: string } }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const currentBook = useBookStore((state) => state.currentBook);
+  const isCompleteObj = useBookStore((state) => state.isCompleteObj);
 
-  useEffect(() => {
-    const fetchBookDetails = async () => {
-      if (currentBook) {
-        try {
-          const details = await getBookByKey(currentBook.key, currentBook);
-          const reviews = await getReviewsByBook(currentBook.key);
+  const fetchBookDetails = async () => {
+    if (currentBook) {
+      if (isCompleteObj) {
+        setBookDetails(currentBook);
+      } else {
+        //if not in DB fetch info
+        const details = await getBookByKey(currentBook.key, currentBook);
+        setBookDetails(details);
 
-          let { title, author, cover, key, description, genres } = details;
-
-          //save a copy to DB
-          await addBookToDb(
-            title,
-            author,
-            description,
-            genres,
-            String(cover),
-            key
-          );
-
-          getRating(reviews);
-          setBookDetails(details);
-          setBookReviews(reviews);
-          setIsLoading(false);
-        } catch (error) {
-          console.error("Failed to fetch book details. Error: ", error);
-        }
+        //save a copy to the DB
+        let { title, author, cover, key, description, genres } = details;
+        await addBookToDb(
+          title,
+          author,
+          description,
+          genres,
+          String(cover),
+          key
+        );
       }
-    };
+      const reviews = await getReviewsByBook(currentBook.key);
+      getRating(reviews);
+      setBookReviews(reviews);
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchBookDetails();
   }, [currentBook]);
 
