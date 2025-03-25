@@ -2,7 +2,7 @@ import { Star } from "lucide-react";
 import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
 import { Inter, Lora, Montserrat } from "next/font/google";
 import { Separator } from "@/components/ui/separator";
-import ProgressBar from "../ProgressBar";
+import ReviewProgressBar from "../ReviewProgressBar";
 import { useState } from "react";
 import ReviewCard from "./ReviewCard";
 
@@ -61,7 +61,7 @@ export default function Reviews({ reviews }: ReviewsProps) {
               key={starCount}
               onClick={() => handleProgressBarClick(starCount)}
             >
-              <ProgressBar
+              <ReviewProgressBar
                 key={starCount}
                 index={starCount}
                 ratingPercent={ratingPercent}

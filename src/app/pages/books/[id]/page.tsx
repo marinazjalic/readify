@@ -47,6 +47,7 @@ export default function BookDetails({ params }: { params: { id: string } }) {
     }
   };
   useEffect(() => {
+    window.scrollTo(0, 0); //set scroll to top of page
     fetchBookDetails();
   }, [currentBook]);
 
@@ -76,9 +77,9 @@ export default function BookDetails({ params }: { params: { id: string } }) {
         <Button
           onClick={() => setWantToRead(!wantToRead)}
           variant={wantToRead ? "default" : "outline"}
-          className="w-full max-w-[220px] rounded-full bg-navy-600 hover:bg-navy-500 hover:text-white text-white text-xs"
+          className="w-full max-w-[220px] rounded-full bg-dusty-rose hover:bg-dusty-rose hover:text-white text-white text-xs"
         >
-          {wantToRead ? "Added to List" : "Want to Read"}
+          {wantToRead ? "Added to List" : "Add to List"}
         </Button>
       </div>
 

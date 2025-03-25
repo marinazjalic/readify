@@ -45,9 +45,17 @@ export default function BookDetailsComponent({
 
       <div className="flex items-center mb-3">
         <StarRating value={bookRating} className="w-4 h-4" />
-        <span className="ml-2 text-sm">
-          {bookRating.toFixed(1)} ({Math.floor(bookRating * 20)}%)
-        </span>
+        {bookReviews && bookReviews.length > 0 ? (
+          <>
+            <span className="ml-2 text-sm">
+              {bookRating.toFixed(1)} ({Math.floor(bookRating * 20)}%)
+            </span>
+          </>
+        ) : (
+          <span className="ml-2 text-xs text-gray-500 italic mt-1">
+            No ratings
+          </span>
+        )}
       </div>
 
       <div className="relative min-h-[400px]">
