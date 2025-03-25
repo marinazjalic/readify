@@ -16,6 +16,7 @@ import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Reviews from "@/components/reviews/Reviews";
 import StarRating from "@/components/StarRating";
+import { addBookToDb } from "@/actions/books/addBookToDb";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -35,6 +36,19 @@ export default function BookDetails({ params }: { params: { id: string } }) {
         try {
           const details = await getBookByKey(currentBook.key, currentBook);
           const reviews = await getReviewsByBook(currentBook.key);
+
+          let { title, author, cover, key, description, genres } = details;
+
+          //save a copy to DB
+          await addBookToDb(
+            title,
+            author,
+            description,
+            genres,
+            String(cover),
+            key
+          );
+
           getRating(reviews);
           setBookDetails(details);
           setBookReviews(reviews);

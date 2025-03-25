@@ -10,7 +10,7 @@ interface ArrowProps {
 function SampleNextArrow({ style, onClick, direction }: ArrowProps) {
   return (
     <div
-      className="absolute flex flex-col h-[10px] w-[10px] top-1/2 left-full transform -translate-y-1/2 cursor-pointer bg-white"
+      className="absolute flex flex-col h-[10px] w-[10px] top-1/2 left-full transform -translate-y-1/2 cursor-pointer"
       style={{
         ...style,
         display: "flex",
@@ -19,7 +19,6 @@ function SampleNextArrow({ style, onClick, direction }: ArrowProps) {
         cursor: "pointer",
         width: "20px",
         height: "20px",
-        background: "white",
       }}
       onClick={onClick}
     >
@@ -44,7 +43,6 @@ function SamplePrevArrow({ style, onClick }: ArrowProps) {
         cursor: "pointer",
         width: "20px",
         height: "20px",
-        background: "white",
       }}
       onClick={onClick}
     >

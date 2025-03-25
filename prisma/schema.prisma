@@ -95,13 +95,14 @@ model VerificationToken {
 }
 
 model Book {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
   title        String
-  author       String
-  description  String
-  publish_date DateTime
-  rating       Float
+  author       String[]
+  description  String?
+  publish_date DateTime?
   genres       String[]
+  coverUrl     String?
+  bookKey      String? //if saved from open lib api
 
   @@map("books")
 }

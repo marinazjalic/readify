@@ -5,6 +5,8 @@ import Newsletter from "@/components/newsletter/Newsletter";
 
 export default async function Home() {
   const books = await getAllBooks();
+  const thrillers = books.filter((book) => book.genres.includes("Thriller"));
+  const romance = books.filter((book) => book.genres.includes("Romance"));
 
   return (
     <div className="bg-cream-100 pt-7">
@@ -12,9 +14,9 @@ export default async function Home() {
       <div className="flex">
         <Newsletter />
         <div className="w-[70%]">
-          <Carousel text="temp" books={books} />
-          <Carousel text="temp" books={books} />
-          <Carousel text="temp" books={books} />
+          <Carousel text="Top Rated" books={books} />
+          <Carousel text="Thrillers" books={thrillers} />
+          <Carousel text="Romance" books={romance} />
         </div>
       </div>
     </div>
