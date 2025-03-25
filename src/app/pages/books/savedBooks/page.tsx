@@ -2,19 +2,21 @@
 import { getSavedBooksByUser } from "@/actions/books/getSavedBooksByUser";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { DisplayBook } from "@/types";
+import type { DisplayBook } from "@/types";
 import BookScrollDisplay from "@/components/books/BookScrollDisplay";
 import { Button } from "@/components/ui/button";
 import { ReadingStatus } from "@prisma/client";
 import { updateSavedBook } from "@/actions/books/updateSavedBook";
 import { createActivity } from "@/actions/activity/createActivity";
 import { ActivityType } from "@prisma/client";
-import { ReferenceType } from "@prisma/client";
+import { Montserrat } from "next/font/google";
+
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 export default function SavedBooks() {
   const { data: session } = useSession();
   const [savedBooks, setSavedBooks] = useState<DisplayBook[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentBookshelf, setCurrentBookShelf] = useState("");
   const [filteredBooks, setFilteredBooks] = useState<DisplayBook[]>([]);
 
@@ -58,8 +60,7 @@ export default function SavedBooks() {
   };
 
   const getButtonClass = (readingStatus: string) => {
-    const baseClass =
-      "bg-white text-gray-500 text-xs h-auto min-h-0 p-0 shadow-none hover:bg-white";
+    const baseClass = `bg-white text-gray-500 text-xs h-auto min-h-0 p-0 shadow-none hover:bg-white ${montserrat.className}`;
     const activeClass =
       "bg-white text-olive-green-500 text-xs h-auto min-h-0 p-0 shadow-none hover:bg-white border-b-2 rounded-none border-olive-green-500 hover:text-olive-green-500";
 
@@ -148,29 +149,36 @@ export default function SavedBooks() {
     }
   };
 
+  const currentlyReadingBooks = savedBooks.filter(
+    (book) => book.savedInfo!.status === ReadingStatus.IN_PROGRESS
+  );
+
   return (
-    <div className="flex flex-col gap-4 text-gray-600">
-      <div className="bg-white py-3 mx-2 sm:mx-4 md:mx-5 rounded-lg shadow-md mt-4">
-        <h3 className="text-base sm:text-lg font-medium px-4 sm:px-6 md:px-8 mb-2 sm:mb-3">
+    <div className="flex flex-col gap-4 text-gray-600 bg-cream-100">
+      <div className="bg-white py-3 mx-2 sm:mx-4 md:mx-5 shadow-md mt-4 relative">
+        <h3
+          className={`${montserrat.className} text-navy-500 text-base sm:text-lg font-medium px-3 sm:px-6 md:px-8 mb-0 sm:mb-3 z-10`}
+        >
           Currently Reading
         </h3>
         <BookScrollDisplay
-          savedBooks={savedBooks.filter(
-            (book) => book.savedInfo!.status === ReadingStatus.IN_PROGRESS
-          )}
+          savedBooks={currentlyReadingBooks}
           showProgress={true}
           onPinBook={handlePinBook}
           onUpdateStatus={handleUpdateStatus}
           onUpdateProgress={handleUpdateReadingProgress}
+          isLoading={isLoading}
         />
       </div>
 
-      <div className="bg-white py-3 sm:py-4 md:py-5 mx-2 sm:mx-4 md:mx-5 rounded-lg shadow-md mt-3 sm:mt-4 md:mt-5">
+      <div className="bg-white sm:py-3 md:py-3 mx-2 sm:mx-4 md:mx-5 shadow-md mb-4">
         <div className="px-4 sm:px-6 md:px-8">
-          <h3 className="text-base sm:text-lg font-medium mb-2 sm:mb-3">
+          <h3
+            className={`${montserrat.className} text-base sm:text-lg font-medium mb-2 sm:mb-3 text-navy-500`}
+          >
             Your Bookshelves
           </h3>
-          <div className="flex flex-row text-xxs gap-2 mb-2 ml-0.5">
+          <div className="flex flex-row text-xxs gap-2 ml-0.5">
             <Button
               variant="ghost"
               className={getButtonClass("ALL")}
@@ -200,6 +208,7 @@ export default function SavedBooks() {
           onPinBook={handlePinBook}
           onUpdateStatus={handleUpdateStatus}
           onUpdateProgress={handleUpdateReadingProgress}
+          isLoading={isLoading}
         />
       </div>
     </div>

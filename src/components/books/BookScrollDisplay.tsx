@@ -5,7 +5,14 @@ import { useSession } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import type { DisplayBook } from "@/types";
 import Image from "next/image";
-import { BookOpen, ChevronRight, Pin, Check, AlertCircle } from "lucide-react";
+import {
+  BookOpen,
+  ChevronRight,
+  Pin,
+  Check,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -38,6 +45,7 @@ interface BookScrollProps {
     pageCount?: number
   ) => void;
   onPinBook?: (bookKey: string, isPinned: boolean) => void;
+  isLoading?: boolean;
 }
 
 export default function BookScrollDisplay({
@@ -46,9 +54,9 @@ export default function BookScrollDisplay({
   onUpdateStatus,
   onUpdateProgress,
   onPinBook,
+  isLoading = false,
 }: BookScrollProps) {
   const { data: session } = useSession();
-  const [isLoading, setIsLoading] = useState(false);
   const [visibleBooks, setVisibleBooks] = useState<DisplayBook[]>([]);
   const [showAllBooks, setShowAllBooks] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -190,185 +198,183 @@ export default function BookScrollDisplay({
         ref={containerRef}
         className="relative w-full h-[200px] overflow-hidden"
       >
-        <div
-          className={`flex ${
-            showAllBooks ? "flex-wrap gap-4" : "space-x-4"
-          } h-full items-center`}
-        >
-          {isLoading ? (
-            Array.from({ length: 5 }).map((_, index) => (
-              <div key={`skeleton-${index}`} className="flex-shrink-0">
-                <div className="h-44 w-32 bg-gray-200 animate-pulse rounded-tr-lg rounded-br-lg" />
-                <div className="h-2.5 w-full bg-gray-200 animate-pulse rounded-md mt-2" />
+        {isLoading ? (
+          <div className="flex justify-center items-center h-full w-full">
+            <Loader2 className="h-8 w-8 text-olive-green-400 animate-spin" />
+          </div>
+        ) : (
+          <div
+            className={`flex ${
+              showAllBooks ? "flex-wrap gap-4" : "space-x-4"
+            } h-full items-center`}
+          >
+            {visibleBooks.length === 0 ? (
+              <div className="flex flex-col items-center justify-center w-full h-full text-gray-500">
+                <BookOpen className="h-8 w-8 mb-2 opacity-50" />
+                <p className="text-sm">No books currently being read</p>
               </div>
-            ))
-          ) : visibleBooks.length === 0 ? (
-            <div className="flex flex-col items-center justify-center w-full h-full text-gray-500">
-              <BookOpen className="h-8 w-8 mb-2 opacity-50" />
-              <p className="text-sm">No books currently being read</p>
-            </div>
-          ) : (
-            visibleBooks.map((book) => (
-              <DropdownMenu
-                key={book.key}
-                open={contextMenuOpen && selectedBook?.key === book.key}
-                onOpenChange={(open) => {
-                  if (!open) setContextMenuOpen(false);
-                }}
-              >
-                <DropdownMenuTrigger asChild>
-                  <div
-                    className="flex-shrink-0 cursor-pointer relative"
-                    onClick={() => console.log(`Clicked book: ${book.title}`)}
-                    onContextMenu={(e) => handleRightClick(e, book)}
-                  >
-                    {/* Book cover container */}
-                    <div className="flex flex-col">
-                      <div
-                        className={`relative h-44 w-32 bg-white shadow-sm rounded-tr-lg rounded-br-lg overflow-hidden border ${
-                          book.savedInfo?.isPinned
-                            ? "border-olive-green-500 border-2"
-                            : "border-gray-200"
-                        }`}
-                      >
-                        {book.savedInfo?.isPinned && (
-                          <div className="absolute top-2 right-2 z-10 bg-olive-green-500 text-white rounded-full p-1.5 shadow-md transform -rotate-12">
-                            <Pin className="h-4 w-4" />
+            ) : (
+              visibleBooks.map((book) => (
+                <DropdownMenu
+                  key={book.key}
+                  open={contextMenuOpen && selectedBook?.key === book.key}
+                  onOpenChange={(open) => {
+                    if (!open) setContextMenuOpen(false);
+                  }}
+                >
+                  <DropdownMenuTrigger asChild>
+                    <div
+                      className="flex-shrink-0 cursor-pointer relative"
+                      onClick={() => console.log(`Clicked book: ${book.title}`)}
+                      onContextMenu={(e) => handleRightClick(e, book)}
+                    >
+                      <div className="flex flex-col">
+                        <div
+                          className={`relative h-44 w-32 bg-white shadow-sm rounded-tr-lg rounded-br-lg`}
+                        >
+                          {book.savedInfo?.isPinned && (
+                            <div className="absolute top-2.5 right-2.5 z-20 bg-teracota-500 text-white rounded-full p-1.5 shadow-md transform translate-x-1/2 -translate-y-1/2">
+                              <Pin className="h-3.5 w-3.5" />
+                            </div>
+                          )}
+                          <div className="absolute inset-0 ">
+                            <Image
+                              src={
+                                book.cover
+                                  ? `https://covers.openlibrary.org/b/id/${book.cover}-L.jpg`
+                                  : "/assets/book-icon.jpg"
+                              }
+                              alt={`Cover of ${book.title}`}
+                              fill
+                              sizes="(max-width: 768px) 100px, 112px"
+                              className="rounded-tr-lg rounded-br-lg shadow-md"
+                              style={{
+                                objectFit: "cover",
+                                objectPosition: "center top",
+                              }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* progress bar */}
+                        {showProgress && (
+                          <div className="bg-gray-300 w-full h-2 rounded-md mt-2">
+                            <div
+                              className="bg-teracota-500 h-full rounded-md"
+                              style={{
+                                width: `${getProgressPercentage(book)}%`,
+                                maxWidth: "100%",
+                              }}
+                            ></div>
                           </div>
                         )}
-                        <div className="absolute inset-0 bg-gray-100">
-                          <Image
-                            src={
-                              book.cover
-                                ? `https://covers.openlibrary.org/b/id/${book.cover}-L.jpg`
-                                : "/assets/book-icon.jpg"
-                            }
-                            alt={`Cover of ${book.title}`}
-                            fill
-                            sizes="(max-width: 768px) 100px, 112px"
-                            className="rounded-tr-lg rounded-br-lg"
-                            style={{
-                              objectFit: "cover",
-                              objectPosition: "center top",
-                            }}
-                          />
-                        </div>
                       </div>
-
-                      {/* progress bar */}
-                      {showProgress && (
-                        <div className="bg-gray-300 w-full h-2 rounded-md mt-2">
-                          <div
-                            className="bg-olive-green-500 h-full rounded-md"
-                            style={{
-                              width: `${getProgressPercentage(book)}%`,
-                              maxWidth: "100%",
-                            }}
-                          ></div>
-                        </div>
-                      )}
                     </div>
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                  <DropdownMenuItem onClick={handlePinBook}>
-                    <Pin className="mr-2 h-4 w-4" />
-                    {book.savedInfo?.isPinned ? "Unpin" : "Pin"}
-                  </DropdownMenuItem>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56">
+                    <DropdownMenuItem onClick={handlePinBook}>
+                      <Pin className="mr-2 h-4 w-4" />
+                      {book.savedInfo?.isPinned ? "Unpin" : "Pin"}
+                    </DropdownMenuItem>
 
-                  <DropdownMenuSeparator />
+                    <DropdownMenuSeparator />
 
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>
-                      <BookOpen className="mr-2 h-4 w-4" />
-                      Move to...
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuSubContent>
-                      <DropdownMenuItem
-                        onClick={() =>
-                          handleUpdateStatus(ReadingStatus.IN_PROGRESS)
-                        }
-                      >
-                        {book.savedInfo?.status ===
-                          ReadingStatus.IN_PROGRESS && (
-                          <Check className="mr-2 h-4 w-4" />
-                        )}
-                        <span
-                          className={
-                            book.savedInfo?.status === ReadingStatus.IN_PROGRESS
-                              ? "font-medium"
-                              : ""
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>
+                        <BookOpen className="mr-2 h-4 w-4" />
+                        Move to...
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuSubContent>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            handleUpdateStatus(ReadingStatus.IN_PROGRESS)
                           }
                         >
-                          Currently Reading
-                        </span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() =>
-                          handleUpdateStatus(ReadingStatus.TO_READ)
-                        }
-                      >
-                        {book.savedInfo?.status === ReadingStatus.TO_READ && (
-                          <Check className="mr-2 h-4 w-4" />
-                        )}
-                        <span
-                          className={
-                            book.savedInfo?.status === ReadingStatus.TO_READ
-                              ? "font-medium"
-                              : ""
+                          {book.savedInfo?.status ===
+                            ReadingStatus.IN_PROGRESS && (
+                            <Check className="mr-2 h-4 w-4" />
+                          )}
+                          <span
+                            className={
+                              book.savedInfo?.status ===
+                              ReadingStatus.IN_PROGRESS
+                                ? "font-medium"
+                                : ""
+                            }
+                          >
+                            Currently Reading
+                          </span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            handleUpdateStatus(ReadingStatus.TO_READ)
                           }
                         >
-                          Want to Read
-                        </span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() =>
-                          handleUpdateStatus(ReadingStatus.COMPLETED)
-                        }
-                      >
-                        {book.savedInfo?.status === ReadingStatus.COMPLETED && (
-                          <Check className="mr-2 h-4 w-4" />
-                        )}
-                        <span
-                          className={
-                            book.savedInfo?.status === ReadingStatus.COMPLETED
-                              ? "font-medium"
-                              : ""
+                          {book.savedInfo?.status === ReadingStatus.TO_READ && (
+                            <Check className="mr-2 h-4 w-4" />
+                          )}
+                          <span
+                            className={
+                              book.savedInfo?.status === ReadingStatus.TO_READ
+                                ? "font-medium"
+                                : ""
+                            }
+                          >
+                            Want to Read
+                          </span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            handleUpdateStatus(ReadingStatus.COMPLETED)
                           }
                         >
-                          Read
-                        </span>
-                      </DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuSub>
+                          {book.savedInfo?.status ===
+                            ReadingStatus.COMPLETED && (
+                            <Check className="mr-2 h-4 w-4" />
+                          )}
+                          <span
+                            className={
+                              book.savedInfo?.status === ReadingStatus.COMPLETED
+                                ? "font-medium"
+                                : ""
+                            }
+                          >
+                            Read
+                          </span>
+                        </DropdownMenuItem>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuSub>
 
-                  <DropdownMenuSeparator />
+                    <DropdownMenuSeparator />
 
-                  <DropdownMenuItem onClick={handleOpenProgressDialog}>
-                    Update Progress
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ))
-          )}
-        </div>
+                    <DropdownMenuItem onClick={handleOpenProgressDialog}>
+                      Update Progress
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ))
+            )}
+          </div>
+        )}
       </div>
 
       {/* View All / View Less button */}
-      {savedBooks.length > visibleBooks.length && !showAllBooks && (
-        <div className="flex justify-end mt-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-olive-green-500 hover:text-olive-green-600 flex items-center text-xs"
-            onClick={handleViewAll}
-          >
-            View All <ChevronRight className="h-4 w-4 ml-1" />
-          </Button>
-        </div>
-      )}
+      {!isLoading &&
+        savedBooks.length > visibleBooks.length &&
+        !showAllBooks && (
+          <div className="flex justify-end mt-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-olive-green-500 hover:text-olive-green-600 flex items-center text-xs"
+              onClick={handleViewAll}
+            >
+              View All <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          </div>
+        )}
 
-      {showAllBooks && (
+      {!isLoading && showAllBooks && (
         <div className="flex justify-end mt-2">
           <Button
             variant="ghost"
