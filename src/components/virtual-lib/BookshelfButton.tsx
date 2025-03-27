@@ -18,13 +18,13 @@ export default function BookshelfButton({
   onSelectBookshelf,
 }: BookshelfButtonProps) {
   const getButtonClass = (readingStatus: string) => {
-    const baseClass = `bg-white text-gray-500 text-xs h-auto min-h-0 p-0 shadow-none hover:bg-white ${montserrat.className}`;
+    const baseClass = `bg-white text-gray-500 text-xs h-5 min-h-0 p-0 shadow-none hover:bg-white hover:text-gray-400 ${montserrat.className}`;
     const activeClass =
-      "bg-white text-olive-green-500 text-xs h-auto min-h-0 p-0 shadow-none hover:bg-white border-b-2 rounded-none border-olive-green-500 hover:text-olive-green-500";
+      "bg-white text-olive-green-500 border-b-2 rounded-none border-olive-green-500 hover:text-olive-green-500";
 
-    return currentlySelectedShelf === readingStatus
-      ? `${baseClass} ${activeClass}`
-      : baseClass;
+    return `${baseClass} ${
+      currentlySelectedShelf === readingStatus ? activeClass : ""
+    }`;
   };
 
   return (

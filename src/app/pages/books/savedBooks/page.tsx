@@ -83,10 +83,10 @@ export default function SavedBooks() {
         />
       </div>
 
-      <div className="bg-white sm:py-3 md:py-3 mx-2 sm:mx-4 md:mx-5 shadow-md mb-4">
+      <div className="bg-white mx-2 sm:mx-4 md:mx-5 shadow-md">
         <div className="px-4 sm:px-6 md:px-8">
           <h3
-            className={`${montserrat.className} text-base sm:text-lg font-medium mb-2 sm:mb-3 text-navy-500`}
+            className={`${montserrat.className} text-base sm:text-lg font-medium mb-2 pt-4 text-navy-500`}
           >
             Your Bookshelves
           </h3>
@@ -114,7 +114,7 @@ export default function SavedBooks() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-olive-green-500 hover:text-olive-green-600 flex items-center text-xs ml-auto"
+                className="text-olive-green-500 hover:text-olive-green-600 hover:bg-white hover:text-opacity-75 flex items-center text-xs ml-auto h-5"
               >
                 View All <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
