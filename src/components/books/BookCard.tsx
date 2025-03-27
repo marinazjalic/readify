@@ -77,7 +77,7 @@ export default function BookCard({ book, enableSaving }: BookCardProps) {
           src={
             book.cover
               ? `https://covers.openlibrary.org/b/id/${book.cover}-L.jpg`
-              : "/assets/book-icon.jpg"
+              : "/assets/unknown-book-icon.png"
           }
           alt={`Cover of ${book.title}`}
           fill
