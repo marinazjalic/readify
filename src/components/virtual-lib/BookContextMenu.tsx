@@ -24,6 +24,7 @@ interface BookContextMenuProps {
   onOpenChange: (open: boolean) => void;
   onOpenProgressDialog: () => void;
   children: React.ReactNode;
+  mutate: () => void;
 }
 
 export default function BookContextMenu({
@@ -32,6 +33,7 @@ export default function BookContextMenu({
   onOpenChange,
   onOpenProgressDialog,
   children,
+  mutate,
 }: BookContextMenuProps) {
   const { userId } = useUserContext();
 
@@ -39,8 +41,7 @@ export default function BookContextMenu({
     await updateSavedBook(book.key, userId, {
       isPinned: !book.savedInfo?.isPinned,
     });
-
-    //to-do: refresh saved books
+    mutate();
   };
 
   return (
@@ -64,16 +65,19 @@ export default function BookContextMenu({
               book={book}
               readingStatus={ReadingStatus.IN_PROGRESS}
               statusText="Currently Reading"
+              mutate={mutate}
             />
             <ContextMenuItem
               book={book}
               readingStatus={ReadingStatus.TO_READ}
               statusText="Want to Read"
+              mutate={mutate}
             />
             <ContextMenuItem
               book={book}
               readingStatus={ReadingStatus.COMPLETED}
               statusText="Read"
+              mutate={mutate}
             />
           </DropdownMenuSubContent>
         </DropdownMenuSub>

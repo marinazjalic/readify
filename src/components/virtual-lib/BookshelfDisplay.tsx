@@ -14,6 +14,7 @@ interface BookshelfDisplayProps {
   isLoading?: boolean;
   onViewButtonVisibilityChange: (isVisible: boolean) => void;
   showAllBooks?: boolean;
+  mutate: () => void;
 }
 
 export default function BookshelfDisplay({
@@ -22,6 +23,7 @@ export default function BookshelfDisplay({
   isLoading,
   onViewButtonVisibilityChange,
   showAllBooks = false,
+  mutate,
 }: BookshelfDisplayProps) {
   const BOOK_WIDTH = 144;
   const MIN_VISIBLE_BOOKS = 3;
@@ -110,6 +112,7 @@ export default function BookshelfDisplay({
                     if (!open) setContextMenuOpen(false);
                   }}
                   onOpenProgressDialog={handleOpenProgressDialog}
+                  mutate={mutate}
                 >
                   <div
                     className="flex-shrink-0 cursor-pointer relative"
@@ -169,6 +172,7 @@ export default function BookshelfDisplay({
           dialogOpen={progressDialogOpen}
           selectedBook={selectedBook}
           onCancel={() => setProgressDialogOpen(false)}
+          mutate={mutate}
         />
       )}
     </div>

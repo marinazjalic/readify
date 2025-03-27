@@ -21,12 +21,14 @@ interface ProgressDialogProps {
   dialogOpen: boolean;
   selectedBook: DisplayBook;
   onCancel: () => void;
+  mutate: () => void;
 }
 
 export default function ProgressDialog({
   dialogOpen,
   selectedBook,
   onCancel,
+  mutate,
 }: ProgressDialogProps) {
   const { progress, pageCount } = selectedBook.savedInfo!;
   const [currentPage, setCurrentPage] = useState(progress);
@@ -66,6 +68,7 @@ export default function ProgressDialog({
     //update in db and create activity for newsfeed
     const result = await updateSavedBook(key, userId, updateData);
     if (result) {
+      mutate();
       //fix - fetch saved books to re-render the progress bar
       await createActivity(
         userId,

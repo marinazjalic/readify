@@ -6,7 +6,7 @@ import { getBookDetails } from "@/lib/openLibrary";
 
 export async function getSavedBooksByUser(
   userId: string
-): Promise<DisplayBook[] | null> {
+): Promise<DisplayBook[]> {
   try {
     const savedBooks = await prisma.savedBook.findMany({
       where: { userId: userId },

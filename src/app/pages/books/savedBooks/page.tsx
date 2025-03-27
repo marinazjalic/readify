@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { Montserrat } from "next/font/google";
 import { ChevronRight } from "lucide-react";
-import { DisplayBook } from "@/types";
 import { ReadingStatus } from "@prisma/client";
+import useSWR, { mutate } from "swr";
 import { getSavedBooksByUser } from "@/actions/books/getSavedBooksByUser";
 import { Button } from "@/components/ui/button";
 import BookshelfDisplay from "@/components/virtual-lib/BookshelfDisplay";
@@ -13,47 +13,53 @@ import BookshelfButton from "@/components/virtual-lib/BookshelfButton";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
+const fetcher = async (userId: string) => {
+  return getSavedBooksByUser(userId);
+};
+
 export default function SavedBooks() {
   const { data: session } = useSession();
-  const [savedBooks, setSavedBooks] = useState<DisplayBook[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [filteredBooks, setFilteredBooks] = useState<DisplayBook[]>([]);
+
   const [currentBookshelf, setCurrentBookShelf] = useState("ALL"); //default: display all books
   const [showViewButton, setShowViewButton] = useState(false);
   const [showAllBooks, setShowAllBooks] = useState(false);
 
-  useEffect(() => {
-    if (session?.user?.id) {
-      fetchSavedBooks(session.user.id);
+  const {
+    data: books,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR(session?.user?.id ? session.user.id : null, fetcher);
+
+  const savedBooks = useMemo(() => books || [], [books]);
+
+  const allBooks = useMemo(() => {
+    const pinned = savedBooks.filter((book) => book.savedInfo?.isPinned) || [];
+    const unpinned =
+      savedBooks.filter((book) => !book.savedInfo?.isPinned) || [];
+    return [...pinned, ...unpinned];
+  }, [savedBooks]);
+
+  const filteredBooks = useMemo(() => {
+    if (currentBookshelf in ReadingStatus) {
+      return savedBooks.filter(
+        (book) => book.savedInfo!.status === currentBookshelf
+      );
     }
-  }, [session]);
+    return allBooks;
+  }, [savedBooks, currentBookshelf, allBooks]);
 
-  const fetchSavedBooks = async (userId: string) => {
-    const books = await getSavedBooksByUser(userId);
-
-    if (books) {
-      //display pinned books at the beginning
-      const pinned = books?.filter((book) => book.savedInfo?.isPinned) || [];
-      const unpinned = books?.filter((book) => !book.savedInfo?.isPinned) || [];
-      const allBooks = [...pinned, ...unpinned];
-
-      setSavedBooks(books);
-      setFilteredBooks(allBooks);
-      setIsLoading(false);
-    }
-  };
-
-  const currentlyReadingBooks = savedBooks.filter(
-    (book) => book.savedInfo!.status === ReadingStatus.IN_PROGRESS
+  const currentlyReadingBooks = useMemo(
+    () =>
+      savedBooks.filter(
+        (book) => book.savedInfo!.status === ReadingStatus.IN_PROGRESS
+      ),
+    [savedBooks]
   );
 
   const handleSelectBookshelf = (readingStatus: string) => {
     setCurrentBookShelf(readingStatus);
-    if (readingStatus in ReadingStatus) {
-      setFilteredBooks(
-        savedBooks.filter((book) => book.savedInfo!.status === readingStatus)
-      );
-    } else setFilteredBooks(savedBooks);
+    setShowAllBooks(false);
   };
 
   return (
@@ -73,6 +79,7 @@ export default function SavedBooks() {
             setShowViewButton(isVisible)
           }
           showAllBooks={showAllBooks}
+          mutate={mutate}
         />
       </div>
 
@@ -122,6 +129,7 @@ export default function SavedBooks() {
               setShowViewButton(isVisible)
             }
             showAllBooks={showAllBooks}
+            mutate={mutate}
           />
         </div>
       </div>

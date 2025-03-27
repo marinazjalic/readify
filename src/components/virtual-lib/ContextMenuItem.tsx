@@ -10,12 +10,14 @@ interface ContextItemProps {
   readingStatus: ReadingStatus;
   book: DisplayBook;
   statusText: string;
+  mutate: () => void;
 }
 
 export default function ContextMenuItem({
   book,
   readingStatus,
   statusText,
+  mutate,
 }: ContextItemProps) {
   const { userId } = useUserContext();
 
@@ -25,7 +27,7 @@ export default function ContextMenuItem({
         status: newStatus as ReadingStatus,
       });
       if (updatedBook) {
-        //to-do: refresh books
+        mutate();
         await createActivity(
           userId,
           ActivityType.UPDATED_STATUS,
