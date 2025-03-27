@@ -19,6 +19,8 @@ export default function SavedBooks() {
   const [isLoading, setIsLoading] = useState(true);
   const [filteredBooks, setFilteredBooks] = useState<DisplayBook[]>([]);
   const [currentBookshelf, setCurrentBookShelf] = useState("ALL"); //default: display all books
+  const [showViewButton, setShowViewButton] = useState(false);
+  const [showAllBooks, setShowAllBooks] = useState(false);
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -67,6 +69,10 @@ export default function SavedBooks() {
           bookList={currentlyReadingBooks}
           showProgressBar={true}
           isLoading={isLoading}
+          onViewButtonVisibilityChange={(isVisible) =>
+            setShowViewButton(isVisible)
+          }
+          showAllBooks={showAllBooks}
         />
       </div>
 
@@ -97,19 +103,25 @@ export default function SavedBooks() {
               bookshelfStatus={ReadingStatus.COMPLETED}
               onSelectBookshelf={handleSelectBookshelf}
             />
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-olive-green-500 hover:text-olive-green-600 flex items-center text-xs ml-auto"
-            >
-              View All <ChevronRight className="h-4 w-4 ml-1" />
-            </Button>
+            {showViewButton && !showAllBooks && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-olive-green-500 hover:text-olive-green-600 flex items-center text-xs ml-auto"
+              >
+                View All <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            )}
           </div>
 
           <BookshelfDisplay
             bookList={filteredBooks}
             showProgressBar={false}
             isLoading={isLoading}
+            onViewButtonVisibilityChange={(isVisible) =>
+              setShowViewButton(isVisible)
+            }
+            showAllBooks={showAllBooks}
           />
         </div>
       </div>

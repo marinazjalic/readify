@@ -12,18 +12,21 @@ interface BookshelfDisplayProps {
   bookList: DisplayBook[];
   showProgressBar: boolean;
   isLoading?: boolean;
+  onViewButtonVisibilityChange: (isVisible: boolean) => void;
+  showAllBooks?: boolean;
 }
 
 export default function BookshelfDisplay({
   bookList,
   showProgressBar,
   isLoading,
+  onViewButtonVisibilityChange,
+  showAllBooks = false,
 }: BookshelfDisplayProps) {
   const BOOK_WIDTH = 144;
   const MIN_VISIBLE_BOOKS = 3;
   const containerRef = useRef<HTMLDivElement>(null);
   const [visibleBooks, setVisibleBooks] = useState<DisplayBook[]>([]);
-  const [showAllBooks, setShowAllBooks] = useState(false);
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<DisplayBook | null>(null);
   const [progressDialogOpen, setProgressDialogOpen] = useState(false);
@@ -40,6 +43,9 @@ export default function BookshelfDisplay({
     setVisibleBooks(
       bookList.slice(0, showAllBooks ? bookList.length : booksToShow)
     );
+
+    const shouldShowViewButton = booksToShow < bookList.length;
+    onViewButtonVisibilityChange(shouldShowViewButton);
   };
 
   useEffect(() => {
@@ -49,7 +55,11 @@ export default function BookshelfDisplay({
     window.addEventListener("resize", onResize);
 
     return () => window.removeEventListener("resize", onResize);
-  }, [bookList, showAllBooks]);
+  }, [bookList, showAllBooks, onViewButtonVisibilityChange]);
+
+  useEffect(() => {
+    calculateVisibleBooks();
+  }, [showAllBooks, bookList.length]);
 
   const getProgressPercentage = (book: DisplayBook): number => {
     const progress = book.savedInfo?.progress || 0;
