@@ -21,8 +21,8 @@ export default function ReviewCard({ review }: ReviewCardProps) {
     <Card key={review.id}>
       <CardContent className="p-4">
         <div className="flex items-start gap-4">
-          <div className="flex flex-col items-center">
-            <Avatar className="h-10 w-10">
+          <div className="flex flex-col items-center w-[15%]">
+            <Avatar className="h-12 w-12">
               <AvatarImage
                 src={review.user.profileImageUrl || undefined}
                 alt={review.user.firstName || "User avatar"}

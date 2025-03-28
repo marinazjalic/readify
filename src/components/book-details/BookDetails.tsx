@@ -17,6 +17,7 @@ interface BookDetailsProps {
   bookReviews: ReviewDetails[];
   bookRating: number;
   isLoading: boolean;
+  mutate: () => void;
 }
 
 export default function BookDetailsComponent({
@@ -25,6 +26,7 @@ export default function BookDetailsComponent({
   bookReviews,
   bookRating,
   isLoading,
+  mutate,
 }: BookDetailsProps) {
   const router = useRouter();
 
@@ -106,6 +108,7 @@ export default function BookDetailsComponent({
                 bookId={bookDetails.key}
                 bookTitle={bookDetails.title}
                 bookCover={bookDetails.cover}
+                mutate={mutate}
               />
               <Reviews reviews={bookReviews} />
             </div>

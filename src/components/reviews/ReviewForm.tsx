@@ -22,11 +22,13 @@ import { useRouter } from "next/navigation";
 import { Montserrat } from "next/font/google";
 import { createActivity } from "@/actions/activity/createActivity";
 import { ActivityType } from "@prisma/client";
+import { mutate } from "swr";
 
 interface ReviewsProps {
   bookId: string;
   bookTitle: string;
   bookCover: string;
+  mutate: () => void;
 }
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -35,6 +37,7 @@ export default function ReviewForm({
   bookId,
   bookTitle,
   bookCover,
+  mutate,
 }: ReviewsProps) {
   const [rating, setRating] = useState(0);
   const [reviewContent, setReviewContent] = useState("");
@@ -66,6 +69,7 @@ export default function ReviewForm({
 
         //creating news feed activity
         if (review.success) {
+          mutate();
           await createActivity(
             session.user.id,
             ActivityType.REVIEWED,
