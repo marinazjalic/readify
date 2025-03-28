@@ -1,17 +1,16 @@
-import { Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
 import { follow } from "@/actions/following/follow";
 import StarRating from "../StarRating";
+import { Montserrat } from "next/font/google";
 
 interface ReviewCardProps {
   review: ReviewDetails;
 }
-
+const montserrat = Montserrat({ subsets: ["latin"] });
 export default function ReviewCard({ review }: ReviewCardProps) {
   const handleFollowButton = async (userId: string, followedBy: string) => {
     await follow(userId, followedBy);
@@ -34,7 +33,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
                   review.user.lastName.charAt(0)}
               </AvatarFallback>
             </Avatar>
-            <p className="text-xs font-semibold pt-3">
+            <p className={`text-xs font-semibold pt-3 ${montserrat.className}`}>
               {review.user.firstName + " " + review.user.lastName[0] + ". "}
             </p>
 
@@ -42,7 +41,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-sky-400 hover:bg-transparent hover:underline hover:text-sky-400"
+                className={`text-olive-green-500 hover:bg-transparent hover:underline hover:text-olive-green-400 ${montserrat.className}`}
                 onClick={() =>
                   handleFollowButton(review.userId, session.user.id)
                 }
@@ -52,8 +51,8 @@ export default function ReviewCard({ review }: ReviewCardProps) {
             )}
           </div>
 
-          <div className="flex-1 space-y-2">
-            <div className="flex items-center justify-between">
+          <div className="flex-1 space-y-2 mt-2">
+            <div className="flex items-center justify-between mb-3.5">
               <div>
                 <div className="flex items-center gap-2">
                   <StarRating value={review.rating} className="w-3.5 h-3.5" />
@@ -64,17 +63,21 @@ export default function ReviewCard({ review }: ReviewCardProps) {
               </div>
             </div>
 
-            {review.subject && <p className="text-sm">{review.subject}</p>}
-
             {review.content && (
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                {review.content}
-              </p>
+              <div className="py-1.5 p-0 rounded-md border-l-2 border-gray-300">
+                {review.subject && (
+                  <p className="text-xs ml-1.5 font-semibold">
+                    {review.subject}
+                  </p>
+                )}
+                <p className="text-xs text-gray-500 mt-2 ml-1.5">
+                  {review.content}
+                </p>
+              </div>
             )}
           </div>
         </div>
       </CardContent>
-      <Separator />
     </Card>
   );
 }

@@ -46,10 +46,23 @@ export default function BookDetails({ params }: { params: { id: string } }) {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     window.scrollTo(0, 0); //set scroll to top of page
     fetchBookDetails();
   }, [currentBook]);
+
+  //disable scroll bar when loading
+  useEffect(() => {
+    if (isLoading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isLoading]);
 
   const getRating = (reviews: ReviewDetails[]) => {
     const ratingSum = reviews
@@ -61,7 +74,7 @@ export default function BookDetails({ params }: { params: { id: string } }) {
 
   return (
     <div
-      className={`flex flex-col lg:flex-row min-h-screen bg-white text-sm pt-0`}
+      className={`flex flex-col lg:flex-row min-h-screen bg-cream-100 text-sm pt-0`}
     >
       {/* left side content */}
       <div className="w-full lg:w-1/4 lg:fixed lg:left-0 lg:top-[120px] lg:bottom-0 p-4 flex flex-col items-center space-y-4">
@@ -77,7 +90,7 @@ export default function BookDetails({ params }: { params: { id: string } }) {
         <Button
           onClick={() => setWantToRead(!wantToRead)}
           variant={wantToRead ? "default" : "outline"}
-          className="w-full max-w-[220px] rounded-full bg-dusty-rose hover:bg-dusty-rose hover:text-white text-white text-xs"
+          className="w-full max-w-[220px] rounded-full bg-olive-green-500 hover:bg-olive-green-400 hover:text-white text-white text-xs"
         >
           {wantToRead ? "Added to List" : "Add to List"}
         </Button>

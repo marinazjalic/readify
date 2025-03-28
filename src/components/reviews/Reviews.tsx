@@ -1,28 +1,12 @@
-import { Star } from "lucide-react";
 import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
-import { Inter, Lora, Montserrat } from "next/font/google";
+import { Lora } from "next/font/google";
 import { Separator } from "@/components/ui/separator";
-import ReviewProgressBar from "../ReviewProgressBar";
 import { useState } from "react";
 import ReviewCard from "./ReviewCard";
+import ReviewProgressBar from "../ReviewProgressBar";
 
 interface ReviewsProps {
   reviews: ReviewDetails[];
-}
-
-function StarRating({ value }: { value: number }) {
-  return (
-    <div className="flex">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <Star
-          key={star}
-          className={`w-4 h-4 ${
-            star <= value ? "text-yellow-400 fill-current" : "text-gray-300"
-          }`}
-        />
-      ))}
-    </div>
-  );
 }
 
 const lora = Lora({ subsets: ["latin"] });
@@ -43,7 +27,7 @@ export default function Reviews({ reviews }: ReviewsProps) {
   };
   return (
     <div className="space-y-6">
-      <h2 className={`${lora.className} text-xl font-semibold`}>
+      <h2 className={`${lora.className} text-2xl ml-2 font-semibold`}>
         Reviews & Ratings
       </h2>
 

@@ -44,12 +44,16 @@ export default function Books() {
     };
   }, [isLoading]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
   return (
-    <div className="bg-white min-h-screen relative">
+    <div className="bg-cream-100 min-h-screen relative">
       {isLoading ? (
         <div
           className="absolute inset-0 flex justify-center items-center"

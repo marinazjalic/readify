@@ -1,13 +1,13 @@
 "use client";
 
 import { Montserrat } from "next/font/google";
-import ReviewForm from "@/components/reviews/ReviewForm";
 import { useRouter } from "next/navigation";
 import { ReviewDetails } from "@/actions/reviews/getReviewsByBook";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import Reviews from "@/components/reviews/Reviews";
-import StarRating from "@/components/StarRating";
 import { BookDetails } from "@/types";
+import { Loader2 } from "lucide-react";
+import Reviews from "@/components/reviews/Reviews";
+import ReviewForm from "@/components/reviews/ReviewForm";
+import StarRating from "@/components/StarRating";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -47,8 +47,8 @@ export default function BookDetailsComponent({
         <StarRating value={bookRating} className="w-4 h-4" />
         {bookReviews && bookReviews.length > 0 ? (
           <>
-            <span className="ml-2 text-sm">
-              {bookRating.toFixed(1)} ({Math.floor(bookRating * 20)}%)
+            <span className="ml-2 text-sm text-gray-500 mt-0.5">
+              {bookRating.toFixed(1)}
             </span>
           </>
         ) : (
@@ -60,7 +60,9 @@ export default function BookDetailsComponent({
 
       <div className="relative min-h-[400px]">
         {isLoading ? (
-          <LoadingSpinner />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Loader2 className="h-8 w-8 text-olive-green-400 animate-spin" />
+          </div>
         ) : (
           <div className="space-y-6">
             {/* displaying book description */}
@@ -87,7 +89,7 @@ export default function BookDetailsComponent({
                     {bookDetails.genres.map((genre: string, index: number) => (
                       <button
                         key={index}
-                        className={`${montserrat.className} border-t-none border-b-2 border-olive-green-500 hover:border-gray-400 hover:text-gray-500 text-navy-600 text-xxs font-bold`}
+                        className={`${montserrat.className} border-t-none border-b-2 border-navy-500 hover:border-gray-400 hover:text-gray-500 text-navy-600 text-xxs font-bold`}
                         onClick={() => handleGenreBtnClick(genre)}
                       >
                         {genre}

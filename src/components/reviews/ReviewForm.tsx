@@ -21,7 +21,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Montserrat } from "next/font/google";
 import { createActivity } from "@/actions/activity/createActivity";
-import { ActivityType, ReferenceType } from "@prisma/client";
+import { ActivityType } from "@prisma/client";
 
 interface ReviewsProps {
   bookId: string;
@@ -40,38 +40,46 @@ export default function ReviewForm({
   const [reviewContent, setReviewContent] = useState("");
   const [reviewSubject, setReviewSubject] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const { data: session } = useSession();
   const router = useRouter();
 
   const handleRatingChange = (newRating: number) => {
     setRating(newRating);
+    if (newRating === 0) {
+      setErrorMessage("Please leave rating.");
+    } else setErrorMessage("");
   };
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
     if (session) {
-      const review = await createReview(
-        bookId,
-        session.user.id,
-        rating,
-        reviewContent,
-        reviewSubject
-      );
-
-      //creating news feed activity
-      if (review.success) {
-        await createActivity(
-          session.user.id,
-          ActivityType.REVIEWED,
+      if (rating != 0) {
+        setIsDialogOpen(false);
+        const review = await createReview(
           bookId,
-          bookTitle,
-          undefined,
-          review.data?.id
+          session.user.id,
+          rating,
+          reviewContent,
+          reviewSubject
         );
+
+        //creating news feed activity
+        if (review.success) {
+          await createActivity(
+            session.user.id,
+            ActivityType.REVIEWED,
+            bookId,
+            bookTitle,
+            undefined,
+            review.data?.id
+          );
+        }
+        resetFormValues();
+      } else {
+        setErrorMessage("Please leave rating.");
       }
     }
-
-    setIsDialogOpen(false);
   };
 
   const handleLeaveReviewBtn = () => {
@@ -82,15 +90,24 @@ export default function ReviewForm({
     }
   };
 
+  const resetFormValues = () => {
+    setRating(0);
+    setReviewSubject("");
+    setReviewContent("");
+    setErrorMessage("");
+  };
+
   return (
     <div className="mt-8">
       <Separator className="my-4" />
-      <h3 className="text-xl font-semibold mb-6 text-center text-navy-600">
+      <h3
+        className={`text-xl font-semibold mb-6 text-center text-navy-600 ${montserrat.className} italic`}
+      >
         Let other readers know what you thought.
       </h3>
       <div className="flex justify-center">
         <Button
-          className={`${montserrat.className} bg-white text-navy-600 border-2 border-olive-green-500 hover:bg-olive-green-500 hover:text-white rounded-full`}
+          className={`${montserrat.className} bg-navy-600 text-white text-xs hover:bg-navy-500 hover:text-white rounded-full`}
           onClick={handleLeaveReviewBtn}
         >
           Leave Review
@@ -101,9 +118,9 @@ export default function ReviewForm({
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle
-                  className={`${montserrat.className} text-navy-600`}
+                  className={`${montserrat.className} text-navy-600 italic `}
                 >
-                  Leave a review.
+                  Share your thoughts
                 </DialogTitle>
               </DialogHeader>
               <div className="grid gap-4 py-4">
@@ -129,7 +146,7 @@ export default function ReviewForm({
                   <span
                     className={`${montserrat.className} text-xs text-gray-500`}
                   >
-                    Rate this book
+                    {errorMessage == "" ? "Rate this book" : errorMessage}
                   </span>
                 </div>
                 <form onSubmit={handleSubmitReview} className="space-y-4">
@@ -153,7 +170,10 @@ export default function ReviewForm({
                       type="button"
                       variant="outline"
                       className="border border-olive-green-500 text-navy-600"
-                      onClick={() => setIsDialogOpen(false)}
+                      onClick={() => {
+                        setIsDialogOpen(false);
+                        resetFormValues();
+                      }}
                     >
                       Cancel
                     </Button>
@@ -165,7 +185,6 @@ export default function ReviewForm({
                     </Button>
                   </div>
                 </form>
-                {/* </div> */}
               </div>
             </DialogContent>
           </Dialog>
