@@ -28,6 +28,10 @@ export default function UserProfile() {
     followingList,
     followingError,
     mutateFollowing,
+    challenge,
+    challengeError,
+    isChallengeLoading,
+    mutateChallenge,
   } = useUserSWR(session?.user ? session.user.id : undefined);
 
   const isFollowersLoading = userProfile && !followers && !followersError;
@@ -42,6 +46,7 @@ export default function UserProfile() {
           <ReadingChallengeBox
             isGoalDialogOpen={isGoalDialogOpen}
             setIsGoalDialogOpen={setIsGoalDialogOpen}
+            challenge={challenge ?? undefined}
           />
         </>
       );
@@ -126,6 +131,7 @@ export default function UserProfile() {
       <ReadingGoalDialog
         isGoalDialogOpen={isGoalDialogOpen}
         setIsGoalDialogOpen={setIsGoalDialogOpen}
+        mutateChallenge={mutateChallenge}
       />
     </aside>
   );

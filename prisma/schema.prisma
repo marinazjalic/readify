@@ -33,17 +33,19 @@ enum ActivityType {
 }
 
 model User {
-  id              String     @id @default(auto()) @map("_id") @db.ObjectId
-  firstName       String
-  lastName        String
-  email           String     @unique
-  password        String
-  profileImageUrl String?
-  dateCreated     DateTime   @default(now())
-  reviews         Review[]
-  accounts        Account[]
-  sessions        Session[]
-  activities      Activity[]
+  id                 String      @id @default(auto()) @map("_id") @db.ObjectId
+  firstName          String
+  lastName           String
+  email              String      @unique
+  password           String
+  profileImageUrl    String?
+  profileImageColour String? //default until profile image is uploaded
+  dateCreated        DateTime    @default(now())
+  reviews            Review[]
+  accounts           Account[]
+  sessions           Session[]
+  activities         Activity[]
+  Challenge          Challenge[]
 
   followingIds String[] @db.ObjectId
   followerIds  String[] @db.ObjectId
@@ -155,4 +157,15 @@ model Activity {
   user      User       @relation(fields: [userId], references: [id])
   savedBook SavedBook? @relation(fields: [savedBookId], references: [id])
   review    Review?    @relation(fields: [reviewId], references: [id])
+}
+
+model Challenge {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  year   Int
+  goal   Int
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+
+  @@unique([userId, year])
+  @@map("challenges")
 }

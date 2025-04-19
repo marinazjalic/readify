@@ -2,31 +2,42 @@ import { BookMarked } from "lucide-react";
 import { Lora } from "next/font/google";
 import { ReadingStatus } from "@prisma/client";
 import { useUserContext } from "@/context/UserContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { Challenge } from "@prisma/client";
 
 const lora = Lora({ subsets: ["latin"] });
 
 interface ChallengeBoxProps {
   isGoalDialogOpen: boolean;
   setIsGoalDialogOpen: (open: boolean) => void;
+  challenge: Challenge | undefined;
 }
 export default function ReadingChallengeBox({
   isGoalDialogOpen,
   setIsGoalDialogOpen,
+  challenge,
 }: ChallengeBoxProps) {
   const currentYear = new Date().getFullYear();
   const { savedBooks } = useUserContext();
   const [readingGoal, setReadingGoal] = useState(0);
+
+  useEffect(() => {
+    if (challenge) {
+      setReadingGoal(challenge.goal);
+    }
+  }, [challenge]);
 
   const completedBooksCount =
     savedBooks?.filter(
       (book) => book.savedInfo?.status === ReadingStatus.COMPLETED
     ).length || 0;
 
-  const progressPercentage = Math.min(
-    100,
-    (completedBooksCount / readingGoal) * 100
-  );
+  const progressPercentage =
+    readingGoal !== 0
+      ? Math.min(100, (completedBooksCount / readingGoal) * 100)
+      : 0;
+
   return (
     <div className="py-4 px-4">
       <div className="flex items-center gap-2 border-l-4 border-olive-green-500 pl-2 mb-3">
@@ -63,13 +74,6 @@ export default function ReadingChallengeBox({
             Update goal
           </button>
         </div>
-
-        {completedBooksCount >= readingGoal && readingGoal > 0 && (
-          <div className="mt-3 text-xs text-center p-2 bg-light-blue rounded-md text-navy-500 italic border border-olive-green-100">
-            Congratulations! You've reached your reading goal for {currentYear}!
-            🎉
-          </div>
-        )}
       </div>
     </div>
   );

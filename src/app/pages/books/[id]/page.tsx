@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { addBookToDb } from "@/actions/books/addBookToDb";
+import { addSavedBook } from "@/actions/books/addSavedBook";
 import { getReviewsByBook } from "@/actions/reviews/getReviewsByBook";
 import { getBookByKey } from "@/actions/books/getBookByKey";
 import { useBookStore } from "@/lib/bookStore";
 import BookDetailsComponent from "@/components/book-details/BookDetails";
 import Image from "next/image";
 import useSWR from "swr";
+import { useSession } from "next-auth/react";
 
 const reviewFetcher = async (key: string) => {
   return getReviewsByBook(key);
@@ -30,6 +32,13 @@ export default function BookDetails({ params }: { params: { id: string } }) {
   const [wantToRead, setWantToRead] = useState(false);
   const currentBook = useBookStore((state) => state.currentBook);
   const isCompleteObj = useBookStore((state) => state.isCompleteObj);
+  const { data: session } = useSession();
+
+  const addToSavedBooks = async () => {
+    if (session && currentBook) {
+      await addSavedBook(currentBook?.key, session.user.id);
+    } else console.error("Error: Failed to add book to reading list.");
+  };
 
   const {
     data: bookDetails,
@@ -101,7 +110,10 @@ export default function BookDetails({ params }: { params: { id: string } }) {
           />
         </div>
         <Button
-          onClick={() => setWantToRead(!wantToRead)}
+          onClick={() => {
+            setWantToRead(!wantToRead);
+            addToSavedBooks();
+          }}
           variant={wantToRead ? "default" : "outline"}
           className="w-full max-w-[220px] rounded-full bg-olive-green-500 hover:bg-olive-green-400 hover:text-white text-white text-xs"
         >

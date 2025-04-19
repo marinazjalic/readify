@@ -1,7 +1,8 @@
 import useSWR from "swr";
 import { getUserDetails } from "@/actions/users/getUserDetails";
 import { getByIds } from "@/actions/following/getByIds";
-import { User } from "@prisma/client";
+import { User, Challenge } from "@prisma/client";
+import { getChallengeByUser } from "@/actions/challenge/getChallengeByUser";
 
 const profileFetcher = async (
   userId: string
@@ -12,6 +13,10 @@ const profileFetcher = async (
 //reusable for followers/following list
 const followFetcher = async (idList: string[]): Promise<FollowUser[]> => {
   return getByIds(idList);
+};
+
+const challengeFetcher = async (userId: string): Promise<Challenge | null> => {
+  return await getChallengeByUser(userId);
 };
 
 export interface FollowUser {
@@ -58,6 +63,20 @@ export function useUserSWR(userId?: string) {
     }
   );
 
+  const {
+    data: challenge,
+    error: challengeError,
+    isValidating: isChallengeLoading,
+    mutate: mutateChallenge,
+  } = useSWR(
+    userId ? ["challenge", userId] : null,
+    ([_, id]) => challengeFetcher(id),
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 60000,
+    }
+  );
+
   return {
     userProfile,
     userProfileError,
@@ -69,5 +88,9 @@ export function useUserSWR(userId?: string) {
     followingList,
     followingError,
     mutateFollowing,
+    challenge,
+    challengeError,
+    isChallengeLoading,
+    mutateChallenge,
   };
 }

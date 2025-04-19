@@ -11,31 +11,39 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUserContext } from "@/context/UserContext";
 import { ReadingStatus } from "@prisma/client";
+import { updateChallenge } from "@/actions/challenge/updateChallenge";
+import { useSession } from "next-auth/react";
 
 interface GoalDialogProps {
   isGoalDialogOpen: boolean;
   setIsGoalDialogOpen: (open: boolean) => void;
+  mutateChallenge: () => void;
 }
 
 export default function ReadingGoalDialog({
   isGoalDialogOpen,
   setIsGoalDialogOpen,
+  mutateChallenge,
 }: GoalDialogProps) {
   const [readingGoal, setReadingGoal] = useState(0);
   const [newGoal, setNewGoal] = useState(readingGoal);
   const currentYear = new Date().getFullYear();
   const { savedBooks } = useUserContext();
+  const { data: session } = useSession();
 
   const completedBooksCount =
     savedBooks?.filter(
       (book) => book.savedInfo?.status === ReadingStatus.COMPLETED
     ).length || 0;
 
-  const handleGoalUpdate = () => {
+  const handleGoalUpdate = async () => {
     setReadingGoal(newGoal);
     setIsGoalDialogOpen(false);
 
-    //to-do update in db
+    if (session) {
+      const result = await updateChallenge(session.user.id, newGoal);
+      if (result) mutateChallenge();
+    }
   };
 
   return (
@@ -66,21 +74,11 @@ export default function ReadingGoalDialog({
             />
           </div>
 
-          <div className="mt-6 text-center text-sm text-navy-500">
+          <div className="mt-6 text-center text-xs text-gray-500">
             <p>
               You've read {completedBooksCount}{" "}
               {completedBooksCount === 1 ? "book" : "books"} so far.
             </p>
-
-            {completedBooksCount > 0 && (
-              <div className="mt-2 italic">
-                {completedBooksCount >= readingGoal
-                  ? "Congratulations! You've reached your goal! 🎉"
-                  : `${
-                      readingGoal - completedBooksCount
-                    } more to reach your goal!`}
-              </div>
-            )}
           </div>
         </div>
 
