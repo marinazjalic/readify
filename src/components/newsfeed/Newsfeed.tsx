@@ -64,8 +64,8 @@ export default function Newsfeed() {
           <Loader2 className="h-8 w-8 text-olive-green-400 animate-spin" />
         </div>
       ) : newsfeed.length === 0 ? (
-        <div className="text-center py-8 text-navy-500">
-          <p>No activities yet. Start by sharing a discussion!</p>
+        <div className="text-center py-8 text-gray-500 text-sm">
+          <p>No activities yet. Start by sharing a discussion.</p>
         </div>
       ) : (
         <div className="mt-2">

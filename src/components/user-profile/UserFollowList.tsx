@@ -48,7 +48,7 @@ export default function UserFollowList({
           <div className="animate-pulse text-olive-green-400">Loading...</div>
         </div>
       ) : !users || users.length === 0 ? (
-        <div className="text-center py-8 text-gray-500 text-sm">
+        <div className="text-center py-8 text-gray-500 text-xs">
           {type === "followers"
             ? "You don't have any followers yet."
             : "You're not following anyone yet."}

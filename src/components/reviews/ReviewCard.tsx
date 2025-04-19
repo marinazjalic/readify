@@ -6,16 +6,25 @@ import { useSession } from "next-auth/react";
 import { follow } from "@/actions/following/follow";
 import StarRating from "../StarRating";
 import { Montserrat } from "next/font/google";
+import { useUserSWR } from "@/app/hooks/useUserSWR";
 
 interface ReviewCardProps {
   review: ReviewDetails;
 }
 const montserrat = Montserrat({ subsets: ["latin"] });
 export default function ReviewCard({ review }: ReviewCardProps) {
+  const { data: session } = useSession();
+
+  const { userProfile, mutate } = useUserSWR(
+    session?.user ? session.user.id : undefined
+  );
+
+  const followingList = userProfile?.followingIds;
+
   const handleFollowButton = async (userId: string, followedBy: string) => {
     await follow(userId, followedBy);
+    mutate();
   };
-  const { data: session } = useSession();
 
   return (
     <Card key={review.id}>
@@ -37,18 +46,21 @@ export default function ReviewCard({ review }: ReviewCardProps) {
               {review.user.firstName + " " + review.user.lastName[0] + ". "}
             </p>
 
-            {session && session.user.id != review.userId && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className={`text-olive-green-500 hover:bg-transparent hover:underline hover:text-olive-green-400 ${montserrat.className}`}
-                onClick={() =>
-                  handleFollowButton(review.userId, session.user.id)
-                }
-              >
-                Follow
-              </Button>
-            )}
+            {session &&
+              session.user.id != review.userId &&
+              followingList &&
+              !followingList.includes(review.userId) && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`text-olive-green-500 hover:bg-transparent hover:underline hover:text-olive-green-400 ${montserrat.className}`}
+                  onClick={() =>
+                    handleFollowButton(review.userId, session.user.id)
+                  }
+                >
+                  Follow
+                </Button>
+              )}
           </div>
 
           <div className="flex-1 space-y-2 mt-2">
