@@ -41,7 +41,7 @@ export default function UserMenu({
         onClick={handleBookIconClick}
       >
         <BookOpen className="h-5 w-5" />
-        <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+        <span className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 text-gray-300 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
           Library
         </span>
       </Button>
@@ -52,10 +52,11 @@ export default function UserMenu({
         onClick={handleNewsIconClick}
       >
         <RssIcon className="h-5 w-5" />
-        <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+        <span className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 text-gray-300 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
           Newsfeed
         </span>
       </Button>
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="rounded-full mr-3">
@@ -70,7 +71,7 @@ export default function UserMenu({
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-56 p-0 rounded-t-none border-t-0"
+          className="w-56 p-0 rounded-lg border-t-0 bg-cream-100"
           style={{
             boxShadow:
               "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
@@ -91,13 +92,16 @@ export default function UserMenu({
               <p className="text-xs text-gray-500">{userEmail}</p>
             </div>
           </div>
-          <DropdownMenuItem className="text-xs">
-            <User className="mr-2 h-4 w-4" />
-            Profile
+          <DropdownMenuItem className="text-xs text-gray-600">
+            <User className="mr-1 h-4 w-4 scale-[0.9] " />
+            <p className="mt-1">Profile</p>
           </DropdownMenuItem>
-          <DropdownMenuItem className="text-xs" onClick={() => signOut()}>
-            <LogOut className="mr-2 h-4 w-4" />
-            Sign out
+          <DropdownMenuItem
+            className="text-xs text-gray-600"
+            onClick={() => signOut({ callbackUrl: "/" })}
+          >
+            <LogOut className="mr-1 h-4 w-4 scale-[0.9]" />
+            <p className="mt-1">Sign out</p>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

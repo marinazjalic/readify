@@ -34,7 +34,7 @@ function SampleNextArrow({ style, onClick, direction }: ArrowProps) {
 function SamplePrevArrow({ style, onClick }: ArrowProps) {
   return (
     <div
-      className="absolute flex flex-col h-[10px] w-[10px] top-1/2 -translate-x-1/2 z-[1000]"
+      className="absolute flex flex-col h-[10px] w-[10px] top-1/2 -translate-x-1/2"
       style={{
         ...style,
         display: "flex",

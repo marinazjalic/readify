@@ -28,7 +28,7 @@ export default function LoginPage() {
     if (result?.error) {
       setValidationError(true);
     } else {
-      router.push("/"); //temp go back to home page
+      router.push("/pages/user-home");
     }
   };
 
@@ -93,12 +93,6 @@ export default function LoginPage() {
             </span>
           </div>
         </div>
-        {/* <Button
-          variant="outline"
-          className="w-full mb-4 border-2 border-navy-600 text-navy-600"
-        >
-          Continue with Google
-        </Button> */}
         <GoogleAuthButton mode={"signin"} />
         <div className="text-center">
           <Link
