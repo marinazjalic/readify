@@ -9,6 +9,13 @@ import VirtualLibrary from "./VirtualLibraryBox";
 import ReadingChallengeBox from "./ReadingChallengeBox";
 import { useUserSWR } from "@/app/hooks/useUserSWR";
 import { useSession } from "next-auth/react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import UserAvatarEditor from "./UserAvatarEditor";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -74,24 +81,9 @@ export default function UserProfile() {
 
   return (
     <aside className="w-full md:w-[27.5%] bg-white md:fixed md:h-[90vh] border border-olive-green-100 overflow-auto px-4">
-      {/* Profile Header */}
       <div className="pt-6 pb-4 px-4 border-b border-olive-green-100">
         <div className="flex flex-col items-center">
-          <Avatar className="h-40 w-40 md:h-36 w-36 lg:h-40 lg:w-40 shadow-sm mb-4">
-            <AvatarImage
-              src={
-                userProfile?.profileImageUrl
-                  ? userProfile.profileImageUrl
-                  : undefined
-              }
-              alt="User avatar"
-            />
-            <AvatarFallback className="bg-olive-green-400 text-white text-6xl">
-              {userProfile
-                ? `${userProfile?.firstName[0].toUpperCase()}${userProfile?.lastName[0].toUpperCase()}`
-                : "U"}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatarEditor userProfile={userProfile!} />
 
           <h3 className={`${montserrat.className} text-lg text-navy-600`}>
             {userProfile?.firstName} {userProfile?.lastName}
