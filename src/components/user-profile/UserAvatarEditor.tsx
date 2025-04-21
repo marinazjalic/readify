@@ -1,5 +1,7 @@
 "use client";
 
+import type React from "react";
+import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Tooltip,
@@ -7,7 +9,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
+import { uploadProfileImage } from "@/actions/upload/uploadProfileImage";
 
 interface UserAvatarEditorProps {
   userProfile: Omit<User, "password">;
@@ -16,6 +19,39 @@ interface UserAvatarEditorProps {
 export default function UserAvatarEditor({
   userProfile,
 }: UserAvatarEditorProps) {
+  const [isUploading, setIsUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (userProfile?.profileImageUrl) {
+      setPreviewUrl(userProfile.profileImageUrl);
+    }
+  }, [userProfile?.profileImageUrl]);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+    setIsUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const result = await uploadProfileImage(userProfile.id, formData);
+
+      if (!result.success) {
+        setPreviewUrl(userProfile?.profileImageUrl || undefined);
+      }
+    } catch (error) {
+      setPreviewUrl(userProfile?.profileImageUrl || undefined);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
     <div>
       <TooltipProvider>
@@ -27,14 +63,11 @@ export default function UserAvatarEditor({
                 document.getElementById("profile-picture-input")?.click()
               }
             >
-              <Avatar className="h-40 w-40 md:h-36 w-36 lg:h-40 lg:w-40 shadow-sm mb-4">
+              <Avatar className="h-40 w-40 md:h-36 md:w-36 lg:h-40 lg:w-40 shadow-sm mb-4">
                 <AvatarImage
-                  src={
-                    userProfile?.profileImageUrl
-                      ? userProfile.profileImageUrl
-                      : undefined
-                  }
+                  src={previewUrl || "/placeholder.svg"}
                   alt="User avatar"
+                  className="object-cover"
                 />
                 <AvatarFallback className="bg-olive-green-400 text-white text-6xl">
                   {userProfile
@@ -42,6 +75,11 @@ export default function UserAvatarEditor({
                     : "U"}
                 </AvatarFallback>
               </Avatar>
+              {isUploading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full">
+                  <div className="animate-spin h-8 w-8 border-4 border-white border-t-transparent rounded-full"></div>
+                </div>
+              )}
             </div>
           </TooltipTrigger>
           <TooltipContent className="translate-y-52">
@@ -54,6 +92,7 @@ export default function UserAvatarEditor({
         id="profile-picture-input"
         className="hidden"
         accept="image/*"
+        onChange={handleFileChange}
       />
     </div>
   );
