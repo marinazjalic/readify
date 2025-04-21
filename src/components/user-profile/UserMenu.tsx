@@ -28,11 +28,11 @@ export default function UserMenu({ userName, userEmail }: UserMenuProps) {
   );
 
   const handleBookIconClick = () => {
-    router.push("/pages/books/savedBooks");
+    router.push("/pages/user/library");
   };
 
   const handleNewsIconClick = () => {
-    router.push("/pages/user-home");
+    router.push("/pages/user/home");
   };
 
   return (

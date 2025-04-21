@@ -28,7 +28,7 @@ export default function LoginPage() {
     if (result?.error) {
       setValidationError(true);
     } else {
-      router.push("/pages/user-home");
+      router.push("/pages/user/home");
     }
   };
 
