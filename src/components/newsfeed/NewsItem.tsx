@@ -56,6 +56,7 @@ export default function NewsItem({ item }: NewsItemProps) {
           <AvatarImage
             src={item.user.profileImageUrl || undefined}
             alt={`${item.user.firstName}'s avatar`}
+            className="object-cover"
           />
           <AvatarFallback>{item.user.firstName.charAt(0)}</AvatarFallback>
         </Avatar>

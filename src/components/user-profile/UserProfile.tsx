@@ -83,7 +83,7 @@ export default function UserProfile() {
     <aside className="w-full md:w-[27.5%] bg-white md:fixed md:h-[90vh] border border-olive-green-100 overflow-auto px-4">
       <div className="pt-6 pb-4 px-4 border-b border-olive-green-100">
         <div className="flex flex-col items-center">
-          <UserAvatarEditor userProfile={userProfile!} />
+          <UserAvatarEditor userProfile={userProfile!} mutate={mutate} />
 
           <h3 className={`${montserrat.className} text-lg text-navy-600`}>
             {userProfile?.firstName} {userProfile?.lastName}

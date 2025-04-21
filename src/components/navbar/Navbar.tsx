@@ -71,7 +71,6 @@ export default function Navbar() {
                     session.user.firstName + " " + session.user.lastName
                   }
                   userEmail={session.user.email as string}
-                  userProfileImg={session.user.image}
                 />
               </div>
             ) : (

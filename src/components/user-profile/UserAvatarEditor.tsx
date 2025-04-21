@@ -14,10 +14,12 @@ import { uploadProfileImage } from "@/actions/upload/uploadProfileImage";
 
 interface UserAvatarEditorProps {
   userProfile: Omit<User, "password">;
+  mutate: () => void;
 }
 
 export default function UserAvatarEditor({
   userProfile,
+  mutate,
 }: UserAvatarEditorProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
@@ -42,7 +44,9 @@ export default function UserAvatarEditor({
 
       const result = await uploadProfileImage(userProfile.id, formData);
 
-      if (!result.success) {
+      if (result.success) {
+        mutate();
+      } else {
         setPreviewUrl(userProfile?.profileImageUrl || undefined);
       }
     } catch (error) {

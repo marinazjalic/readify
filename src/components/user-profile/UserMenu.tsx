@@ -10,19 +10,22 @@ import { User, LogOut, Newspaper, BookOpen, RssIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useUserSWR } from "@/app/hooks/useUserSWR";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 interface UserMenuProps {
   userName: string;
   userEmail: string;
-  userProfileImg?: string | null;
 }
 
-export default function UserMenu({
-  userName,
-  userEmail,
-  userProfileImg,
-}: UserMenuProps) {
+export default function UserMenu({ userName, userEmail }: UserMenuProps) {
   const router = useRouter();
+  const { data: session } = useSession();
+
+  const { userProfile } = useUserSWR(
+    session?.user ? session.user.id : undefined
+  );
 
   const handleBookIconClick = () => {
     router.push("/pages/books/savedBooks");
@@ -62,7 +65,8 @@ export default function UserMenu({
           <Button variant="ghost" size="icon" className="rounded-full mr-3">
             <Avatar>
               <AvatarImage
-                src={userEmail || undefined}
+                src={userProfile?.profileImageUrl || undefined}
+                className="object-cover"
                 alt={userName || "User avatar"}
               />
               <AvatarFallback>{userName[0] || "U"}</AvatarFallback>
@@ -82,7 +86,8 @@ export default function UserMenu({
           <div className="flex items-center space-x-2 p-4 border-b border-gray-200">
             <Avatar>
               <AvatarImage
-                src={userProfileImg || undefined}
+                src={userProfile?.profileImageUrl || undefined}
+                className="object-cover"
                 alt={userName || "User avatar"}
               />
               <AvatarFallback>{userName[0] || "U"}</AvatarFallback>
@@ -92,10 +97,6 @@ export default function UserMenu({
               <p className="text-xs text-gray-500">{userEmail}</p>
             </div>
           </div>
-          <DropdownMenuItem className="text-xs text-gray-600">
-            <User className="mr-1 h-4 w-4 scale-[0.9] " />
-            <p className="mt-1">Profile</p>
-          </DropdownMenuItem>
           <DropdownMenuItem
             className="text-xs text-gray-600"
             onClick={() => signOut({ callbackUrl: "/" })}

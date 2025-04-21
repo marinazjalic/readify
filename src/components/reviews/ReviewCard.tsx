@@ -35,6 +35,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
               <AvatarImage
                 src={review.user.profileImageUrl || undefined}
                 alt={review.user.firstName || "User avatar"}
+                className="object-cover"
               />
 
               <AvatarFallback>
