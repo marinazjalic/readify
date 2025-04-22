@@ -23,6 +23,7 @@ module.exports = {
         "forest-green": "#228B22",
         "forest-green-dark": "#006400",
         "dusty-rose": "#d09696",
+        aqua: "#56b4c2",
         "olive-green": {
           "100": "#e2e9e5",
           "400": "#8ba798",

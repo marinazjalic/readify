@@ -27,23 +27,20 @@ export default function NewsItem({ item }: NewsItemProps) {
   const getActivityDetails = () => {
     if (item.review) {
       return {
-        icon: <Star className="w-3.5 h-3.5 text-amber-500" />,
+        icon: <Star className="w-3.5 h-3.5 text-gray-400" />,
         borderColor: "border-amber-500",
-        textColor: "text-amber-500",
         margins: "mt-0.5 ml-1",
       };
     } else if (item.discussion) {
       return {
-        icon: <MessageCircle className="h-3.5 w-3.5 text-sky-300" />,
+        icon: <MessageCircle className="h-3.5 w-3.5 text-gray-400" />,
         borderColor: "border-sky-300",
-        textColor: "text-sky-300",
         margins: "mt-0.5 ml-0.5",
       };
     } else {
       return {
-        icon: <BookOpen className="h-3.5 w-3.5 text-olive-green-500" />,
+        icon: <BookOpen className="h-3.5 w-3.5 text-gray-400" />,
         borderColor: "border-olive-green-500",
-        textColor: "text-olive-green-500",
         margins: "mt-0 ml-1",
       };
     }
@@ -63,7 +60,7 @@ export default function NewsItem({ item }: NewsItemProps) {
 
         <div className="flex-1">
           <div className="flex items-center flex-wrap">
-            <p className="text-sm text-gray-600">
+            <p className="text-xs font-semibold text-gray-600">
               {item.user.firstName} {item.user.lastName}
             </p>
             {(() => {
@@ -76,7 +73,7 @@ export default function NewsItem({ item }: NewsItemProps) {
                     {activityDetails.icon}
                   </div>
                   <p
-                    className={`text-xxs ${activityDetails.textColor} ${activityDetails.margins}`}
+                    className={`text-xxs text-gray-400 ${activityDetails.margins}`}
                   >
                     {item.activityDescription}
                   </p>
@@ -89,14 +86,14 @@ export default function NewsItem({ item }: NewsItemProps) {
           </div>
 
           {item.review?.content && (
-            <div className="mt-3 p-3 0 rounded-md border-l-2 border-teracota-500">
+            <div className="mt-3 p-3 0 rounded-md border-l-2 border-aqua">
               <div className="flex items-center mb-1">
                 <StarRating value={item.review.rating} className="w-4 h-4" />
-                <span className="text-xs text-teracota-500 ml-2">
-                  {item.review.rating}/5 rating
+                <span className="text-xs text-gray-400 ml-1.5 pt-0.5">
+                  {item.review.rating}/5
                 </span>
               </div>
-              <p className="text-xs text-gray-500 mt-1.5 ml-0.5">
+              <p className="text-xxs text-gray-500 mt-1.5 ml-0.5">
                 {item.review.content}
               </p>
             </div>

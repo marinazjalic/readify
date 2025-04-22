@@ -19,7 +19,7 @@ import Image from "next/image";
 import { createReview } from "@/actions/reviews/createReview";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Montserrat } from "next/font/google";
+import { Montserrat, Pacifico } from "next/font/google";
 import { createActivity } from "@/actions/activity/createActivity";
 import { ActivityType } from "@prisma/client";
 import { mutate } from "swr";
@@ -32,6 +32,10 @@ interface ReviewsProps {
 }
 
 const montserrat = Montserrat({ subsets: ["latin"] });
+const pacifico = Pacifico({
+  weight: "400", // You need to specify the font weight
+  subsets: ["latin"],
+});
 
 export default function ReviewForm({
   bookId,
@@ -105,16 +109,16 @@ export default function ReviewForm({
     <div className="mt-8">
       <Separator className="my-4" />
       <h3
-        className={`text-xl font-semibold mb-6 text-center text-navy-600 ${montserrat.className} italic`}
+        className={`text-xl font-semibold mb-6 text-center text-navy-600 ${montserrat.className}`}
       >
-        Let other readers know what you thought.
+        Share your thoughts with fellow readers
       </h3>
       <div className="flex justify-center">
         <Button
-          className={`${montserrat.className} bg-navy-600 text-white text-xs hover:bg-navy-500 hover:text-white rounded-full`}
+          className={`${montserrat.className} bg-cream border border-navy-500 text-navy-500 text-sm font-semibold hover:bg-navy-500 hover:text-white rounded-full`}
           onClick={handleLeaveReviewBtn}
         >
-          Leave Review
+          Write a Review
         </Button>
         {session && (
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

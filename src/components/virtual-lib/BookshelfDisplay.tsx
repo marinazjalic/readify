@@ -123,7 +123,7 @@ export default function BookshelfDisplay({
                         className={`relative h-44 w-32 bg-white shadow-sm rounded-tr-lg rounded-br-lg`}
                       >
                         {book.savedInfo?.isPinned && (
-                          <div className="absolute top-2.5 right-2.5 z-20 bg-teracota-500 text-white rounded-full p-1.5 shadow-md transform translate-x-1/2 -translate-y-1/2">
+                          <div className="absolute top-2.5 right-2.5 z-20 bg-aqua text-white rounded-full p-1.5 shadow-md transform translate-x-1/2 -translate-y-1/2">
                             <Pin className="h-3.5 w-3.5" />
                           </div>
                         )}

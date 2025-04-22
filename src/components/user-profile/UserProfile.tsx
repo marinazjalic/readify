@@ -1,6 +1,5 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
 import { Montserrat } from "next/font/google";
 import UserFollowList from "./UserFollowList";
@@ -9,12 +8,6 @@ import VirtualLibrary from "./VirtualLibraryBox";
 import ReadingChallengeBox from "./ReadingChallengeBox";
 import { useUserSWR } from "@/app/hooks/useUserSWR";
 import { useSession } from "next-auth/react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import UserAvatarEditor from "./UserAvatarEditor";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -80,8 +73,8 @@ export default function UserProfile() {
   };
 
   return (
-    <aside className="w-full md:w-[27.5%] bg-white md:fixed md:h-[90vh] border border-olive-green-100 overflow-auto px-4">
-      <div className="pt-6 pb-4 px-4 border-b border-olive-green-100">
+    <aside className="w-full md:w-[27.5%] bg-cream-100 md:fixed md:h-[90vh]  overflow-auto px-4 border-t-none">
+      <div className="pt-6 pb-4 px-4">
         <div className="flex flex-col items-center">
           <UserAvatarEditor userProfile={userProfile!} mutate={mutate} />
 
@@ -95,7 +88,7 @@ export default function UserProfile() {
           <div className="flex gap-6 text-sm">
             <button
               onClick={() => setView("followers")}
-              className="text-navy-500 hover:text-teracota-500 transition-colors flex flex-col items-center"
+              className="text-navy-500 hover:text-aqua transition-colors flex flex-col items-center"
             >
               <span className="font-medium">
                 {userProfile?.followerIds?.length || 0}
@@ -106,7 +99,7 @@ export default function UserProfile() {
             </button>
             <button
               onClick={() => setView("following")}
-              className="text-navy-500 hover:text-teracota-500 transition-colors flex flex-col items-center"
+              className="text-navy-500 hover:text-aqua transition-colors flex flex-col items-center"
             >
               <span className="font-medium">
                 {userProfile?.followingIds?.length || 0}

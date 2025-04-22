@@ -109,16 +109,15 @@ export default function BookDetails({ params }: { params: { id: string } }) {
             className="shadow-xl rounded-tr-xl rounded-br-xl"
           />
         </div>
-        <Button
+        <button
           onClick={() => {
             setWantToRead(!wantToRead);
             addToSavedBooks();
           }}
-          variant={wantToRead ? "default" : "outline"}
-          className="w-full max-w-[220px] rounded-full bg-olive-green-500 hover:bg-olive-green-400 hover:text-white text-white text-xs"
+          className="w-full max-w-[250px] py-2 rounded-full bg-aqua hover:bg-opacity-85 text-white text-xs"
         >
-          {wantToRead ? "Added to List" : "Add to List"}
-        </Button>
+          {wantToRead ? "Added to List" : "Want to Read"}
+        </button>
       </div>
 
       {/* right side content */}

@@ -49,7 +49,7 @@ export default function Newsfeed() {
   }, [session]);
 
   return (
-    <main className="w-full md:w-[73%] md:ml-[27%] md:p-6 bg-white border border-olive-green-100 overflow-y-auto h-[calc(100vh-114px)]">
+    <main className="w-full md:w-[73%] md:ml-[27%] md:p-6 bg-cream-100 overflow-y-auto ">
       <div className="flex items-center gap-2  border-navy-600  mb-4">
         <BookOpen className="h-5 w-5 text-navy-600" />
         <h2 className={`${lora.className} text-navy-600 text-lg font-medium`}>

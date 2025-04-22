@@ -40,18 +40,22 @@ export default function BookDetailsComponent({
         {currentBook?.title}
       </h1>
       <p
-        className={`${montserrat.className} text-base text-xs text-gray-500 mb-2`}
+        className={`${montserrat.className} text-base text-md text-gray-500 mb-1 ml-0.5`}
       >
         {currentBook?.author}
       </p>
 
       <div className="flex items-center mb-3">
-        <StarRating value={bookRating} className="w-4 h-4" />
+        <StarRating value={bookRating} className="w-5 h-5" />
         {bookReviews && bookReviews.length > 0 ? (
           <>
+            <div></div>
             <span className="ml-2 text-sm text-gray-500 mt-0.5">
               {bookRating.toFixed(1)}
             </span>
+            <p className="text-xs text-gray-500 ml-2 mt-1">
+              • {bookReviews.length} ratings
+            </p>
           </>
         ) : (
           <span className="ml-2 text-xs text-gray-500 italic mt-1">
@@ -83,7 +87,7 @@ export default function BookDetailsComponent({
               <div>
                 <div className="flex items-center gap-4">
                   <p
-                    className={`${montserrat.className} text-xs text-gray-600 whitespace-nowrap`}
+                    className={`${montserrat.className} text-sm text-gray-600 whitespace-nowrap`}
                   >
                     Categories
                   </p>
@@ -91,7 +95,7 @@ export default function BookDetailsComponent({
                     {bookDetails.genres.map((genre: string, index: number) => (
                       <button
                         key={index}
-                        className={`${montserrat.className} border-t-none border-b-2 border-navy-500 hover:border-gray-400 hover:text-gray-500 text-navy-600 text-xxs font-bold`}
+                        className={`${montserrat.className} h-5 border-t-none border-b-2 border-aqua hover:border-gray-500 hover:text-gray-500 text-navy-600 text-xxs font-bold`}
                         onClick={() => handleGenreBtnClick(genre)}
                       >
                         {genre}

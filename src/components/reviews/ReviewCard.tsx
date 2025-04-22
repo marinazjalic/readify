@@ -7,6 +7,7 @@ import { follow } from "@/actions/following/follow";
 import StarRating from "../StarRating";
 import { Montserrat } from "next/font/google";
 import { useUserSWR } from "@/app/hooks/useUserSWR";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 
 interface ReviewCardProps {
   review: ReviewDetails;
@@ -27,7 +28,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   };
 
   return (
-    <Card key={review.id}>
+    <Card key={review.id} className="bg-cream-100">
       <CardContent className="p-4">
         <div className="flex items-start gap-4">
           <div className="flex flex-col items-center w-[15%]">
@@ -51,16 +52,14 @@ export default function ReviewCard({ review }: ReviewCardProps) {
               session.user.id != review.userId &&
               followingList &&
               !followingList.includes(review.userId) && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={`text-olive-green-500 hover:bg-transparent hover:underline hover:text-olive-green-400 ${montserrat.className}`}
+                <button
+                  className={`bg-navy-500 text-xs px-2 rounded-full h-5 text-white mt-1 ${montserrat.className} hover:bg-opacity-85 hover:text-white`}
                   onClick={() =>
                     handleFollowButton(review.userId, session.user.id)
                   }
                 >
                   Follow
-                </Button>
+                </button>
               )}
           </div>
 
@@ -77,15 +76,11 @@ export default function ReviewCard({ review }: ReviewCardProps) {
             </div>
 
             {review.content && (
-              <div className="py-1.5 p-0 rounded-md border-l-2 border-gray-300">
+              <div>
                 {review.subject && (
-                  <p className="text-xs ml-1.5 font-semibold">
-                    {review.subject}
-                  </p>
+                  <p className="text-xs font-semibold">{review.subject}</p>
                 )}
-                <p className="text-xs text-gray-500 mt-2 ml-1.5">
-                  {review.content}
-                </p>
+                <p className="text-xs text-gray-500 mt-1.5">{review.content}</p>
               </div>
             )}
           </div>

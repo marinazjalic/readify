@@ -61,7 +61,7 @@ export default function DiscussionBox({ onNewPost }: DiscussionBoxProps) {
             type="button"
             disabled={!discussion.trim() || isSubmitting}
             onClick={handlePostButtonClick}
-            className="bg-olive-green-500 hover:bg-olive-green-400 text-white flex items-center text-xs h-7"
+            className="bg-aqua hover:bg-olive-green-400 text-white flex items-center text-xs h-7"
           >
             {isSubmitting ? "Posting..." : "Post"}
           </Button>
