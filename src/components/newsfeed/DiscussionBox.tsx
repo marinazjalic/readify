@@ -48,7 +48,7 @@ export default function DiscussionBox({ onNewPost }: DiscussionBoxProps) {
   };
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 p-4 sm:p-6 md:p-0">
       <form onSubmit={(e) => e.preventDefault()} className="space-y-3">
         <Textarea
           placeholder="Share your thoughts or start a discussion..."

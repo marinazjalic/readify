@@ -73,7 +73,7 @@ export default function UserProfile() {
   };
 
   return (
-    <aside className="w-full md:w-[27.5%] bg-cream-100 md:fixed md:h-[90vh]  overflow-auto px-4 border-t-none">
+    <aside className="w-full md:w-[27.5%] bg-cream-100 md:fixed md:h-[90vh] px-4 border-t-none border-b">
       <div className="pt-6 pb-4 px-4">
         <div className="flex flex-col items-center">
           <UserAvatarEditor userProfile={userProfile!} mutate={mutate} />

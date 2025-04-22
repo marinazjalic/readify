@@ -37,6 +37,7 @@ export default function UserListItem({
           <AvatarImage
             src={user.profileImageUrl || undefined}
             alt={`${user.firstName} ${user.lastName}`}
+            className="object-cover"
           />
           <AvatarFallback className="bg-olive-green-400 text-white text-xs">
             {user.firstName?.[0]}

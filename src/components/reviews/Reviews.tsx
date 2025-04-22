@@ -66,8 +66,8 @@ export default function Reviews({ reviews }: ReviewsProps) {
             <p className="text-gray-500 ml-2 text-xs">No results.</p>
           ) : (
             displayedReviews.map((review) => (
-              <div>
-                <ReviewCard key={review.id} review={review} />
+              <div key={review.id}>
+                <ReviewCard review={review} />
                 <Separator />
               </div>
             ))

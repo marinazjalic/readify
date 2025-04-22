@@ -67,16 +67,8 @@
     @apply bg-background text-foreground;
     width: 100vw;
     overflow-x: hidden;
-    position: relative;
   }
 }
-
-/* @supports (scrollbar-gutter: stable) {
-  html {
-    overflow-y: auto;
-    scrollbar-gutter: stable;
-  }
-} */
 
 button[data-radix-collection-item],
 [data-radix-popper-content-wrapper] [role="dialog"] button[type="button"],
