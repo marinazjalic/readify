@@ -13,10 +13,6 @@ import BookshelfButton from "@/components/virtual-lib/BookshelfButton";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
-const fetcher = async (userId: string) => {
-  return getSavedBooksByUser(userId);
-};
-
 export default function SavedBooks() {
   const { data: session } = useSession();
 
@@ -29,7 +25,10 @@ export default function SavedBooks() {
     error,
     isLoading,
     mutate,
-  } = useSWR(session?.user?.id ? session.user.id : null, fetcher);
+  } = useSWR(
+    session?.user?.id ? ["saved-books", session.user.id] : null,
+    ([_, userId]) => getSavedBooksByUser(userId)
+  );
 
   const savedBooks = useMemo(() => books || [], [books]);
 
