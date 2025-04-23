@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { createUser } from "@/actions/users/createUser";
 import { GoogleAuthButton } from "./google-auth-buttons";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface SignUpFormProps {
   bgColor?: string;
@@ -28,6 +30,7 @@ export default function SignUpForm({
   formWidth = "w-72",
   buttonColor = "bg-navy-600 hover:bg-navy-500",
 }: SignUpFormProps) {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -51,10 +54,21 @@ export default function SignUpForm({
       return;
     }
     const { confirmPassword, ...userData } = formData;
-    await createUser(userData);
-  };
+    const newUser = await createUser(userData);
 
-  const handleGoogleSignUp = () => {};
+    if (newUser) {
+      const result = await signIn("credentials", {
+        email: userData.email,
+        password: userData.password,
+        redirect: false,
+      });
+      if (result?.error) {
+        console.error("Error: Failed to sign in after registration. ");
+      } else {
+        router.push("/pages/user/home");
+      }
+    }
+  };
 
   return (
     <div
@@ -118,14 +132,6 @@ export default function SignUpForm({
             <span className={`${bgColor} px-2 text-gray-500 text-xs`}>or</span>
           </div>
         </div>
-        {/* <Button
-          type="button"
-          variant="outline"
-          className="w-full h-8 text-sm"
-          onClick={handleGoogleSignUp}
-        >
-          Continue with Google
-        </Button> */}
         <GoogleAuthButton mode={"signup"} />
       </form>
     </div>
