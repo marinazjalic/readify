@@ -12,7 +12,7 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useUserSWR } from "@/app/hooks/useUserSWR";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface UserMenuProps {
   userName: string;
@@ -22,6 +22,9 @@ interface UserMenuProps {
 export default function UserMenu({ userName, userEmail }: UserMenuProps) {
   const router = useRouter();
   const { data: session } = useSession();
+  const [defaultColour, setDefaultColour] = useState<string | undefined>(
+    undefined
+  );
 
   const { userProfile } = useUserSWR(
     session?.user ? session.user.id : undefined
@@ -34,6 +37,12 @@ export default function UserMenu({ userName, userEmail }: UserMenuProps) {
   const handleNewsIconClick = () => {
     router.push("/pages/user/home");
   };
+
+  useEffect(() => {
+    if (userProfile?.profileImageColour) {
+      setDefaultColour(userProfile.profileImageColour);
+    }
+  }, [userProfile?.profileImageColour]);
 
   return (
     <div className="flex items-center">
@@ -69,7 +78,15 @@ export default function UserMenu({ userName, userEmail }: UserMenuProps) {
                 className="object-cover"
                 alt={userName || "User avatar"}
               />
-              <AvatarFallback>{userName[0] || "U"}</AvatarFallback>
+              <AvatarFallback
+                className={
+                  defaultColour
+                    ? `bg-${defaultColour} text-white`
+                    : `bg-gray-400 text-white`
+                }
+              >
+                {userName[0].toUpperCase() || "U"}
+              </AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
@@ -90,7 +107,15 @@ export default function UserMenu({ userName, userEmail }: UserMenuProps) {
                 className="object-cover"
                 alt={userName || "User avatar"}
               />
-              <AvatarFallback>{userName[0] || "U"}</AvatarFallback>
+              <AvatarFallback
+                className={
+                  defaultColour
+                    ? `bg-${defaultColour} text-white`
+                    : `bg-gray-400 text-white`
+                }
+              >
+                {userName[0].toUpperCase() || "U"}
+              </AvatarFallback>
             </Avatar>
             <div>
               <p className="text-sm font-medium">{userName}</p>

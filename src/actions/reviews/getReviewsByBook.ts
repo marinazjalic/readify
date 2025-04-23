@@ -8,6 +8,7 @@ export type ReviewDetails = Review & {
     firstName: string;
     lastName: string;
     profileImageUrl: string | null;
+    profileImageColour: string | null;
   };
 };
 
@@ -23,6 +24,7 @@ export async function getReviewsByBook(
           firstName: true,
           lastName: true,
           profileImageUrl: true,
+          profileImageColour: true,
         },
       },
     },

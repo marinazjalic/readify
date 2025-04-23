@@ -23,12 +23,21 @@ export default function UserAvatarEditor({
 }: UserAvatarEditorProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
+  const [defaultColour, setDefaultColour] = useState<string | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     if (userProfile?.profileImageUrl) {
       setPreviewUrl(userProfile.profileImageUrl);
     }
   }, [userProfile?.profileImageUrl]);
+
+  useEffect(() => {
+    if (userProfile?.profileImageColour) {
+      setDefaultColour(userProfile.profileImageColour);
+    }
+  }, [userProfile?.profileImageColour]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -67,15 +76,21 @@ export default function UserAvatarEditor({
                 document.getElementById("profile-picture-input")?.click()
               }
             >
-              <Avatar className="h-40 w-40 md:h-36 md:w-36 lg:h-40 lg:w-40 shadow-sm mb-4">
+              <Avatar className="h-40 w-40 md:h-36 md:w-36 lg:h-40 lg:w-40 shadow-sm mb-4 border border-gray-200 border-2">
                 <AvatarImage
                   src={previewUrl || "/placeholder.svg"}
                   alt="User avatar"
                   className="object-cover"
                 />
-                <AvatarFallback className="bg-olive-green-400 text-white text-6xl">
+                <AvatarFallback
+                  className={
+                    defaultColour
+                      ? `bg-${defaultColour} text-white text-6xl`
+                      : `bg-gray-400 text-white text-6xl`
+                  }
+                >
                   {userProfile
-                    ? `${userProfile?.firstName[0].toUpperCase()}${userProfile?.lastName[0].toUpperCase()}`
+                    ? `${userProfile?.firstName[0].toUpperCase()}`
                     : "U"}
                 </AvatarFallback>
               </Avatar>

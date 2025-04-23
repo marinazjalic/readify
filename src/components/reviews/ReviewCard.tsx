@@ -7,7 +7,6 @@ import { follow } from "@/actions/following/follow";
 import StarRating from "../StarRating";
 import { Montserrat } from "next/font/google";
 import { useUserSWR } from "@/app/hooks/useUserSWR";
-import { Separator } from "@radix-ui/react-dropdown-menu";
 
 interface ReviewCardProps {
   review: ReviewDetails;
@@ -39,9 +38,14 @@ export default function ReviewCard({ review }: ReviewCardProps) {
                 className="object-cover"
               />
 
-              <AvatarFallback>
-                {review.user.firstName.charAt(0) +
-                  review.user.lastName.charAt(0)}
+              <AvatarFallback
+                className={
+                  review.user.profileImageColour
+                    ? `bg-${review.user.profileImageColour} text-white text-lg`
+                    : `bg-gray-400 text-white text-lg`
+                }
+              >
+                {review.user.firstName.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <p className={`text-xs font-semibold pt-3 ${montserrat.className}`}>
