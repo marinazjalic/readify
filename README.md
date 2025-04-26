@@ -1,2 +1,2 @@
-### Home Page Screenshot
-![Home Page](images/home-page.jpg)
+### Home Page
+![Home Page](public/assets/home-page.jpg)
