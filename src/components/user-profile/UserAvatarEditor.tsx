@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/tooltip";
 import type { User } from "@prisma/client";
 import { uploadProfileImage } from "@/actions/upload/uploadProfileImage";
+import { cn } from "@/lib/utils";
 
 interface UserAvatarEditorProps {
   userProfile: Omit<User, "password">;
@@ -65,6 +66,27 @@ export default function UserAvatarEditor({
     }
   };
 
+  const getAvatarBgClass = () => {
+    if (!defaultColour) return "bg-gray-400";
+
+    switch (defaultColour) {
+      case "bright-blue":
+        return "bg-bright-blue";
+      case "bright-orange":
+        return "bg-bright-orange";
+      case "light-purple":
+        return "bg-light-purple";
+      case "bright-coral":
+        return "bg-bright-coral";
+      case "dark-blue":
+        return "bg-dark-blue";
+      case "bright-green":
+        return "bg-bright-green";
+      default:
+        return "bg-gray-200";
+    }
+  };
+
   return (
     <div>
       <TooltipProvider>
@@ -83,11 +105,7 @@ export default function UserAvatarEditor({
                   className="object-cover"
                 />
                 <AvatarFallback
-                  className={
-                    defaultColour
-                      ? `bg-${defaultColour} text-white text-6xl`
-                      : `bg-gray-400 text-white text-6xl`
-                  }
+                  className={cn(getAvatarBgClass(), "text-white text-6xl")}
                 >
                   {userProfile
                     ? `${userProfile?.firstName[0].toUpperCase()}`
