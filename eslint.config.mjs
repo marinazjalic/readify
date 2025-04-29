@@ -1,36 +1,108 @@
 // eslint.config.mjs
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import eslintPluginReact from "eslint-plugin-react";
+import eslintPluginReactHooks from "eslint-plugin-react-hooks";
+import eslintPluginJsxA11y from "eslint-plugin-jsx-a11y";
+import nextPlugin from "@next/eslint-plugin-next";
+import importPlugin from "eslint-plugin-import";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+export default [
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  {
+    files: ["**/*.{js,mjs,cjs,jsx,ts,tsx,mts}"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        React: "readonly",
+        JSX: "readonly",
+      },
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    plugins: {
+      react: eslintPluginReact,
+      "react-hooks": eslintPluginReactHooks,
+      "jsx-a11y": eslintPluginJsxA11y,
+      "@next/next": nextPlugin,
+      import: importPlugin,
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
+      "import/resolver": {
+        typescript: {},
+        node: {
+          extensions: [".js", ".jsx", ".ts", ".tsx"],
+        },
+      },
+    },
+    rules: {
+      // React rules
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      "react/jsx-uses-react": "off",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+      // Next.js rules
+      "@next/next/no-html-link-for-pages": "error",
+      "@next/next/no-img-element": "error",
+      "@next/next/no-unwanted-polyfillio": "warn",
+      "@next/next/no-sync-scripts": "error",
+      "@next/next/no-script-component-in-head": "error",
+      "@next/next/no-page-custom-font": "error",
+      "@next/next/no-duplicate-head": "error",
+      "@next/next/no-document-import-in-page": "error",
+      "@next/next/no-css-tags": "error",
 
-// Convert the configurations using FlatCompat
-const configs = compat.extends("next/core-web-vitals");
+      // TypeScript rules
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+        },
+      ],
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/ban-ts-comment": "warn",
 
-// Create a new array with only the necessary properties
-const eslintConfig = configs.map((config) => {
-  // Remove problematic properties that contain functions
-  const { languageOptions, ...rest } = config;
+      // Import rules
+      "import/no-unresolved": "off", // TypeScript handles this
+      "import/named": "error",
+      "import/default": "error",
+      "import/no-named-as-default": "warn",
 
-  // If languageOptions exist, create a safe version without the parser
-  const safeLanguageOptions = languageOptions
-    ? {
-        ...languageOptions,
-        parser: null, // Remove the parser object that contains functions
-      }
-    : undefined;
-
-  // Return a new configuration object
-  return {
-    ...rest,
-    ...(safeLanguageOptions ? { languageOptions: safeLanguageOptions } : {}),
-  };
-});
-
-export default eslintConfig;
+      // General rules
+      "no-console": ["warn", { allow: ["warn", "error"] }],
+      "prefer-const": "warn",
+    },
+  },
+  {
+    files: ["**/*.tsx", "**/*.jsx"],
+    rules: {
+      // Add JSX specific rules here
+    },
+  },
+  {
+    // Specific rules for Next.js pages and components
+    files: [
+      "src/app/**/*.{js,jsx,ts,tsx}",
+      "src/pages/**/*.{js,jsx,ts,tsx}",
+      "src/components/**/*.{js,jsx,ts,tsx}",
+    ],
+    rules: {
+      // Rules specific to Next.js structure
+      "@next/next/no-head-element": "error",
+    },
+  },
+];
