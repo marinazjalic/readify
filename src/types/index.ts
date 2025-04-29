@@ -38,6 +38,7 @@ export type ActivityDetails = Activity & {
     lastName: string;
     email: string;
     profileImageUrl: string | null;
+    profileImageColour: string | null;
   };
   review?: Review;
   savedBook?: SavedBook;

@@ -8,6 +8,7 @@ declare module "next-auth" {
       firstName?: string;
       lastName?: string;
       profileImageUrl?: string | null;
+      profileImageColour?: string | null;
       name?: string | null;
       image?: string | null;
       followingIds?: string[];

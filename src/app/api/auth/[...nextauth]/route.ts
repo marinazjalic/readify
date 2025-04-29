@@ -97,6 +97,10 @@ const handler = NextAuth({
           session.user.lastName = token.lastName as string;
         if ("profileImageUrl" in token)
           session.user.profileImageUrl = token.profileImageUrl as string | null;
+        if ("profileImageColour" in token)
+          session.user.profileImageColour = token.profileImageColour as
+            | string
+            | null;
 
         session.user.followerIds = token.followerIds || [];
         session.user.followingIds = token.followingIds || [];

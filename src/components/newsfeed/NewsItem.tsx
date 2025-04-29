@@ -3,6 +3,7 @@ import StarRating from "../StarRating";
 import { BookOpen, MessageCircle, Star } from "lucide-react";
 import type { ActivityDetails } from "@/types";
 import { Montserrat } from "next/font/google";
+import { useState, useEffect } from "react";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -11,6 +12,16 @@ interface NewsItemProps {
 }
 
 export default function NewsItem({ item }: NewsItemProps) {
+  const [defaultColour, setDefaultColour] = useState<string | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    if (item.user?.profileImageColour) {
+      setDefaultColour(item.user.profileImageColour);
+    }
+  }, [item.user.profileImageColour]);
+
   const formatRelativeTime = (date: Date) => {
     const now = new Date();
     const diffInSeconds = Math.floor(
@@ -55,7 +66,15 @@ export default function NewsItem({ item }: NewsItemProps) {
             alt={`${item.user.firstName}'s avatar`}
             className="object-cover"
           />
-          <AvatarFallback>{item.user.firstName.charAt(0)}</AvatarFallback>
+          <AvatarFallback
+            className={
+              defaultColour
+                ? `bg-${defaultColour} text-white`
+                : `bg-gray-400 text-white`
+            }
+          >
+            {item.user.firstName.charAt(0)}
+          </AvatarFallback>
         </Avatar>
 
         <div className="flex-1">

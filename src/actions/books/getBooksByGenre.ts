@@ -2,16 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  description: string;
-  publish_date: Date;
-  rating: number;
-  genres: string[];
-}
+import { Book } from "@prisma/client";
 
 export async function getBooksByGenre(genre: string): Promise<Book[]> {
   try {

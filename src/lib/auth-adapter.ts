@@ -11,6 +11,7 @@ interface AdapterUser {
   firstName?: string;
   lastName?: string;
   profileImageUrl?: string | null;
+  profileImageColour?: string | null;
 }
 
 // Create a custom adapter that extends the PrismaAdapter

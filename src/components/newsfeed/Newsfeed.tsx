@@ -36,6 +36,7 @@ export default function Newsfeed() {
         lastName: session.user.lastName,
         email: session.user.email,
         profileImageUrl: session.user.profileImageUrl || null,
+        profileImageColour: session.user.profileImageColour || null,
       },
     };
 
