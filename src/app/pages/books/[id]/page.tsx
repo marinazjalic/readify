@@ -22,7 +22,7 @@ const bookDetailsFetcher = async (key: string, initialData: any) => {
 
   //save a copy to db
   if (details) {
-    let { title, author, cover, key, description, genres } = details;
+    const { title, author, cover, key, description, genres } = details;
     await addBookToDb(title, author, description, genres, String(cover), key);
   }
   return details;

@@ -51,7 +51,7 @@ export default function BookCard({ book, enableSaving }: BookCardProps) {
   //only authenticated users can favourite books
   const handleLike = async (bookKey: string) => {
     if (session) {
-      let newSet = new Set(likedBooks);
+      const newSet = new Set(likedBooks);
       console.log(newSet);
       if (newSet.has(bookKey)) {
         deleteSavedBooks(bookKey, session.user.id, newSet);
