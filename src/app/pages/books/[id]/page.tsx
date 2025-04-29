@@ -28,7 +28,7 @@ const bookDetailsFetcher = async (key: string, initialData: any) => {
   return details;
 };
 
-export default function BookDetails({ params }: { params: { id: string } }) {
+export default function BookDetails() {
   const [wantToRead, setWantToRead] = useState(false);
   const currentBook = useBookStore((state) => state.currentBook);
   const isCompleteObj = useBookStore((state) => state.isCompleteObj);
