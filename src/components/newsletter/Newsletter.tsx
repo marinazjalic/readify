@@ -1,22 +1,19 @@
 import { Lora, Allura, Montserrat } from "next/font/google";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { Award } from "lucide-react";
 import TopBook from "./TopBook";
+import { Separator } from "@/components/ui/separator";
 
 const lora = Lora({ subsets: ["latin"] });
 const montserrat = Montserrat({ subsets: ["latin"] });
-const allura = Allura({
-  subsets: ["latin"],
-  weight: "400",
-});
 
 export default function Newsletter() {
   return (
-    <div className="hidden md:block w-[30%] h-120px bg-cream-100 border-r mt-4 mr-2 flex-col justify-center text-gray-600 ml-2">
+    <div className="hidden md:block w-[30%] h-120px bg-cream-100 border-r mt-4 mr-2 flex-col justify-center text-gray-600 ml-2 pr-4">
       <TopBook />
+      <Separator />
       {/* reading challenge container */}
-      <div className="border-t-2 border-b-2 border-olive-green-100 w-[97%] mt-2 mr-2 flex">
+      <div className="w-[97%] mt-2 mr-2 flex mr-2">
         <div className="flex-shrink-0 w-16 sm:w-20 md:w-[5.5rem] flex items-center justify-center">
           <Image
             src="/assets/reading-challenge.png"
@@ -27,7 +24,9 @@ export default function Newsletter() {
           />
         </div>
 
-        <div className={`${lora.className} flex-grow hidden sm:block mt-2`}>
+        <div
+          className={`${lora.className} flex-grow hidden sm:block mt-2 border-none`}
+        >
           <h3 className="ml-2 text-lg sm:text-xl font-medium">
             2025 Reading Challenge
           </h3>
@@ -36,9 +35,10 @@ export default function Newsletter() {
           </p>
         </div>
       </div>
+      <Separator />
 
       {/* seasonal reading lists */}
-      <div className="flex items-center justify-center border-b-2">
+      <div className="flex items-center justify-center">
         <Image
           src="/assets/spring-icon.png"
           alt="logo"
@@ -57,16 +57,36 @@ export default function Newsletter() {
           className="mt-1 ml-2 mb-2"
         />
       </div>
+      <Separator />
 
       <div className={`${lora.className} text-center mt-2 text-gray-500`}>
         <h4 className="text-lg text-gray-800">
           Join Our Community of Book Lovers!
         </h4>
         <p
-          className={`${montserrat.className} text-xs ml-2 mr-2 text-gray-600 mt-1`}
+          className={`${montserrat.className} text-xs ml-2 mr-2 text-gray-600 mt-1 mb-2`}
         >
           Sign up today to curate your virtual library, track your reading
           progress, and connect with others to see what they're reading!
+        </p>
+      </div>
+      <Separator />
+
+      <Image
+        src="/assets/new-releases.png"
+        alt="logo"
+        width={500}
+        height={50}
+        className="mt-2 mb-2"
+      />
+
+      <Separator />
+      <div
+        className={`mt-4 px-4 text-center italic text-sm text-gray-500 ${lora.className}`}
+      >
+        <p>
+          “Books are a uniquely portable magic.” <br />
+          <span className="text-xs not-italic"> -Stephen King</span>
         </p>
       </div>
     </div>
